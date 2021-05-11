@@ -1,4 +1,4 @@
-package com.rest.vue.entities;
+package com.rest.comeencasa.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,7 +26,7 @@ public class Pedido implements Serializable {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "pedidoUsuario_id"), name = "pedidoUsuario_id")
-    User user;
+    Usuario usuario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -65,12 +65,12 @@ public class Pedido implements Serializable {
         this.precio_final = precio_final;
     }
 
-    public User getUser() {
-        return user;
+    public Usuario getUser() {
+        return usuario;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public List<Rutina> getRutinas() {

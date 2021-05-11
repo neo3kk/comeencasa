@@ -1,4 +1,4 @@
-package com.rest.vue.entities;
+package com.rest.comeencasa.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -62,11 +62,11 @@ public class Plato implements Serializable {
         this.platoRutinas = platoRutinas;
     }
 
-    public List<com.rest.vue.entities.PlatoIngrediente> getPlatoIngrediente() {
+    public List<com.rest.comeencasa.entities.PlatoIngrediente> getPlatoIngrediente() {
         return PlatoIngrediente;
     }
 
-    public void setPlatoIngrediente(List<com.rest.vue.entities.PlatoIngrediente> platoIngrediente) {
+    public void setPlatoIngrediente(List<com.rest.comeencasa.entities.PlatoIngrediente> platoIngrediente) {
         PlatoIngrediente = platoIngrediente;
     }
 }

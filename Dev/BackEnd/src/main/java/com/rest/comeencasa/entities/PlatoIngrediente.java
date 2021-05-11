@@ -1,4 +1,4 @@
-package com.rest.vue.entities;
+package com.rest.comeencasa.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

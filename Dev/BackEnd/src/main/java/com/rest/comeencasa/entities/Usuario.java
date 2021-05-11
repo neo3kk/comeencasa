@@ -1,4 +1,4 @@
-package com.rest.vue.entities;
+package com.rest.comeencasa.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
