@@ -1,17 +1,17 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.repos.UserRepository;
+import com.rest.comeencasa.repos.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoginService {
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository usuarioRepository;
 
     public boolean checkUserAndPassword(String username, String password) {
         try {
-            User user = userRepository.findUserByEmailAndPassword(username, password);
+            User user = usuarioRepository.findUserByEmailAndPassword(username, password);
             if (user == null) {
                 return false;
             }

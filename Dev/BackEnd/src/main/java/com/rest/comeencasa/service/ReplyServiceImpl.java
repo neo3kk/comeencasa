@@ -1,7 +1,5 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.entities.*;
-import com.rest.comeencasa.repos.ReplyRepository;
 import com.rest.comeencasa.utils.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

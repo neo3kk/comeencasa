@@ -2,8 +2,8 @@ package com.rest.comeencasa.controllers;
 
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.UserDTO;
-import com.rest.comeencasa.repos.UserRepository;
+import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.repos.UsuarioRepository;
 import com.rest.comeencasa.service.LoginService;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserService;
@@ -29,7 +29,7 @@ public class LoginController {
     TokenService tokenService;
 
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository usuarioRepository;
 
     @Autowired
     UserService userService;
@@ -44,12 +44,11 @@ public class LoginController {
             restMap.put("message", "Incorrect email or password.");
             return new ResponseEntity<>(gson.toJson(restMap),HttpStatus.UNAUTHORIZED);
         }
-        User user = userRepository.findUserByEmailAndPassword(email, password);
-        UserDTO userDTO = userService.makeUserDTO(user);
+        Usuario user = usuarioRepository.findUsuarioByEmailAndPassword(email, password);
         String token = tokenService.newToken(email);
         Map<String, Object> restMap = new HashMap<>();
         restMap.put("token", token);
-        restMap.put("user", userDTO);
+        restMap.put("user", user);
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 
@@ -62,12 +61,10 @@ public class LoginController {
         String password = map.get("password");
         String name = map.get("name");
         String role = map.get("role");
-        User user = new User();
+        Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
-        user.setRole("admin");
         user.setPassword(password);
-        user.setRole_permissions("admin");
         if (userService.createUser(user)) {
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "done");

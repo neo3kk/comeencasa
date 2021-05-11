@@ -1,9 +1,7 @@
 package com.rest.comeencasa.service;
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.*;
-import com.rest.comeencasa.repos.ImageRepository;
-import com.rest.comeencasa.repos.UserRepository;
+import com.rest.comeencasa.repos.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +13,7 @@ public class UserServiceImpl implements UserService {
     Gson gson = new Gson();
 
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository usuarioRepository;
 
     @Autowired
     TokenService tokenService;
@@ -52,15 +50,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByemail(String email) {
-        User user = userRepository.findUserByemail(email);
+        User user = usuarioRepository.findUserByemail(email);
         return user;
     }
 
     @Override
     public boolean createUser(User user) {
-        if (userRepository.findUserByemail(user.getEmail()) == null) {
+        if (usuarioRepository.findUserByemail(user.getEmail()) == null) {
             try {
-                userRepository.save(user);
+                usuarioRepository.save(user);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -80,13 +78,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(String payload, HttpServletRequest request) {
         HashMap map = gson.fromJson(payload, HashMap.class);
-        User userRequest = userRepository.findById(getUerRequest(request).getId()).get();
+        User userRequest = usuarioRepository.findById(getUerRequest(request).getId()).get();
         String email = (String) map.get("email");
         String name = (String) map.get("name");
         String avatar = (String) map.get("avatar");
         userRequest.setName(name);
         userRequest.setEmail(email);
-        return userRepository.save(userRequest);
+        return usuarioRepository.save(userRequest);
     }
 
     private Image updateImage(String avatar, User userRequest) {
@@ -112,7 +110,7 @@ public class UserServiceImpl implements UserService {
     public User updatePassword(String newPassword, HttpServletRequest request) {
         User user = getUerRequest(request);
         user.setPassword(newPassword);
-        userRepository.save(user);
+        usuarioRepository.save(user);
         return user;
     }
 

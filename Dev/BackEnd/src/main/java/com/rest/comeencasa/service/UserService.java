@@ -1,22 +1,21 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.entities.UserDTO;
+import com.rest.comeencasa.entities.Usuario;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    UserDTO makeUserDTO(User user);
 
-    User findUserByemail(String email);
+    Usuario findUsuarioByEmail(String email);
 
-    boolean createUser(User user);
+    boolean createUser(Usuario user);
 
-    User getUerRequest(HttpServletRequest request);
+    Usuario getUerRequest(HttpServletRequest request);
 
-    User updateUser(String payload, HttpServletRequest request);
+    Usuario updateUser(String payload, HttpServletRequest request);
 
-    User updatePassword(String newPassword, HttpServletRequest request);
+    Usuario updatePassword(String newPassword, HttpServletRequest request);
 
     boolean checkpassword(HttpServletRequest request, String currentPassword);
 }

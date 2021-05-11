@@ -1,8 +1,6 @@
 package com.rest.comeencasa.service;
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.*;
-import com.rest.comeencasa.repos.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,6 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.entities.*;
-import com.rest.comeencasa.repos.CategoryRepository;
-import com.rest.comeencasa.repos.ReplyRepository;
-import com.rest.comeencasa.repos.TopicRepository;
-import com.rest.comeencasa.repos.UserRepository;
+import com.rest.comeencasa.repos.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +18,7 @@ public class TopicServiceImpl implements TopicService {
     CategoryService categoryService;
 
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository userRepository;
 
     @Autowired
     ReplyRepository replyRepository;
