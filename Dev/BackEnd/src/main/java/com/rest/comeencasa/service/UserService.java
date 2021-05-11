@@ -1,6 +1,5 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.entities.User;
 import com.rest.comeencasa.entities.UserDTO;
 
 import javax.servlet.http.HttpServletRequest;

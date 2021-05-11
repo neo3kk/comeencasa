@@ -2,7 +2,6 @@ package com.rest.comeencasa.controllers;
 
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.User;
 import com.rest.comeencasa.entities.UserDTO;
 import com.rest.comeencasa.repos.UserRepository;
 import com.rest.comeencasa.service.LoginService;

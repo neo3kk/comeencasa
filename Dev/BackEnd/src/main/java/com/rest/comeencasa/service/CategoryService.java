@@ -1,8 +1,5 @@
 package com.rest.comeencasa.service;
 
-import com.rest.comeencasa.entities.Category;
-import com.rest.comeencasa.entities.CategoryDTO;
-
 import java.util.List;
 
 public interface CategoryService {

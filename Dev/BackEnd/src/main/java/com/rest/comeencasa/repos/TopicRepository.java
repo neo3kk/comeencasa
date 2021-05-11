@@ -1,8 +1,6 @@
 package com.rest.comeencasa.repos;
 
 
-import com.rest.comeencasa.entities.Category;
-import com.rest.comeencasa.entities.Topic;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

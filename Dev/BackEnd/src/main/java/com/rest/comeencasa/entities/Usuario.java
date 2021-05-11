@@ -9,13 +9,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable,UsuarioInterface{
+public class Usuario implements UsuarioInterface{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<Pedido> pedidos;
 
