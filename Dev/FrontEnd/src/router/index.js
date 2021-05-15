@@ -26,5 +26,21 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
 
+  Router.beforeEach((to, from, next) => {
+    if (to.query.accessToken && to.query.refreshToken) {
+      localStorage.setItem("tokenLogin", "Bearer " + to.query.accessToken);
+      localStorage.setItem("refreshToken", "Bearer " + to.query.refreshToken);
+    }
+    if (to.meta.requiresAuth) {
+      if (localStorage.getItem("tokenLogin")) {
+        next()
+      } else {
+        next({name: "login"})
+      }
+    } else {
+      next();
+    }
+  });
+
   return Router
 }
