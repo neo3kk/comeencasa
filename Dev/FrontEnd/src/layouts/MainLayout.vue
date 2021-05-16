@@ -15,6 +15,11 @@
           Come En Casa
         </q-toolbar-title>
 
+        <img
+          alt="COME EN CASA"
+          src="~src/assets/logo.png"
+        >
+
         <div></div>
       </q-toolbar>
     </q-header>
@@ -41,13 +46,13 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from 'src/components/EssentialLink.vue'
 
 const linksData = [
   {
@@ -96,8 +101,8 @@ const linksData = [
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
-  data () {
+  components: {EssentialLink},
+  data() {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
