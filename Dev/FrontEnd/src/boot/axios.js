@@ -7,8 +7,6 @@ Vue.prototype.$axios = axios;
 export default async ({Vue, router}) => {
 
   axios.interceptors.request.use(config => {
-
-
       config.withCredentials = true;
       config.headers['Authorization'] = localStorage.getItem("tokenLogin");
     return config;

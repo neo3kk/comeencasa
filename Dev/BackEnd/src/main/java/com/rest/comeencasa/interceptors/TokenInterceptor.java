@@ -17,28 +17,31 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+        if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
 
-        String header = request.getHeader("AUTHORIZATION");
+        String auth = request.getHeader("Authorization");
+        System.out.println(auth);
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            System.out.println(validate);
+            if (validate==null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return false;
 
-        if (header == null) {
+            } else if (validate.equals("EXPIRED")) {
+                response.sendError(403, "EXPIRED");
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return false;
+            } else {
+                response.setStatus(HttpServletResponse.SC_OK);
+                return true;
+            }
+        } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
-        String token = header.replace("Bearer ", "");
-        try {
-            String email = tokenService.verifyToken(token);
-            if (email == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return false;
-            }
-            request.setAttribute("email", email);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 }

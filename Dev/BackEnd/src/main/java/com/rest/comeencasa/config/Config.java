@@ -1,6 +1,5 @@
 package com.rest.comeencasa.config;
 
-import com.rest.comeencasa.interceptors.GetInterceptorCategory;
 import com.rest.comeencasa.interceptors.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +12,12 @@ public class Config implements WebMvcConfigurer {
     @Autowired
     TokenInterceptor tokenInterceptor;
 
-    @Autowired
-    GetInterceptorCategory getInterceptorCategory;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080")
-                .allowedMethods("*")
+                .allowedMethods("PUT","POST","GET","DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .allowedHeaders("*");
     }
@@ -28,9 +25,8 @@ public class Config implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getInterceptorCategory)
-                .addPathPatterns("/categories","categories/*");
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/getprofile", "/profile", "/profile/password");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login");
     }
 }
