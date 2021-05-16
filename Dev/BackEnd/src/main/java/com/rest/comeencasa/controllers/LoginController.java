@@ -7,6 +7,7 @@ import com.rest.comeencasa.repos.UsuarioRepository;
 import com.rest.comeencasa.service.LoginService;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserService;
+import com.rest.comeencasa.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class LoginController {
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String payload) {
@@ -60,12 +61,12 @@ public class LoginController {
         String email = map.get("email");
         String password = map.get("password");
         String name = map.get("name");
-        String role = map.get("role");
         Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        if (userService.createUser(user)) {
+        if (userService.getUser(user)==null){
+            userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "done");
             return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
