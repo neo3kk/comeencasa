@@ -4,9 +4,7 @@ package com.rest.comeencasa.controllers;
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.repos.UsuarioRepository;
-import com.rest.comeencasa.service.LoginService;
 import com.rest.comeencasa.service.TokenService;
-import com.rest.comeencasa.service.UserService;
 import com.rest.comeencasa.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +22,6 @@ public class LoginController {
    Gson gson = new Gson();
 
     @Autowired
-    LoginService loginService;
-
-    @Autowired
     TokenService tokenService;
 
     @Autowired
@@ -40,16 +35,24 @@ public class LoginController {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         String email = map.get("email");
         String password = map.get("password");
-        if (!loginService.checkUserAndPassword(email, password)) {
+        Usuario us = new Usuario();
+        us.setEmail(email);
+        us.setPassword(password);
+
+        if (!userService.isRegistred(us)) {
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "Incorrect email or password.");
             return new ResponseEntity<>(gson.toJson(restMap),HttpStatus.UNAUTHORIZED);
         }
-        Usuario user = usuarioRepository.findUsuarioByEmailAndPassword(email, password);
+
+/*        if (!loginService.checkUserAndPassword(email, password)) {
+            Map<String, Object> restMap = new HashMap<>();
+            restMap.put("message", "Incorrect email or password.");
+            return new ResponseEntity<>(gson.toJson(restMap),HttpStatus.UNAUTHORIZED);
+        }*/
         String token = tokenService.newToken(email);
         Map<String, Object> restMap = new HashMap<>();
-        restMap.put("token", token);
-        restMap.put("user", user);
+        restMap.put("tokenLogin", token);
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 

@@ -136,7 +136,7 @@ export default {
     },
     async login() {
 
-      let sendLogin = await this.$axios.post(this.url_server_api+'/loginLocal', {
+      let sendLogin = await this.$axios.post(this.url_server_api+'/login', {
         email: this.email,
         password: this.password,
       }).catch(error => {
