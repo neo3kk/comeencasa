@@ -8,26 +8,29 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "rutina")
-public class Rutina implements Serializable {
+@Table(name = "menu")
+public class Menu implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name ="fecha_rutina", columnDefinition = "TEXT")
-    String fecha_rutina;
+    @Column(name ="fecha_menu", columnDefinition = "TEXT")
+    String fecha_menu;
 
     @Column(name = "ubicacion_entrega", columnDefinition = "TEXT")
     String ubicacion;
 
+    @Column(name = "tipo_de_plato", columnDefinition = "TEXT")
+    String tipo_de_plato;
+
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "rutinaPedido_id"), name = "rutinaPedido_id")
+    @JoinColumn(foreignKey = @ForeignKey(name = "menuPedido_id"), name = "menuPedido_id")
     Pedido pedido;
 
-    @OneToMany(mappedBy = "rutina", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    List<PlatoRutina> platoRutinas;
+    List<PlatoMenu> platoMenu;
 
     public Long getId() {
         return id;
@@ -37,12 +40,12 @@ public class Rutina implements Serializable {
         this.id = id;
     }
 
-    public String getFecha_rutina() {
-        return fecha_rutina;
+    public String getFecha_menu() {
+        return fecha_menu;
     }
 
-    public void setFecha_rutina(String fecha_rutina) {
-        this.fecha_rutina = fecha_rutina;
+    public void setFecha_menu(String fecha_menu) {
+        this.fecha_menu = fecha_menu;
     }
 
     public String getUbicacion() {
@@ -61,11 +64,11 @@ public class Rutina implements Serializable {
         this.pedido = pedido;
     }
 
-    public List<PlatoRutina> getPlatoRutinas() {
-        return platoRutinas;
+    public List<PlatoMenu> getPlatoMenu() {
+        return platoMenu;
     }
 
-    public void setPlatoRutinas(List<PlatoRutina> platoRutinas) {
-        this.platoRutinas = platoRutinas;
+    public void setPlatoMenu(List<PlatoMenu> platoMenu) {
+        this.platoMenu = platoMenu;
     }
 }

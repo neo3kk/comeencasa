@@ -24,7 +24,7 @@ public class Plato implements Serializable {
 
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    List<PlatoRutina> platoRutinas;
+    List<PlatoMenu> platoMenu;
 
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -54,12 +54,12 @@ public class Plato implements Serializable {
         this.precio = precio;
     }
 
-    public List<PlatoRutina> getPlatoRutinas() {
-        return platoRutinas;
+    public List<PlatoMenu> getPlatoRutinas() {
+        return platoMenu;
     }
 
-    public void setPlatoRutinas(List<PlatoRutina> platoRutinas) {
-        this.platoRutinas = platoRutinas;
+    public void setPlatoRutinas(List<PlatoMenu> platoRutinas) {
+        this.platoMenu = platoRutinas;
     }
 
     public List<com.rest.comeencasa.entities.PlatoIngrediente> getPlatoIngrediente() {

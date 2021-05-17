@@ -4,19 +4,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "plato_rutina")
-public class PlatoRutina implements Serializable {
+@Table(name = "plato_menu")
+public class PlatoMenu implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "platorutina_rutina_id"), name = "platorutina_rutina_id")
-    Rutina rutina;
+    @JoinColumn(foreignKey = @ForeignKey(name = "platomenu_menu_id"), name = "platomenu_menu_id")
+    Menu menu;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "platorutina_plato_id"), name = "platorutina_plato_id")
+    @JoinColumn(foreignKey = @ForeignKey(name = "platomenu_plato_id"), name = "platomenu_plato_id")
     Plato plato;
 
     public Long getId() {
@@ -27,12 +27,12 @@ public class PlatoRutina implements Serializable {
         this.id = id;
     }
 
-    public Rutina getRutina() {
-        return rutina;
+    public Menu getRutina() {
+        return menu;
     }
 
-    public void setRutina(Rutina rutina) {
-        this.rutina = rutina;
+    public void setRutina(Menu menu) {
+        this.menu = menu;
     }
 
     public Plato getPlato() {
