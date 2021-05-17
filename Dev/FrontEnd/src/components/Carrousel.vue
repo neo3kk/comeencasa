@@ -3,9 +3,14 @@
     <q-carousel
       animated
       v-model="slide"
-      arrows
       navigation
       infinite
+      :autoplay="autoplay"
+      arrows
+      transition-prev="slide-right"
+      transition-next="slide-left"
+      @mouseenter="autoplay = false"
+      @mouseleave="autoplay = true"
     >
       <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
       <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
@@ -15,11 +20,13 @@
   </div>
 </template>
 
+
 <script>
 export default {
   data () {
     return {
-      slide: 1
+      slide: 1,
+      autoplay: true
     }
   }
 }
