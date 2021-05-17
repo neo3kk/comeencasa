@@ -1,14 +1,16 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="COME EN CASA"
-      src="~src/assets/logo.png"
-    >
+    <Carrousel></Carrousel>
   </q-page>
+
 </template>
 
 <script>
+
+import Carrousel from 'src/components/Carrousel.vue'
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {Carrousel}
 }
 </script>

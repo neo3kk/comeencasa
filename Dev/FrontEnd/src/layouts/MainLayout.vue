@@ -12,15 +12,11 @@
         />
 
         <q-toolbar-title>
-          Come En Casa
+          <img
+            alt="COME EN CASA"
+            src="~src/assets/logomin.png"
+            id="logomin">
         </q-toolbar-title>
-
-        <img
-          alt="COME EN CASA"
-          src="~src/assets/logo.png"
-        >
-
-        <div></div>
       </q-toolbar>
     </q-header>
 
