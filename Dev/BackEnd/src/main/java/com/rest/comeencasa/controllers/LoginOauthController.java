@@ -2,7 +2,6 @@ package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Usuario;
-import com.rest.comeencasa.service.LoginService;
 import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,6 @@ import java.util.Map;
 @RestController
 public class LoginOauthController {
     Gson gson = new Gson();
-
-    @Autowired
-    LoginService loginService;
 
     @Autowired
     LoginServiceOauth loginServiceOauth;
@@ -47,7 +43,7 @@ public class LoginOauthController {
         Usuario us = new Usuario();
         us.setEmail(userDetails.get("email"));
         Map<String, Object> restMap = new HashMap<>();
-        restMap.put("token", userDetails);
+        restMap.put("tokenLogin", userDetails);
 
         if (!userService.isRegistred(us)) {
             us.setOauth(1);

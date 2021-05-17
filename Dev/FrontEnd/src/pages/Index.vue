@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <img
       alt="COME EN CASA"
-      src="~assets/logo.png"
+      src="~src/assets/logo.png"
     >
   </q-page>
 </template>

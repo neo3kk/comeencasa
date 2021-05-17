@@ -7,24 +7,18 @@ Vue.prototype.$axios = axios;
 export default async ({Vue, router}) => {
 
   axios.interceptors.request.use(config => {
-
-    if (config.url !== "http://server247.cfgs.esliceu.net/bloggeri18n/blogger.php") {
       config.withCredentials = true;
       config.headers['Authorization'] = localStorage.getItem("tokenLogin");
-    }
     return config;
   }, function (error) {
-
     return Promise.reject(error);
   });
 
   axios.interceptors.response.use(function (response) {
-
-    if (response.data.accessToken && response.data.refreshToken) {
-      localStorage.setItem("tokenLogin", "Bearer " + response.data.accessToken);
-      localStorage.setItem("refreshToken", "Bearer " + response.data.refreshToken);
+    if (response.data.tokenLogin) {
+      localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
       if (router.apps[0]._route.path == "/login") {
-        router.push("/admin");
+        router.push("/");
       }
     }
 
@@ -35,15 +29,10 @@ export default async ({Vue, router}) => {
 
     if (error.response.status == 403) {
 
-      let refreshToken = localStorage.getItem("refreshToken");
-      let response = await axios.post(SETTINGS.URL_SERVER_OAUTH+'/oauth/newtoken', {
-        refreshToken: refreshToken
-      });
+      router.push("/login");
 
       if (response.status == 200) {
-        localStorage.setItem("tokenLogin", "Bearer " + response.data.accessToken);
-        localStorage.setItem("refreshToken", "Bearer " + response.data.refreshToken);
-
+        localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
         return axios(originalRequest).catch(err => {});
       }
     }

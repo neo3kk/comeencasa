@@ -1,4 +1,3 @@
-
 const routes = [
   {
     path: '/',
@@ -12,6 +11,14 @@ const routes = [
     component: () => import('layouts/LoginLayout.vue'),
     children: [
       { path: 'login', name: 'login', component: () => import('pages/LoginPage.vue'), meta: {requiresAuth: false}},
+    ]
+  },
+  {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: 'pedidos', name: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: false}},
+      { path: 'test', name: 'test', component: () => import('pages/test.vue'), meta: {requiresAuth: true}},
     ]
   },
 

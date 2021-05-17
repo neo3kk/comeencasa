@@ -6,9 +6,9 @@
   "author": "Jlopez <neo3kk@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "quasar dev",
-    "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "dev": "node_modules/.bin/quasar dev",
+    "build": "node_modules/.bin/quasar build",
+    "build:pwa": "node_modules/.bin/quasar build -m pwa"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
