@@ -53,6 +53,7 @@ public class LoginController {
         String token = tokenService.newToken(email);
         Map<String, Object> restMap = new HashMap<>();
         restMap.put("tokenLogin", token);
+        restMap.put("user", email);
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 
