@@ -21,7 +21,7 @@
 
             <div class="row no-wrap q-pa-md">
               <div class="q-pa-md q-gutter-sm column">
-                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('myorders')">
+                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('pedidos')">
                   <q-tooltip content-class="bg-accent">Mis pedidos</q-tooltip>
                 </q-btn>
                 <q-btn round color="deep-orange" icon="edit_location" @click="$router.push('profile')">
