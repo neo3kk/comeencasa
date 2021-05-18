@@ -57,43 +57,25 @@ const linksData = [
     title: 'Menus',
     caption: 'Todos nuestros menus',
     icon: 'room_service',
-    link: '/test'
+    link: '/menus'
   },
   {
-    title: 'Mis Pedidos',
-    caption: '',
-    icon: 'shopping_cart',
-    link: '/pedidos'
+    title: 'Tarifas',
+    caption: 'Una tarifa para cada ocasión',
+    icon: 'credit_card',
+    link: '/tarifas'
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'Envios',
+    caption: 'Descubre si estas en nuestro radio de actividad',
+    icon: 'delivery_dining',
+    link: '/radio'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Alergenos',
+    caption: 'Leyenda de los alergenos',
+    icon: 'spa',
+    link: '/alergenos'
   }
 ];
 

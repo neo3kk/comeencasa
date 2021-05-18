@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-btn round glossy color="blue" icon="house">
+    <q-btn round glossy color="negative" icon="house">
       <q-menu>
         <div class="row no-wrap q-pa-md">
           <div class="column items-center">
@@ -24,7 +24,7 @@
                 <q-btn round color="primary" icon="shopping_cart" @click="$router.push('pedidos')">
                   <q-tooltip content-class="bg-accent">Mis pedidos</q-tooltip>
                 </q-btn>
-                <q-btn round color="deep-orange" icon="edit_location" @click="$router.push('profile')">
+                <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('profile')">
                   <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
                 </q-btn>
               </div>
