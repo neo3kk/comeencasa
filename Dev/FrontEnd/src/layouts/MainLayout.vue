@@ -60,10 +60,10 @@ const linksData = [
     link: 'https://quasar.dev'
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Mis Pedidos',
+    caption: '',
+    icon: 'shopping_cart',
+    link: 'http://localhost:8080/#/pedidos'
   },
   {
     title: 'Discord Chat Channel',
