@@ -30,7 +30,7 @@ public class Pedido implements Serializable {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    List<Menu> menus;
+    List<PedidoMenu> pedidoMenus;
 
 
     public Long getId() {
@@ -73,11 +73,4 @@ public class Pedido implements Serializable {
         this.usuario = usuario;
     }
 
-    public List<Menu> getRutinas() {
-        return menus;
-    }
-
-    public void setRutinas(List<Menu> menus) {
-        this.menus = menus;
-    }
 }

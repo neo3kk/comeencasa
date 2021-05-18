@@ -22,6 +22,9 @@ public class Plato implements Serializable {
     @Column(name ="precio", columnDefinition = "TEXT")
     String precio;
 
+    @Column(name = "tipo_de_plato", columnDefinition = "TEXT")
+    String tipo_de_plato;
+
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<PlatoMenu> platoMenu;

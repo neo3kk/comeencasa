@@ -15,18 +15,16 @@ public class Menu implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name ="nombre_menu", columnDefinition = "TEXT")
+    String nombre_menu;
+
     @Column(name ="fecha_menu", columnDefinition = "TEXT")
     String fecha_menu;
 
-    @Column(name = "ubicacion_entrega", columnDefinition = "TEXT")
-    String ubicacion;
 
-    @Column(name = "tipo_de_plato", columnDefinition = "TEXT")
-    String tipo_de_plato;
-
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "menuPedido_id"), name = "menuPedido_id")
-    Pedido pedido;
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    List<PedidoMenu> pedidoMenus;
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -48,20 +46,20 @@ public class Menu implements Serializable {
         this.fecha_menu = fecha_menu;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getNombre_menu() {
+        return nombre_menu;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setNombre_menu(String nombre_menu) {
+        this.nombre_menu = nombre_menu;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public List<PedidoMenu> getPedidoMenus() {
+        return pedidoMenus;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setPedidoMenus(List<PedidoMenu> pedidoMenus) {
+        this.pedidoMenus = pedidoMenus;
     }
 
     public List<PlatoMenu> getPlatoMenu() {
