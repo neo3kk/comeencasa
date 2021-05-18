@@ -4,7 +4,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue'),meta: {requiresAuth: false} },
-      { path: 'alergenos', component: () => import('pages/Alergenos.vue'),meta: {requiresAuth: false} },
+      { path: 'platos', component: () => import('pages/Platos.vue'),meta: {requiresAuth: false} },
+      { path: 'tarifas', component: () => import('pages/Tarifas.vue'),meta: {requiresAuth: false} },
+      { path: 'envios', component: () => import('pages/Envios.vue'),meta: {requiresAuth: false} },
+      { path: 'alergenos', component: () => import('pages/Alergenos.vue'),meta: {requiresAuth: false} }
     ]
   },
   {
@@ -18,6 +21,7 @@ const routes = [
     path: '/profile',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      { path: '', component: () => import('pages/Index.vue'),meta: {requiresAuth: true} },
       { path: 'pedidos', name: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
     ]
   },

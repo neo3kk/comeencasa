@@ -57,7 +57,7 @@ const linksData = [
     title: 'Platos',
     caption: 'Todos nuestros platos',
     icon: 'room_service',
-    link: '/menus'
+    link: '/platos'
   },
   {
     title: 'Tarifas',
@@ -69,7 +69,7 @@ const linksData = [
     title: 'Envios',
     caption: 'Descubre si estas en nuestro radio de actividad',
     icon: 'delivery_dining',
-    link: '/radio'
+    link: '/envios'
   },
   {
     title: 'Alergenos',
@@ -81,7 +81,7 @@ const linksData = [
     title: 'Mi cuenta',
     caption: 'Entra a tu cuenta y disfruta de la comida',
     icon: 'account_circle',
-    link: '/login'
+    link: "/login"
   }
 ];
 
@@ -92,13 +92,19 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
-      showUserInfo: false
+      showUserInfo: false,
+      logged: false
     }
   },
   created() {
-    if(localStorage.getItem("tokenLogin")){
-      this.showUserInfo=true
+    if (localStorage.getItem("tokenLogin")) {
+      this.essentialLinks.forEach(function (z){
+        if(z.title === "Mi cuenta"){
+          z.link="/profile"
+        }
+      })
+      this.showUserInfo = true
     }
-  }
+  },
 }
 </script>

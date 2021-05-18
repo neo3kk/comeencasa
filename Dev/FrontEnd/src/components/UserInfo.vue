@@ -24,10 +24,10 @@
 
             <div class="row no-wrap q-pa-md">
               <div class="q-pa-md q-gutter-sm column">
-                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('pedidos')">
+                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('/profile/pedidos')">
                   <q-tooltip content-class="bg-accent">Mis pedidos</q-tooltip>
                 </q-btn>
-                <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('profile')">
+                <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('/profile')">
                   <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
                 </q-btn>
               </div>
