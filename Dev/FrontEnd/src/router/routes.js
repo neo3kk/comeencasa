@@ -4,6 +4,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/Index.vue'),meta: {requiresAuth: false} },
+      { path: 'alergenos', component: () => import('pages/Alergenos.vue'),meta: {requiresAuth: false} },
     ]
   },
   {
@@ -14,11 +15,10 @@ const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/profile',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'pedidos', name: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: false}},
-      { path: 'test', name: 'test', component: () => import('pages/test.vue'), meta: {requiresAuth: true}},
+      { path: 'pedidos', name: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
     ]
   },
 

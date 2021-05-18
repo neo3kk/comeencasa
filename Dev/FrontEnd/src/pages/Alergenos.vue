@@ -1,7 +1,6 @@
 <template>
   <q-page>
-    <suggestions></suggestions>
-    <Carrousel></Carrousel>
+    <alergenos-component></alergenos-component>
   </q-page>
 
 
@@ -11,9 +10,10 @@
 
 import Carrousel from 'src/components/Carrousel.vue'
 import Suggestions from "components/Suggestions";
+import AlergenosComponent from "components/AlergenosComponent";
 
 export default {
-  name: 'PageIndex',
-  components: {Suggestions, Carrousel}
+  name: 'Alergenos',
+  components: {AlergenosComponent},
 }
 </script>
