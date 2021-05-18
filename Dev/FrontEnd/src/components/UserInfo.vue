@@ -3,14 +3,6 @@
     <q-btn round glossy color="blue" icon="house">
       <q-menu>
         <div class="row no-wrap q-pa-md">
-          <!--          <div class="column">
-                      <div class="text-h6 q-mb-md">Settings</div>
-                      <q-toggle v-model="mobileData" label="Use Mobile Data" />
-                      <q-toggle v-model="bluetooth" label="Bluetooth" />
-                    </div>
-
-                    <q-separator vertical inset class="q-mx-lg" />-->
-
           <div class="column items-center">
             <q-avatar size="72px">
               <img src="https://cdn.quasar.dev/img/avatar4.jpg">
@@ -26,6 +18,17 @@
               v-close-popup
               @click="logout"
             />
+
+            <div class="row no-wrap q-pa-md">
+              <div class="q-pa-md q-gutter-sm column">
+                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('myorders')">
+                  <q-tooltip content-class="bg-accent">Mis pedidos</q-tooltip>
+                </q-btn>
+                <q-btn round color="deep-orange" icon="edit_location" @click="$router.push('profile')">
+                  <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
+                </q-btn>
+              </div>
+            </div>
           </div>
         </div>
       </q-menu>
@@ -45,7 +48,7 @@ export default {
     this.user = localStorage.getItem("user")
   },
   methods: {
-    logout(){
+    logout() {
       localStorage.clear()
       this.$router.push("/login");
     }
