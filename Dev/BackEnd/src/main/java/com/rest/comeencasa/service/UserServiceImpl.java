@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
         return us;
     }
 
+    public Usuario getUserByEmail(String email) {
+        Usuario us = usuarioRepository.findUsuarioByEmail(email);
+        return us;
+    }
+
     @Override
     public Usuario getUserByid(Long userId) {
         Usuario us = usuarioRepository.findById(userId).get();

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Pedido;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.service.PedidoService;
+import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +27,28 @@ public class PedidoController {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    TokenService tokenService;
 
-    @GetMapping("/pedidos")
-    public ResponseEntity<String> getAll() {
-        List<Usuario> usuarios = userService.getAll();
-        Usuario user = usuarios.get(0);
-        List<Pedido> pedidos = user.getPedidos();
-        Map<String, Object> restMap = new HashMap<>();
-        restMap.put("pedidos", pedidos);
-        return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
+
+    @PostMapping("/pedidos")
+    public ResponseEntity<String> getAllByUser(HttpServletRequest request) {
+        String auth = request.getHeader("Authorization");
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+            }
+        }
+
+        if (user != null){
+            List<Pedido> pedidos = user.getPedidos();
+            Map<String, Object> restMap = new HashMap<>();
+            restMap.put("pedidos", pedidos);
+            return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

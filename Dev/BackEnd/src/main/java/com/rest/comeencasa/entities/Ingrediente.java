@@ -16,21 +16,10 @@ public class Ingrediente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name ="azucar", columnDefinition = "TEXT")
-    String azucar;
-
-    @Column(name ="grasas_saturadas", columnDefinition = "TEXT")
-    String grasas_saturadas;
-
-    @Column(name ="energia", columnDefinition = "TEXT")
-    String energia;
+    @Column(name= "nombre")
+    private String name;
 
 
-    @Column(name ="proteinas", columnDefinition = "TEXT")
-    String proteinas;
-
-    @Column(name ="cafeina", columnDefinition = "TEXT")
-    String cafeina;
 
     @OneToMany(mappedBy = "ingrediente", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -44,51 +33,19 @@ public class Ingrediente implements Serializable {
         this.id = id;
     }
 
-    public String getAzucar() {
-        return azucar;
+    public String getName() {
+        return name;
     }
 
-    public void setAzucar(String azucar) {
-        this.azucar = azucar;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getGrasas_saturadas() {
-        return grasas_saturadas;
-    }
-
-    public void setGrasas_saturadas(String grasas_saturadas) {
-        this.grasas_saturadas = grasas_saturadas;
-    }
-
-    public String getEnergia() {
-        return energia;
-    }
-
-    public void setEnergia(String energia) {
-        this.energia = energia;
-    }
-
-    public String getProteinas() {
-        return proteinas;
-    }
-
-    public void setProteinas(String proteinas) {
-        this.proteinas = proteinas;
-    }
-
-    public String getCafeina() {
-        return cafeina;
-    }
-
-    public void setCafeina(String cafeina) {
-        this.cafeina = cafeina;
-    }
-
-    public List<com.rest.comeencasa.entities.PlatoIngrediente> getPlatoIngrediente() {
+    public List<PlatoIngrediente> getPlatoIngrediente() {
         return PlatoIngrediente;
     }
 
-    public void setPlatoIngrediente(List<com.rest.comeencasa.entities.PlatoIngrediente> platoIngrediente) {
+    public void setPlatoIngrediente(List<PlatoIngrediente> platoIngrediente) {
         PlatoIngrediente = platoIngrediente;
     }
 }
