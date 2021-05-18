@@ -54,16 +54,16 @@ import UserInfo from "components/UserInfo";
 
 const linksData = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Menus',
+    caption: 'Todos nuestros menus',
+    icon: 'room_service',
+    link: '/test'
   },
   {
     title: 'Mis Pedidos',
     caption: '',
     icon: 'shopping_cart',
-    link: 'http://localhost:8080/#/pedidos'
+    link: '/pedidos'
   },
   {
     title: 'Discord Chat Channel',
