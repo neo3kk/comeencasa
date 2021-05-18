@@ -76,7 +76,7 @@
 
 <script>
 import {SETTINGS} from '../settings.js'
-import { required, minLength, between, email } from 'vuelidate/lib/validators'
+import {required, minLength, between, email} from 'vuelidate/lib/validators'
 
 export default {
   data() {
@@ -107,6 +107,10 @@ export default {
       required,
       minLength: minLength(4)
     }
+  }, created() {
+    if (localStorage.getItem("tokenLogin")) {
+      this.$router.push("/")
+    }
   },
   methods: {
     async register() {
@@ -114,7 +118,7 @@ export default {
       if (this.$v.$invalid) {
         this.showNotification("Revisa tots els camps requerits", "error", "negative")
       } else {
-        let sendRegister = await this.$axios.post(this.url_server_api+'/register', {
+        let sendRegister = await this.$axios.post(this.url_server_api + '/register', {
           name: this.name,
           last_name: this.last_name,
           email: this.email,
@@ -136,7 +140,7 @@ export default {
     },
     async login() {
 
-      let sendLogin = await this.$axios.post(this.url_server_api+'/login', {
+      let sendLogin = await this.$axios.post(this.url_server_api + '/login', {
         email: this.email,
         password: this.password,
       }).catch(error => {
