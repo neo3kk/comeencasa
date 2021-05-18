@@ -17,6 +17,7 @@
             src="~src/assets/logomin.png"
             id="logomin">
         </q-toolbar-title>
+        <UserInfo v-show=showUserInfo></UserInfo>
       </q-toolbar>
     </q-header>
 
@@ -49,6 +50,7 @@
 
 <script>
 import EssentialLink from 'src/components/EssentialLink.vue'
+import UserInfo from "components/UserInfo";
 
 const linksData = [
   {
@@ -97,11 +99,17 @@ const linksData = [
 
 export default {
   name: 'MainLayout',
-  components: {EssentialLink},
+  components: {UserInfo, EssentialLink},
   data() {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      essentialLinks: linksData,
+      showUserInfo: false
+    }
+  },
+  created() {
+    if(localStorage.getItem("tokenLogin")){
+      this.showUserInfo=true
     }
   }
 }

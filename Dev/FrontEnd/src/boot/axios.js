@@ -17,6 +17,7 @@ export default async ({Vue, router}) => {
   axios.interceptors.response.use(function (response) {
     if (response.data.tokenLogin) {
       localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
+      localStorage.setItem("user", response.data.user);
       if (router.apps[0]._route.path == "/login") {
         router.push("/");
       }
@@ -33,6 +34,7 @@ export default async ({Vue, router}) => {
 
       if (response.status == 200) {
         localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
+        localStorage.setItem("user", response.data.user);
         return axios(originalRequest).catch(err => {});
       }
     }
