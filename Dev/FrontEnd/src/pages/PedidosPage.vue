@@ -31,7 +31,7 @@ export default {
     };
   },
   async created() {
-    var pedidosFetch = await this.$axios.get(this.url_server_api + '/pedidos')
+    let pedidosFetch = await this.$axios.get(this.url_server_api + '/pedidos')
       .then(response => {
         console.log(response)
         this.pedidos = response.data.pedidos

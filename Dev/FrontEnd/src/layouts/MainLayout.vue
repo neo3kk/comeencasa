@@ -76,6 +76,12 @@ const linksData = [
     caption: 'Leyenda de los alergenos',
     icon: 'spa',
     link: '/alergenos'
+  },
+  {
+    title: 'Mi cuenta',
+    caption: 'Entra a tu cuenta y disfruta de la comida',
+    icon: 'account_circle',
+    link: '/login'
   }
 ];
 
