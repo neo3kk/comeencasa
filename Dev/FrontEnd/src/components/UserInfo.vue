@@ -1,6 +1,9 @@
 <template>
   <div class="q-pa-md">
-    <q-btn round glossy color="negative" icon="house">
+    <q-btn round>
+      <q-avatar size="42px">
+        <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+      </q-avatar>
       <q-menu>
         <div class="row no-wrap q-pa-md">
           <div class="column items-center">

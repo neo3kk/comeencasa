@@ -1,5 +1,6 @@
 <template>
   <q-page>
+    <suggestions></suggestions>
     <Carrousel></Carrousel>
   </q-page>
 
@@ -9,9 +10,10 @@
 <script>
 
 import Carrousel from 'src/components/Carrousel.vue'
+import Suggestions from "components/suggestions";
 
 export default {
   name: 'PageIndex',
-  components: {Carrousel}
+  components: {Suggestions, Carrousel}
 }
 </script>
