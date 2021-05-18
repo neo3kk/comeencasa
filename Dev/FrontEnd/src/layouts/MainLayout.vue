@@ -11,7 +11,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title align="center">
           <img
             alt="COME EN CASA"
             src="~src/assets/logomin.png"
