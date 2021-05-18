@@ -54,8 +54,8 @@ import UserInfo from "components/UserInfo";
 
 const linksData = [
   {
-    title: 'Menus',
-    caption: 'Todos nuestros menus',
+    title: 'Platos',
+    caption: 'Todos nuestros platos',
     icon: 'room_service',
     link: '/menus'
   },
