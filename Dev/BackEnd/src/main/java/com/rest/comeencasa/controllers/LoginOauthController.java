@@ -28,13 +28,6 @@ public class LoginOauthController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/loginOauth2")
-    public String app() throws Exception {
-       // URL url = loginServiceOauth.getGoogleRedirectURL();
-        //return "" + url;
-        return "";
-    }
-
     @GetMapping("/loginOauth")
     public ModelAndView method() throws Exception {
         URL url = loginServiceOauth.getGoogleRedirectURL();
