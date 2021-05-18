@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -27,10 +28,17 @@ public class LoginOauthController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/loginOauth")
+    @GetMapping("/loginOauth2")
     public String app() throws Exception {
+       // URL url = loginServiceOauth.getGoogleRedirectURL();
+        //return "" + url;
+        return "";
+    }
+
+    @GetMapping("/loginOauth")
+    public ModelAndView method() throws Exception {
         URL url = loginServiceOauth.getGoogleRedirectURL();
-        return "redirect:" + url;
+        return new ModelAndView("redirect:" + url);
     }
 
     @GetMapping("/auth/oauth2callback/")
