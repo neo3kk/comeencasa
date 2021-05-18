@@ -1,6 +1,8 @@
 <template>
   <q-page>
-    <q-img src="../statics/logo.png" style="max-width: 150px;"/>
+    <q-item to="/" exact>
+    <q-img src="../assets/logomin.png"/>
+    </q-item>
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width: 350px">
         <q-tabs
