@@ -7,13 +7,13 @@ import com.rest.comeencasa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.xml.stream.Location;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class LoginOauthController {
         return new ModelAndView("redirect:" + url);
     }
 
-    @GetMapping("/auth/oauth2callback/")
+    @PostMapping("/auth/oauth2callback/")
     @Transactional
     public ResponseEntity<String> oauthCallback(@RequestParam String code, HttpSession session) throws Exception {
         String accessToken = loginServiceOauth.getAccessToken(code);
@@ -44,7 +44,8 @@ public class LoginOauthController {
         Usuario us = new Usuario();
         us.setEmail(userDetails.get("email"));
         Map<String, Object> restMap = new HashMap<>();
-        restMap.put("tokenLogin", userDetails);
+        restMap.put("tokenLogin", accessToken);
+        restMap.put("user", userDetails.get("email"));
 
         if (!userService.isRegistred(us)) {
             us.setOauth(1);
