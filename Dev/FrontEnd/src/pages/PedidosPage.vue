@@ -31,11 +31,13 @@ export default {
     };
   },
   async created() {
-    let pedidosFetch = await this.$axios.get(this.url_server_api + '/pedidos')
-      .then(response => {
-        console.log(response)
-        this.pedidos = response.data.pedidos
-      });
+    this.$axios.CancelToken
+    var pedidosFetch = await this.$axios.post(this.url_server_api + '/pedidos', {
+      email: window.localStorage.getItem('tokenLogin')
+    }).then(response => {
+      console.log(response)
+      this.pedidos = response.data.pedidos
+    });
   },
   methods: {}
 };
