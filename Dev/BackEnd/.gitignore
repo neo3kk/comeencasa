@@ -2,3 +2,4 @@
 ./target/
 ./mysql/
 /src/main/props/
+/src/main/resources/application.properties
