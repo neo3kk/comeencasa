@@ -1,5 +1,5 @@
 export const SETTINGS = {
-  URL_SERVER_API: "http://localhost:5000",
+  URL_SERVER_API: "http://localhost:5000/",
 };
 
 //////////////// SETTINGS PARA PRODUCCIÓN ////////////
