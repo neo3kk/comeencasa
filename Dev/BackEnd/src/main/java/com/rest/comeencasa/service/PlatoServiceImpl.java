@@ -3,6 +3,9 @@ package com.rest.comeencasa.service;
 import com.rest.comeencasa.entities.PedidoDTO;
 import com.rest.comeencasa.entities.Plato;
 import com.rest.comeencasa.entities.PlatoDTO;
+import com.rest.comeencasa.repos.PedidoRepository;
+import com.rest.comeencasa.repos.PlatoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.List;
 
 @Service
 public class PlatoServiceImpl implements PlatoService{
+    @Autowired
+    PlatoRepository platoRepository;
+
     @Override
     public List<PlatoDTO> createListplatoDTO(List<Plato> platos) {
         List<PlatoDTO> listDto = new ArrayList<>();
@@ -32,6 +38,6 @@ public class PlatoServiceImpl implements PlatoService{
 
     @Override
     public List<Plato> findAll() {
-        return null;
+        return platoRepository.findAll();
     }
 }
