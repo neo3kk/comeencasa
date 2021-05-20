@@ -10,8 +10,7 @@ public class PedidoDTO{
     String fecha_pedido;
     String ubicacion;
     String precio_final;
-    Usuario usuario;
-    List<PedidoMenu> pedidoMenus;
+    String usuario;
 
     public Long getId() {
         return id;
@@ -45,20 +44,12 @@ public class PedidoDTO{
         this.precio_final = precio_final;
     }
 
-    public Usuario getUsuario() {
+    public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(String usuario) {
         this.usuario = usuario;
-    }
-
-    public List<PedidoMenu> getPedidoMenus() {
-        return pedidoMenus;
-    }
-
-    public void setPedidoMenus(List<PedidoMenu> pedidoMenus) {
-        this.pedidoMenus = pedidoMenus;
     }
 
     @Override
@@ -66,11 +57,22 @@ public class PedidoDTO{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PedidoDTO pedidoDTO = (PedidoDTO) o;
-        return Objects.equals(id, pedidoDTO.id) && Objects.equals(fecha_pedido, pedidoDTO.fecha_pedido) && Objects.equals(ubicacion, pedidoDTO.ubicacion) && Objects.equals(precio_final, pedidoDTO.precio_final) && Objects.equals(usuario, pedidoDTO.usuario) && Objects.equals(pedidoMenus, pedidoDTO.pedidoMenus);
+        return Objects.equals(id, pedidoDTO.id) && Objects.equals(fecha_pedido, pedidoDTO.fecha_pedido) && Objects.equals(ubicacion, pedidoDTO.ubicacion) && Objects.equals(precio_final, pedidoDTO.precio_final) && Objects.equals(usuario, pedidoDTO.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fecha_pedido, ubicacion, precio_final, usuario, pedidoMenus);
+        return Objects.hash(id, fecha_pedido, ubicacion, precio_final, usuario);
+    }
+
+    @Override
+    public String toString() {
+        return "PedidoDTO{" +
+                "id=" + id +
+                ", fecha_pedido='" + fecha_pedido + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", precio_final='" + precio_final + '\'' +
+                ", usuario='" + usuario + '\'' +
+                '}';
     }
 }

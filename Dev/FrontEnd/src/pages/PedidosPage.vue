@@ -2,6 +2,7 @@
   <q-page class="flex flex-center">
 
     <q-list>
+      Pedidos
       <q-item v-for="pedido in pedidos" key="pedido.id">
         <q-item-section>
           <q-item-label>Orden de pedido {{ pedido.id }}</q-item-label>
@@ -13,7 +14,6 @@
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
-
     </q-list>
   </q-page>
 </template>
@@ -25,7 +25,7 @@ import {required, minLength, between, email} from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
-      pedidos: '',
+      pedidos: [],
       tab: "pedidos",
       url_server_api: SETTINGS.URL_SERVER_API
     };
@@ -36,7 +36,7 @@ export default {
   methods: {
     async getPedidos() {
       let pedidosFetch = await this.$axios.post(this.url_server_api + '/pedidos');
-      this.pedidos = pedidosFetch.data.pedidos
+      this.pedidos = pedidosFetch.data
     }
   }
 };

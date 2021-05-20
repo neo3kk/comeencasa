@@ -2,6 +2,7 @@ package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Pedido;
+import com.rest.comeencasa.entities.PedidoDTO;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,8 @@ public class PedidoController {
         }
         if (user != null) {
             List<Pedido> pedidos = pedidoService.findByUsuario(user);
-            Map<String, Object> restMap = new HashMap<>();
-            restMap.put("pedidos", pedidos);
-            return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
+            List<PedidoDTO> pedidoDTOList = pedidoService.createListpedidoDTO(pedidos);
+            return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
