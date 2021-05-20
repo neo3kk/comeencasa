@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
         return us;
     }
 
+    @Override
     public Usuario getUserByEmail(String email) {
         Usuario us = usuarioRepository.findUsuarioByEmail(email);
         return us;

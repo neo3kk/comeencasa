@@ -1,6 +1,7 @@
 package com.rest.comeencasa.interceptors;
 
 
+import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,11 +9,15 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    LoginServiceOauth loginServiceOauth;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,7 +31,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (auth != null && !auth.isEmpty()) {
             String token = auth.replace("Bearer ", "");
             String validate = tokenService.verifyToken(token);
-            System.out.println(validate);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if(userDetails.get("email") != null){
+             validate = userDetails.get("email");
+            };
             if (validate==null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
