@@ -19,6 +19,9 @@ public class Plato implements Serializable {
     @Column(name ="nombre", columnDefinition = "TEXT")
     String nombre;
 
+    @Column(name ="description", columnDefinition = "TEXT")
+    String description;
+
     @Column(name ="precio", columnDefinition = "TEXT")
     String precio;
 
@@ -47,6 +50,30 @@ public class Plato implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTipo_de_plato() {
+        return tipo_de_plato;
+    }
+
+    public void setTipo_de_plato(String tipo_de_plato) {
+        this.tipo_de_plato = tipo_de_plato;
+    }
+
+    public List<PlatoMenu> getPlatoMenu() {
+        return platoMenu;
+    }
+
+    public void setPlatoMenu(List<PlatoMenu> platoMenu) {
+        this.platoMenu = platoMenu;
     }
 
     public String getPrecio() {
