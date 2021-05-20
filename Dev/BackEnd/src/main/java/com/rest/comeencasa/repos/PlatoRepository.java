@@ -1,2 +1,10 @@
-package com.rest.comeencasa.repos;public interface PlatoRepository {
+package com.rest.comeencasa.repos;
+
+import com.rest.comeencasa.entities.Plato;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface PlatoRepository extends JpaRepository<Plato, Long> {
+    List<Plato> findAll();
 }
