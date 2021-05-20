@@ -9,7 +9,6 @@ public class PlatoDTO {
     String description;
     String tipo_de_plato;
 
-
     public Long getId() {
         return id;
     }

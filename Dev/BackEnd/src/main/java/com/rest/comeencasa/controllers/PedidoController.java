@@ -74,7 +74,7 @@ public class PedidoController {
                 Pedido pedido = new Pedido();
                 pedido.setFecha_pedido(utils.getToday());
                 pedido.setUbicacion(ubicacion);
-                pedido.setUser(user);
+                pedido.setUsuario(user);
                 pedido.setPrecio_final(precio_final);
                 pedidoService.makePedidoDto(pedido);
                 return new ResponseEntity<>("Se ha realizado el pedido correctamente",HttpStatus.ACCEPTED);

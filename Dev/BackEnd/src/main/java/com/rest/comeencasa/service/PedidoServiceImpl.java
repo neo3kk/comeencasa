@@ -39,7 +39,7 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoDTO makePedidoDto(Pedido pedido) {
        PedidoDTO pedidoDTO = new PedidoDTO();
        pedidoDTO.setId(pedido.getId());
-       pedidoDTO.setUsuario(pedido.getUser().getEmail());
+       pedidoDTO.setUsuario(pedido.getUsuario().getEmail());
        pedidoDTO.setFecha_pedido(pedido.getFecha_pedido());
        pedidoDTO.setUbicacion(pedido.getUbicacion());
        pedidoDTO.setPrecio_final(pedido.getPrecio_final());

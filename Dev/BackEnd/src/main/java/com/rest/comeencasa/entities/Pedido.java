@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "pedido")
@@ -31,7 +32,6 @@ public class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<PedidoMenu> pedidoMenus;
-
 
     public Long getId() {
         return id;
@@ -65,12 +65,44 @@ public class Pedido implements Serializable {
         this.precio_final = precio_final;
     }
 
-    public Usuario getUser() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUser(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
+    public List<PedidoMenu> getPedidoMenus() {
+        return pedidoMenus;
+    }
+
+    public void setPedidoMenus(List<PedidoMenu> pedidoMenus) {
+        this.pedidoMenus = pedidoMenus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pedido pedido = (Pedido) o;
+        return Objects.equals(id, pedido.id) && Objects.equals(fecha_pedido, pedido.fecha_pedido) && Objects.equals(ubicacion, pedido.ubicacion) && Objects.equals(precio_final, pedido.precio_final) && Objects.equals(usuario, pedido.usuario) && Objects.equals(pedidoMenus, pedido.pedidoMenus);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fecha_pedido, ubicacion, precio_final, usuario, pedidoMenus);
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                ", fecha_pedido='" + fecha_pedido + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", precio_final='" + precio_final + '\'' +
+                ", usuario=" + usuario +
+                ", pedidoMenus=" + pedidoMenus +
+                '}';
+    }
 }

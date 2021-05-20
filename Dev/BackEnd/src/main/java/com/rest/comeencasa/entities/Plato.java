@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "plato")
@@ -60,6 +61,14 @@ public class Plato implements Serializable {
         this.description = description;
     }
 
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
+
     public String getTipo_de_plato() {
         return tipo_de_plato;
     }
@@ -76,27 +85,37 @@ public class Plato implements Serializable {
         this.platoMenu = platoMenu;
     }
 
-    public String getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(String precio) {
-        this.precio = precio;
-    }
-
-    public List<PlatoMenu> getPlatoRutinas() {
-        return platoMenu;
-    }
-
-    public void setPlatoRutinas(List<PlatoMenu> platoRutinas) {
-        this.platoMenu = platoRutinas;
-    }
-
     public List<com.rest.comeencasa.entities.PlatoIngrediente> getPlatoIngrediente() {
         return PlatoIngrediente;
     }
 
     public void setPlatoIngrediente(List<com.rest.comeencasa.entities.PlatoIngrediente> platoIngrediente) {
         PlatoIngrediente = platoIngrediente;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plato plato = (Plato) o;
+        return Objects.equals(id, plato.id) && Objects.equals(nombre, plato.nombre) && Objects.equals(description, plato.description) && Objects.equals(precio, plato.precio) && Objects.equals(tipo_de_plato, plato.tipo_de_plato) && Objects.equals(platoMenu, plato.platoMenu) && Objects.equals(PlatoIngrediente, plato.PlatoIngrediente);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, description, precio, tipo_de_plato, platoMenu, PlatoIngrediente);
+    }
+
+    @Override
+    public String toString() {
+        return "Plato{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", description='" + description + '\'' +
+                ", precio='" + precio + '\'' +
+                ", tipo_de_plato='" + tipo_de_plato + '\'' +
+                ", platoMenu=" + platoMenu +
+                ", PlatoIngrediente=" + PlatoIngrediente +
+                '}';
     }
 }
