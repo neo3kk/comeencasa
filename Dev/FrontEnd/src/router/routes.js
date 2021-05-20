@@ -23,7 +23,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/Index.vue'), meta: {requiresAuth: true}},
-      {path: 'pedidos', name: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
+      {path: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
     ]
   },
 

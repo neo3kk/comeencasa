@@ -30,15 +30,14 @@ export default {
       url_server_api: SETTINGS.URL_SERVER_API
     };
   },
-  async created() {
-    this.$axios.CancelToken
-    var pedidosFetch = await this.$axios.post(this.url_server_api + '/pedidos', {
-      email: window.localStorage.getItem('tokenLogin')
-    }).then(response => {
-      console.log(response)
-      this.pedidos = response.data.pedidos
-    });
+  created() {
+    this.getPedidos();
   },
-  methods: {}
+  methods: {
+    async getPedidos() {
+      let pedidosFetch = await this.$axios.post(this.url_server_api + '/pedidos');
+      this.pedidos = pedidosFetch.data.pedidos
+    }
+  }
 };
 </script>
