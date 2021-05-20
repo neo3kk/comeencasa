@@ -2,6 +2,9 @@
   <q-page>
     <suggestions></suggestions>
     <Carrousel></Carrousel>
+    <div>
+
+    </div>
   </q-page>
 
 
