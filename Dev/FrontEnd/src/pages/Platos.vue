@@ -9,7 +9,7 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        {{ lorem }}
+        Ingredientes:
       </q-card-section>
     </q-card>
   </q-page>
@@ -38,7 +38,7 @@ export default {
   methods: {
     async getPlatos() {
       let platosFetch = await this.$axios.get(this.url_server_api + '/platos');
-      this.pedidos = platosFetch.data
+      this.platos = platosFetch.data
     }
   }
 
