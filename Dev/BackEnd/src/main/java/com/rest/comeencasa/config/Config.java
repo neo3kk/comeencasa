@@ -16,8 +16,8 @@ public class Config implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080","http://localhost:8081")
-                .allowedMethods("PUT","POST","GET","DELETE", "OPTIONS")
+                .allowedOrigins("http://localhost:8080", "http://localhost:8081")
+                .allowedMethods("PUT", "POST", "GET", "DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .allowedHeaders("*");
     }
@@ -27,6 +27,6 @@ public class Config implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login","/register","/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios");
+                .excludePathPatterns("/login", "/register", "/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios", "/upload/image");
     }
 }

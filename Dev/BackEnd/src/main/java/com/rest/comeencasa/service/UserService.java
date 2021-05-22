@@ -27,4 +27,6 @@ public interface UserService {
     void deleteUser(Usuario userObject);
 
     boolean createUser(Usuario user);
+
+    String processAvatar(String avatar, String userId);
 }

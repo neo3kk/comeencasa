@@ -2,19 +2,25 @@ package com.rest.comeencasa.controllers;
 
 
 import com.google.gson.Gson;
+import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.repos.UsuarioRepository;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,11 +96,15 @@ public class LoginController {
     }
 
 
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> image(@RequestBody String payload) {
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        System.out.println(map);
-        System.out.println(payload);
-        return new ResponseEntity<>("hola", HttpStatus.BAD_REQUEST);
+    @PostMapping("/upload/image")
+    public HttpEntity<? extends Serializable> uploadFileRegister(@RequestPart(value = "file") MultipartFile uploadfile) {
+
+        try {
+            byte[] bytes = Base64.encodeBase64(uploadfile.getBytes());
+            return new ResponseEntity<>(bytes, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<String>("ERROR", HttpStatus.UNAUTHORIZED);
+        }
     }
 }

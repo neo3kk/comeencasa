@@ -57,19 +57,17 @@
                      :error-message="mensaError('password')"
                      :error="$v.password.$invalid"
             />
-            <q-file filled bottom-slots v-model="image" label="Label" counter  accept=".jpg,.png,image/*" max-files="1">
-              <template v-slot:before>
-                <q-icon name="folder_open" />
-              </template>
-
-              <template v-slot:hint>
-                Field hint
-              </template>
-
-              <template v-slot:append>
-                <q-btn round dense flat icon="add" @click.stop />
-              </template>
-            </q-file>
+            <q-uploader
+              label="Selecciona una imatge de perfil"
+              fieldName="file"
+              auto-upload
+              class="q-mt-md"
+              @uploaded="uploaded"
+              method="POST"
+              accept=".jpg,.png,image/*"
+              :url="url_server_api+'/upload/image'"
+              multiple
+            />
             <q-btn class="q-my-lg" color="secondary" label="Register" @click="register"/>
           </q-tab-panel>
         </q-tab-panels>
@@ -89,7 +87,7 @@ export default {
       last_name: '',
       email: '',
       password: '',
-      image: null,
+      image: '',
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API
     };
@@ -122,16 +120,12 @@ export default {
       if (this.$v.$invalid) {
         this.showNotification("Revisa tots els camps requerits", "error", "negative")
       } else {
-        console.log(this.image)
-        const fd = new FormData()
-        fd.append('file', this.image)
-
         let sendRegister = await this.$axios.post(this.url_server_api + '/register', {
           name: this.name,
           last_name: this.last_name,
           email: this.email,
           password: this.password,
-          image: fd,
+          image: this.image,
         }).then(response => {
           this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
         }).catch(error => {
@@ -175,15 +169,8 @@ export default {
         ]
       })
     },
-    fileSelected (files) {
-      if (files.length !== 0) {
-        this.selectedFile = true
-      }
-      this.$store.commit('uploader/MutationFileSelected', files[0])
-    },
-//youNeed
-    fileRemoved () {
-      this.selectedFile = false
+    uploaded(info) {
+      this.image = info.xhr.response;
     },
     mensaError(data) {
       if (data === 'name') {

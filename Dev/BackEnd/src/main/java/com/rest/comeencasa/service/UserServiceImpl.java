@@ -117,17 +117,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public String processAvatar(String avatar, String userId){
 
         if ( avatar != null ){
             avatar = avatar.split(",")[1];
             byte[] bytes = Base64.decodeBase64(avatar);
-
             Image image = new Image();
             image.setBytes(bytes);
             image.setFileName( userId +"-"+ new Timestamp(System.currentTimeMillis()).getTime() +".png");
             imageRepository.save(image);
-
             return image.getFileName();
         }
         return null;
