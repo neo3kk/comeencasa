@@ -38,6 +38,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public PedidoDTO makePedidoDto(Pedido pedido) {
        PedidoDTO pedidoDTO = new PedidoDTO();
+       pedidoDTO.setEstado(pedido.getEstado());
        pedidoDTO.setId(pedido.getId());
        pedidoDTO.setUsuario(pedido.getUsuario().getEmail());
        pedidoDTO.setFecha_pedido(pedido.getFecha_pedido());
@@ -50,5 +51,16 @@ public class PedidoServiceImpl implements PedidoService {
     public List<Pedido> findByUsuario(Usuario usuario) {
         List<Pedido> listPedido = pedidoRepository.findPedidoByUsuario(usuario);
         return listPedido;
+    }
+
+    @Override
+    public Pedido findPedidoByUsuarioAndEstado(Usuario usuario, String estado) {
+        Pedido pedido = pedidoRepository.findPedidoByUsuarioAndEstado(usuario,estado);
+        return pedido;
+    }
+
+    @Override
+    public Pedido updatePedido(Pedido pedido) {
+        return pedidoRepository.save(pedido);
     }
 }

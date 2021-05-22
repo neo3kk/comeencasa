@@ -25,6 +25,9 @@ public class Pedido implements Serializable {
     @Column(name = "precio_final", columnDefinition = "TEXT")
     String precio_final;
 
+    @Column(name = "estado", columnDefinition = "TEXT")
+    String estado;
+
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "pedidoUsuario_id"), name = "pedidoUsuario_id")
     Usuario usuario;
@@ -63,6 +66,14 @@ public class Pedido implements Serializable {
 
     public void setPrecio_final(String precio_final) {
         this.precio_final = precio_final;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public Usuario getUsuario() {

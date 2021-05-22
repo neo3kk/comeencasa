@@ -13,6 +13,8 @@ public interface PedidoService {
     List<PedidoDTO> createListpedidoDTO(List<Pedido> pedidos);
     PedidoDTO makePedidoDto(Pedido pedido);
     List<Pedido> findByUsuario(Usuario usuario);
+    Pedido findPedidoByUsuarioAndEstado(Usuario usuario,String estado);
+    Pedido updatePedido(Pedido pedido);
 
 
 }

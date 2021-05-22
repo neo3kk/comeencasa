@@ -57,8 +57,6 @@ public class LoginController {
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 
-
-    @Transactional
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody String payload) {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
@@ -83,5 +81,14 @@ public class LoginController {
         }
 
 
+    }
+
+
+    @PostMapping("/uploadImage")
+    public ResponseEntity<String> image(@RequestBody String payload) {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        System.out.println(map);
+        System.out.println(payload);
+        return new ResponseEntity<>("hola", HttpStatus.BAD_REQUEST);
     }
 }

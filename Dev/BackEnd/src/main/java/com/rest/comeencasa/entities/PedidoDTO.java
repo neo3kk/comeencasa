@@ -10,6 +10,7 @@ public class PedidoDTO{
     String fecha_pedido;
     String ubicacion;
     String precio_final;
+    String estado;
     String usuario;
 
     public Long getId() {
@@ -42,6 +43,14 @@ public class PedidoDTO{
 
     public void setPrecio_final(String precio_final) {
         this.precio_final = precio_final;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public String getUsuario() {
