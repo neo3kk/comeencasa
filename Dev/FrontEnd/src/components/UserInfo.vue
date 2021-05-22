@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-md">
+    <q-btn round color="primary" icon="shopping_cart" @click="$router.push('/carrito')">
+      <q-tooltip content-class="bg-accent">Mi carrito</q-tooltip>
+    </q-btn>
     <q-btn round>
       <q-avatar size="42px">
         <img src="https://cdn.quasar.dev/img/avatar2.jpg">
@@ -21,10 +24,9 @@
               v-close-popup
               @click="logout"
             />
-
             <div class="row no-wrap q-pa-md">
               <div class="q-pa-md q-gutter-sm column">
-                <q-btn round color="primary" icon="shopping_cart" @click="$router.push('/profile/pedidos')">
+                <q-btn round color="primary" icon="menu_book" @click="$router.push('/profile/pedidos')">
                   <q-tooltip content-class="bg-accent">Mis pedidos</q-tooltip>
                 </q-btn>
                 <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('/profile')">
