@@ -1,8 +1,11 @@
 package com.rest.comeencasa.service;
 
 import com.google.gson.Gson;
+import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.repos.ImageRepository;
 import com.rest.comeencasa.repos.UsuarioRepository;
+import org.apache.commons.codec.binary.Base64;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    ImageRepository imageRepository;
 
 
     @Override
@@ -108,6 +115,22 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    public String processAvatar(String avatar, String userId){
+
+        if ( avatar != null ){
+            avatar = avatar.split(",")[1];
+            byte[] bytes = Base64.decodeBase64(avatar);
+
+            Image image = new Image();
+            image.setBytes(bytes);
+            image.setFileName( userId +"-"+ new Timestamp(System.currentTimeMillis()).getTime() +".png");
+            imageRepository.save(image);
+
+            return image.getFileName();
+        }
+        return null;
 
     }
 

@@ -7,6 +7,7 @@ import com.rest.comeencasa.repos.UsuarioRepository;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class LoginController {
 
     @Autowired
     UserServiceImpl userService;
+
+    @Value("${server.domain}")
+    String serverDomain;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String payload) {
@@ -63,10 +67,12 @@ public class LoginController {
         String email = map.get("email");
         String password = map.get("password");
         String name = map.get("name");
+        String avatar = map.get("avatar");
         Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
+        user.setAvatarUrl( "http://"+ serverDomain +"/images/users/" + userService.processAvatar(avatar, String.valueOf(user.getId())) );
         if (userService.getUser(user)==null){
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();

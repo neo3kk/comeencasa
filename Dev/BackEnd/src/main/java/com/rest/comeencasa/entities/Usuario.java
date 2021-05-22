@@ -15,6 +15,9 @@ public class Usuario{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name ="avatarUrl", columnDefinition = "TEXT")
+    private String avatarUrl;
+
     @Column(name ="email", columnDefinition = "TEXT")
     String email = null;
 
@@ -37,6 +40,14 @@ public class Usuario{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public String getEmail() {
