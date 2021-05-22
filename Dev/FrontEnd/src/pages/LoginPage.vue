@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <q-item to="/" exact>
-    <q-img src="../assets/logomin.png"/>
+      <q-img src="../assets/logomin.png"/>
     </q-item>
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="width: 350px">
@@ -60,12 +60,12 @@
             <q-uploader
               label="Selecciona una imatge de perfil"
               fieldName="file"
-              auto-upload
               class="q-mt-md"
-              @uploaded="uploaded"
+              @added="fileSelected"
+              @removed="fileRemoved"
               method="POST"
               accept=".jpg,.png,image/*"
-              :url="url_server_api+'/storage/upload/register'"
+              url=""
               multiple
             />
             <q-btn class="q-my-lg" color="secondary" label="Register" @click="register"/>
@@ -169,8 +169,15 @@ export default {
         ]
       })
     },
-    uploaded(info) {
-      this.image = info.xhr.response;
+    fileSelected (files) {
+      if (files.length !== 0) {
+        this.selectedFile = true
+      }
+      this.$store.commit('uploader/MutationFileSelected', files[0])
+    },
+//youNeed
+    fileRemoved () {
+      this.selectedFile = false
     },
     mensaError(data) {
       if (data === 'name') {
