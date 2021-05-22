@@ -7,8 +7,10 @@ Vue.prototype.$axios = axios;
 export default async ({Vue, router}) => {
 
   axios.interceptors.request.use(config => {
-      config.withCredentials = true;
-      config.headers['Authorization'] = localStorage.getItem("tokenLogin");
+
+    config.withCredentials = true;
+    config.headers['Authorization'] = localStorage.getItem("tokenLogin");
+
     return config;
   }, function (error) {
     return Promise.reject(error);
@@ -35,7 +37,8 @@ export default async ({Vue, router}) => {
       if (response.status == 200) {
         localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
         localStorage.setItem("user", response.data.user);
-        return axios(originalRequest).catch(err => {});
+        return axios(originalRequest).catch(err => {
+        });
       }
     }
 

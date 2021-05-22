@@ -22,7 +22,7 @@ public class PlatoController {
     PlatoService platoService;
 
     @GetMapping("/platos")
-    public ResponseEntity<String> getAllByUser(@RequestHeader("Authorization") String auth) throws Exception {
+    public ResponseEntity<String> getAll() {
         List<Plato> platos = platoService.findAll();
         List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);

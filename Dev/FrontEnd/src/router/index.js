@@ -27,7 +27,7 @@ export default function (/* { store, ssrContext } */) {
   })
 
   Router.beforeEach((to, from, next) => {
-    if (to.query.accessToken && to.query.refreshToken) {
+    if (to.query.accessToken) {
       localStorage.setItem("tokenLogin", "Bearer " + to.query.accessToken);
     }
     if (to.meta.requiresAuth) {
