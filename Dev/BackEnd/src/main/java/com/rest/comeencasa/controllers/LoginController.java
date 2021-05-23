@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +39,6 @@ public class LoginController {
     @Autowired
     UserServiceImpl userService;
 
-    @Value("${server.domain}")
-    String serverDomain;
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String payload) {
@@ -73,12 +73,13 @@ public class LoginController {
         String email = map.get("email");
         String password = map.get("password");
         String name = map.get("name");
-        String avatar = map.get("avatar");
+        String avatar = map.get("file");
+        byte[] bytes = Base64.encodeBase64(avatar.getBytes());
         Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setAvatarUrl( "http://"+ serverDomain +"/images/users/" + userService.processAvatar(avatar, String.valueOf(user.getId())) );
+        user.setAvatarUrl(bytes);
         if (userService.getUser(user)==null){
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
@@ -93,6 +94,15 @@ public class LoginController {
         }
 
 
+    }
+
+    @PostMapping("/getImage")
+    public HttpEntity<? extends Serializable> getImage(@RequestBody String payload) {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String email = map.get("user");
+        Usuario usuario = userService.getUserByEmail(email);
+
+        return new ResponseEntity<String>(Arrays.toString(usuario.getAvatarUrl()), HttpStatus.ACCEPTED);
     }
 
 
