@@ -1,9 +1,7 @@
 package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.Pedido;
-import com.rest.comeencasa.entities.PedidoDTO;
-import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.entities.*;
 import com.rest.comeencasa.service.*;
 import com.rest.comeencasa.utils.utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,12 @@ public class PedidoController {
 
     @Autowired
     PedidoService pedidoService;
+
+    @Autowired
+    PlatoService platoService;
+
+    @Autowired
+    PedidoPlatoService pedidoPlatoService;
 
     @Autowired
     TokenService tokenService;
@@ -105,6 +109,70 @@ public class PedidoController {
                 pedido.setPrecio_final(precio_final);
                 pedidoService.updatePedido(pedido);
                 return new ResponseEntity<>("Se ha modificado el pedido correctamente",HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/getOpenPedido")
+    public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, String> map = gson.fromJson(payload, HashMap.class);
+                String plato_id = map.get("plato_id");
+                String estado = "Pendiente";
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,estado);
+                PedidoDTO pedidoDTO = pedidoService.makePedidoDto(pedido);
+                return new ResponseEntity<>(gson.toJson(pedidoDTO),HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @PostMapping("/addPlatoPedido")
+    public ResponseEntity<String> addPlatoPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, String> map = gson.fromJson(payload, HashMap.class);
+                System.out.println(map);
+                String object = map.get("plato_id");
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
+                if (pedido!=null){
+                    Plato plato = platoService.findPlatoById(Long.valueOf(object));
+                    PedidoPlato pedidoPlato = new PedidoPlato();
+                    pedidoPlato.setPlato(plato);
+                    pedidoPlato.setPedido(pedido);
+                    pedidoPlatoService.savePedidoPlato(pedidoPlato);
+                }else{
+                    pedido = new Pedido();
+                    pedido.setFecha_pedido(utils.getToday());
+                    pedido.setUsuario(user);
+                    pedido.setFecha_pedido(utils.getToday());
+                    pedido.setEstado("Pendiente");
+                    pedido.setUsuario(user);
+                    pedidoService.savePedido(pedido);
+                    Plato plato = platoService.findPlatoById(Long.valueOf(object));
+                    PedidoPlato pedidoPlato = new PedidoPlato();
+                    pedidoPlato.setPlato(plato);
+                    pedidoPlato.setPedido(pedido);
+                    pedidoPlatoService.savePedidoPlato(pedidoPlato);
+                }
+                return new ResponseEntity<>("Se ha añadido el plato correctamente",HttpStatus.ACCEPTED);
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

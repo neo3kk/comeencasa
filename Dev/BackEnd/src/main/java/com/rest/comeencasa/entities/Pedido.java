@@ -36,6 +36,10 @@ public class Pedido implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<PedidoMenu> pedidoMenus;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    List<PedidoPlato> pedidoPlato;
+
     public Long getId() {
         return id;
     }
@@ -90,6 +94,14 @@ public class Pedido implements Serializable {
 
     public void setPedidoMenus(List<PedidoMenu> pedidoMenus) {
         this.pedidoMenus = pedidoMenus;
+    }
+
+    public List<PedidoPlato> getPedidoPlato() {
+        return pedidoPlato;
+    }
+
+    public void setPedidoPlato(List<PedidoPlato> pedidoPlato) {
+        this.pedidoPlato = pedidoPlato;
     }
 
     @Override

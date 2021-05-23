@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlatoServiceImpl implements PlatoService{
@@ -33,11 +34,21 @@ public class PlatoServiceImpl implements PlatoService{
         platoDTO.setTipo_de_plato(plato.getTipo_de_plato());
         platoDTO.setNombre(plato.getNombre());
         platoDTO.setPrecio(plato.getPrecio());
+        platoDTO.setId(plato.getId());
         return platoDTO;
     }
 
     @Override
     public List<Plato> findAll() {
         return platoRepository.findAll();
+    }
+
+    @Override
+    public Plato findPlatoById(Long id) {
+        Plato plato = platoRepository.findAllById(id);
+        if (plato!=null){
+            return plato;
+        }
+        return null;
     }
 }

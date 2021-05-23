@@ -63,4 +63,9 @@ public class PedidoServiceImpl implements PedidoService {
     public Pedido updatePedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
+
+    @Override
+    public void savePedido(Pedido pedido) {
+        pedidoRepository.save(pedido);
+    }
 }

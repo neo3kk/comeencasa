@@ -35,6 +35,10 @@ public class Plato implements Serializable {
 
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    List<PedidoPlato> pedidoPlato;
+
+    @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     List<PlatoIngrediente> PlatoIngrediente;
 
     public Long getId() {
@@ -55,6 +59,14 @@ public class Plato implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<PedidoPlato> getPedidoPlato() {
+        return pedidoPlato;
+    }
+
+    public void setPedidoPlato(List<PedidoPlato> pedidoPlato) {
+        this.pedidoPlato = pedidoPlato;
     }
 
     public void setDescription(String description) {
