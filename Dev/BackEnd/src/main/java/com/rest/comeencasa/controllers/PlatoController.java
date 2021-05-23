@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,13 @@ public class PlatoController {
 
     @GetMapping("/platos")
     public ResponseEntity<String> getAll() {
+        List<Plato> platos = platoService.findAll();
+        List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
+        return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/platosByUsuario")
+    public ResponseEntity<String> getAllByUser(){
         List<Plato> platos = platoService.findAll();
         List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
