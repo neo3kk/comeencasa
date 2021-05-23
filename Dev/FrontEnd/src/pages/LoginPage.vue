@@ -87,7 +87,7 @@ export default {
       last_name: '',
       email: '',
       password: '',
-      image: '',
+      file: '',
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API
     };
@@ -125,7 +125,7 @@ export default {
           last_name: this.last_name,
           email: this.email,
           password: this.password,
-          image: this.image,
+          file: this.file,
         }).then(response => {
           this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
         }).catch(error => {
@@ -170,7 +170,7 @@ export default {
       })
     },
     uploaded(info) {
-      this.image = info.xhr.response;
+      this.file = info.xhr.response;
     },
     mensaError(data) {
       if (data === 'name') {
