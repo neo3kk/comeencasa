@@ -8,7 +8,10 @@ const routes = [
       {path: 'tarifas', component: () => import('pages/Tarifas.vue'), meta: {requiresAuth: false}},
       {path: 'envios', component: () => import('pages/Envios.vue'), meta: {requiresAuth: false}},
       {path: 'alergenos', component: () => import('pages/Alergenos.vue'), meta: {requiresAuth: false}},
-      {path: 'auth/oauth2callback/', component: () => import('pages/Callback.vue'), meta: {requiresAuth: false}}
+      {path: 'auth/oauth2callback/', component: () => import('pages/Callback.vue'), meta: {requiresAuth: false}},
+      {path: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevoPedido', component: () => import('pages/nuevoPedido.vue'), meta: {requiresAuth: true}},
+      {path: 'carrito', component: () => import('pages/carrito.vue'), meta: {requiresAuth: true}},
     ]
   },
   {
@@ -23,7 +26,6 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/Index.vue'), meta: {requiresAuth: true}},
-      {path: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
     ]
   },
 

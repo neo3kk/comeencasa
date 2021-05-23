@@ -82,6 +82,12 @@ const linksData = [
     caption: 'Entra a tu cuenta y disfruta de la comida',
     icon: 'account_circle',
     link: "/login"
+  },
+  {
+    title: 'Nuevo Pedido',
+    caption: 'Pide ya tu comida y te lo llevamos lo antes posible',
+    icon: 'add_circle',
+    link: "/nuevoPedido"
   }
 ];
 
