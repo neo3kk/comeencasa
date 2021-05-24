@@ -10,7 +10,7 @@
         </q-item-section>
 
         <q-item-section side top>
-          <q-item-label caption>{{ plato.precio }}</q-item-label>
+          <q-item-label caption>{{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
