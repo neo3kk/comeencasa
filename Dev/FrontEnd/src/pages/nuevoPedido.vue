@@ -67,7 +67,7 @@ export default {
         actions: [
           {
             label: 'OK', color: 'white', handler: () => {
-              this.tab = "login"
+              this.tab = "nuevoPedido"
             }
           }
         ]

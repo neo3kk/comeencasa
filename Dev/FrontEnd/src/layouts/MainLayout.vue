@@ -87,7 +87,7 @@ const linksData = [
     title: 'Nuevo Pedido',
     caption: 'Pide ya tu comida y te lo llevamos lo antes posible',
     icon: 'add_circle',
-    link: "/nuevoPedido"
+    link: "/profile/nuevoPedido"
   }
 ];
 

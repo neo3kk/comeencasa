@@ -105,6 +105,15 @@ public class LoginController {
         return new ResponseEntity<String>(Arrays.toString(usuario.getAvatarUrl()), HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/getImage2")
+    public HttpEntity<? extends Serializable> getImage2(@RequestBody String payload) {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String email = map.get("user");
+        Usuario usuario = userService.getUserByEmail(email);
+
+        return new ResponseEntity<String>(Arrays.toString(usuario.getAvatarUrl()), HttpStatus.ACCEPTED);
+    }
+
 
     @PostMapping("/upload/image")
     public HttpEntity<? extends Serializable> uploadFileRegister(@RequestPart(value = "file") MultipartFile uploadfile) {
