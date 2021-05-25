@@ -32,6 +32,10 @@
                 <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('/profile')">
                   <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
                 </q-btn>
+                <q-btn v-show="adminShow" round color="negative" icon="account_circle" @click="$router.push('/admin')">
+                  <q-tooltip content-class="bg-accent">Admin</q-tooltip>
+                </q-btn>
+
               </div>
             </div>
           </div>
@@ -48,12 +52,17 @@ export default {
     return {
       image: 'https://placeimg.com/500/300/nature',
       user: "",
+      adminShow:false,
       url_server_api: SETTINGS.URL_SERVER_API
     }
   },
   async created() {
-    this.user = localStorage.getItem("user")
-/*    let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
+    if(localStorage.getItem("user")){
+      this.user = localStorage.getItem("user")
+      if(this.user==="admin@gmail.com"){
+        this.adminShow = true;
+      }
+/*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
       user: this.user
     }).then(response => {
       console.log(response)
@@ -148,6 +157,9 @@ export default {
       }
       this.image = Base64.encode(response.data);
     })*/
+    }
+
+
     console.log("Ara ha estat creat")
   },
   methods: {

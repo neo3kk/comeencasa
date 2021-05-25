@@ -17,6 +17,12 @@
             src="~src/assets/logomin.png"
             id="logomin">
         </q-toolbar-title>
+        <q-input dark dense standout v-model="text" input-class="text-right" class="q-ml-md">
+          <template v-slot:append>
+            <q-icon v-if="text === ''" name="search" />
+            <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
+          </template>
+        </q-input>
         <UserInfo v-show=showUserInfo></UserInfo>
       </q-toolbar>
     </q-header>
@@ -99,7 +105,8 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: linksData,
       showUserInfo: false,
-      logged: false
+      logged: false,
+      text: ''
     }
   },
   created() {

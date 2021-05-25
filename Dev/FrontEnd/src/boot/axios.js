@@ -41,7 +41,7 @@ export default async ({Vue, router}) => {
     }
 
     if (error.response.status == 401) {
-      router.push("/login")
+      router.push("/unauthorized")
     }
 
     return Promise.reject(error);
