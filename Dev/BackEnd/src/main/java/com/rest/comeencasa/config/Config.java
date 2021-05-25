@@ -1,5 +1,6 @@
 package com.rest.comeencasa.config;
 
+import com.rest.comeencasa.interceptors.AdminInterceptor;
 import com.rest.comeencasa.interceptors.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class Config implements WebMvcConfigurer {
     @Autowired
     TokenInterceptor tokenInterceptor;
+
+    @Autowired
+    AdminInterceptor adminInterceptor;
 
 
     @Override
@@ -28,5 +32,7 @@ public class Config implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns( "/", "/login", "/register", "/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios", "/upload/image");
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin", "/admin/*");
     }
 }

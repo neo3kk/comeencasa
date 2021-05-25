@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-btn color="indigo" :label="category" style="width: 100%" v-for="category in categories">
+    <q-btn color="indigo" :label="category" style="width: 100%" v-for="category in categories" :key="id">
       <q-menu>
         <q-list style="min-width: 100px">
           <q-item>

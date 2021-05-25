@@ -12,7 +12,7 @@
             <p>Añade a tu pedido un menu en el que te incluye un entrante, el primer plato, el postre y la bebida!</p>
           </div>
           <div class="q-pa-md row items-start q-gutter-md">
-            <q-btn color="white" text-color="black" label="Prepara tu menu!" @click="$router.replace('/pedidomenu')"/>
+            <q-btn color="white" text-color="black" label="Prepara tu menu!" @click="$router.replace('/profile/pedidomenu')"/>
           </div>
 
         </div>

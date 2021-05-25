@@ -9,9 +9,6 @@ const routes = [
       {path: 'envios', component: () => import('pages/Envios.vue'), meta: {requiresAuth: false}},
       {path: 'alergenos', component: () => import('pages/Alergenos.vue'), meta: {requiresAuth: false}},
       {path: 'auth/oauth2callback/', component: () => import('pages/Callback.vue'), meta: {requiresAuth: false}},
-      {path: 'nuevoPedido', component: () => import('pages/nuevoPedido.vue'), meta: {requiresAuth: true}},
-      {path: 'carrito', component: () => import('pages/carrito.vue'), meta: {requiresAuth: true}},
-      {path: 'pedidomenu', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
     ]
   },
   {
@@ -25,8 +22,19 @@ const routes = [
     path: '/profile',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      {path: '', component: () => import('pages/Index.vue'), meta: {requiresAuth: true}},
+      {path: '', component: () => import('pages/Profile.vue'), meta: {requiresAuth: true}},
       {path: 'pedidos', component: () => import('pages/PedidosPage.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevopedido', component: () => import('pages/NuevoPedido.vue'), meta: {requiresAuth: true}},
+      {path: 'carrito', component: () => import('pages/Carrito.vue'), meta: {requiresAuth: true}},
+      {path: 'pedidomenu', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
+    ]
+  }, {
+    path: '/admin',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {path: '', component: () => import('pages/Admin.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevoingrediente', component: () => import('pages/CrearIngrediente.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevoplato', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
     ]
   },
 
