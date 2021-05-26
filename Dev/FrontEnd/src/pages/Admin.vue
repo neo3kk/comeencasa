@@ -1,7 +1,7 @@
 <template>
   <q-page>
-    <div class="q-pa-md q-gutter-md fit column wrap justify-center items-center content-center">
-      <h3>Adminsitra ingredientes y platos</h3>
+    <div class="q-pa-md q-gutter-md fit flex wrap justify-center items-center content-center">
+
       <q-card class="my-card">
         <q-card-section class="bg-primary text-white">
           <div class="text-h6">Ingredientes</div>
@@ -11,7 +11,7 @@
         <q-separator />
 
         <q-card-actions align="around">
-          <q-btn flat @click="$router.push('/admin/nuevoingrediente')">Edita</q-btn>
+          <q-btn flat @click="$router.push('/admin/nuevoingrediente')">Entra</q-btn>
         </q-card-actions>
       </q-card>
       <q-card class="my-card">
@@ -21,7 +21,17 @@
         </q-card-section>
 
         <q-card-actions align="around">
-          <q-btn flat @click="$router.push('/admin/nuevoplato')">Edita</q-btn>
+          <q-btn flat @click="$router.push('/admin/nuevoplato')">Entra</q-btn>
+        </q-card-actions>
+      </q-card>
+      <q-card class="my-card">
+        <q-card-section class="bg-green text-white">
+          <div class="text-h6">Usuarios</div>
+          <div class="text-subtitle2">Administra los usuarios</div>
+        </q-card-section>
+
+        <q-card-actions align="around">
+          <q-btn flat @click="$router.push('/admin/usersadmin')">Entra</q-btn>
         </q-card-actions>
       </q-card>
     </div>

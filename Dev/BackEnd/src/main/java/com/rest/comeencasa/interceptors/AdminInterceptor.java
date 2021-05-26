@@ -44,7 +44,8 @@ public class AdminInterceptor implements HandlerInterceptor {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return false;
             } else {
-                if(validate.equals("admin@admin.com")){
+                System.out.println("VALIDATE="+validate );
+                if(validate.equals("admin@gmail.com")){
                     response.setStatus(HttpServletResponse.SC_OK);
                     return true;
                 }else{
