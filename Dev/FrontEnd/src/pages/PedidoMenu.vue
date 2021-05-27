@@ -1,34 +1,34 @@
 <template>
   <q-page>
-    <q-btn color="indigo" :label="category" style="width: 100%" v-for="category in categories" :key="id">
-      <q-menu>
-        <q-list style="min-width: 100px">
-          <q-item>
-            <div class="q-pa-md row items-start q-gutter-md">
-              <q-card class="my-card" v-for="plato in platos" key="plato.id"  v-if="category === plato.tipo_de_plato"
-                      @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
-                <img :src="plato.image" class="comida">
-                <q-card-section>
-                  <div>
-                    <div class="text-h6">{{ plato.nombre }}</div>
-                    <div class="text-subtitle2">{{ plato.description }}</div>
-                  </div>
-                </q-card-section>
+    <div v-for="category in categories" :key="id">
+      <q-btn color="indigo" :label="category" style="width: 100%"></q-btn>
+      <q-list style="min-width: 100px">
+        <q-item>
+          <div class="q-pa-md row items-start q-gutter-md">
+            <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="category === plato.tipo_de_plato"
+                    @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
+              <img :src="plato.image" class="comida">
+              <q-card-section>
+                <div>
+                  <div class="text-h6">{{ plato.nombre }}</div>
+                  <div class="text-subtitle2">{{ plato.description }}</div>
+                </div>
+              </q-card-section>
 
-                <q-card-section class="q-pt-none">
-                  Ingredientes:
-                </q-card-section>
-                <q-separator/>
+              <q-card-section class="q-pt-none">
+                Ingredientes:
+              </q-card-section>
+              <q-separator/>
 
-                <q-card-actions align="right">
-                  <q-btn flat color="primary" @click="startComputing(1)">Mas información</q-btn>
-                </q-card-actions>
-              </q-card>
-            </div>
-          </q-item>
-        </q-list>
-      </q-menu>
-    </q-btn>
+              <q-card-actions align="right">
+                <q-btn flat color="primary" @click="startComputing(1)">Mas información</q-btn>
+              </q-card-actions>
+            </q-card>
+          </div>
+        </q-item>
+      </q-list>
+    </div>
+    <q-btn color="indigo" label="Confirma tu pedido" style="width: 100%" @click="hacerPedido"></q-btn>
   </q-page>
 </template>
 
@@ -42,6 +42,10 @@ export default {
       lorem: "loremimpsum",
       platos: [],
       categories: ["entrante", "primero", "postre", "bebida"],
+      entrante: true,
+      primero: true,
+      postre: true,
+      bebida: true,
       url_server_api: SETTINGS.URL_SERVER_API,
       platosSeleccinados: []
     };
@@ -61,18 +65,18 @@ export default {
       if (this.platosSeleccinados.length !== 0) {
         for (let i = 0; i < this.platosSeleccinados.length; i++) {
           if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
-            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor="white"
+            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "white"
             this.platosSeleccinados.splice(i, 1)
             this.platosSeleccinados.push(plato)
             document.getElementById(plato.id).style.backgroundColor = "green"
           } else if (i === this.platosSeleccinados.length - 1) {
             this.platosSeleccinados.push(plato)
-            document.getElementById(plato.id).style.backgroundColor="green"
+            document.getElementById(plato.id).style.backgroundColor = "green"
           }
         }
       } else {
         this.platosSeleccinados.push(plato)
-        document.getElementById(plato.id).style.backgroundColor="green"
+        document.getElementById(plato.id).style.backgroundColor = "green"
       }
 
 
@@ -82,6 +86,19 @@ export default {
         if (this.platos[i].id === id) {
           return this.platos[i]
         }
+      }
+    },
+    async hacerPedido() {
+      if (this.platosSeleccinados.length < 4 && this.platosSeleccinados.length >= 1) {
+        this.showNotification("Falta per seleccionar " + (4 - this.platosSeleccinados.length) + " plats", "error", "negative")
+        this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
+      }
+      if (this.platosSeleccinados.length === 1) {
+        this.showNotification("Falta per seleccionar un plat", "error", "negative")
+      } else {
+        let sendMenu = await this.$axios.post(this.url_server_api + '/añadirMenu', {
+          platos: this.platosSeleccinados
+        })
       }
     },
     showNotification(content, icon, color) {
