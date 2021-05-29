@@ -16,6 +16,15 @@
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
+
+      <q-item v-for="menu in menus" key="menu.idmenu" v-if="menus!=null">
+        <q-item-section>
+          <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
+          <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
+        </q-item-section>
+        <q-separator spaced inset/>
+      </q-item>
+
     </q-list>
   </q-page>
 </template>
@@ -27,6 +36,7 @@ export default {
   name: "carrito.vue",
   data() {
     return {
+      menus: [],
       platos: [],
       tab: "pedidos",
       url_server_api: SETTINGS.URL_SERVER_API
@@ -34,11 +44,28 @@ export default {
   },
   created() {
     this.getPlatos();
+    this.getMenus()
   },
   methods: {
     async getPlatos() {
       let platosFetch = await this.$axios.get(this.url_server_api + '/getCarrito');
       this.platos = platosFetch.data
+    },
+    async getMenus() {
+      var mymenus = []
+      let menusFetch = await this.$axios.get(this.url_server_api + '/getMenus');
+      for (const menu of menusFetch.data) {
+        let platosMenuFetch = await this.$axios.post(this.url_server_api + '/getPlatosMenu', {
+          idmenu: menu.id
+        });
+        mymenus.push({
+          'idmenu': menu.id,
+          'nombre_menu': menu.nombre_menu,
+          'platos': platosMenuFetch.data
+        })
+        console.log(platosMenuFetch.data)
+      }
+      this.menus = mymenus
     }
   }
 }
