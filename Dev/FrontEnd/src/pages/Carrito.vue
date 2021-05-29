@@ -12,6 +12,8 @@
         <q-item-section side top>
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
+          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" /></q-item-label>
+
 
         </q-item-section>
         <q-separator spaced inset/>
@@ -66,6 +68,14 @@ export default {
         console.log(platosMenuFetch.data)
       }
       this.menus = mymenus
+    },
+    async deletePlato(id){
+      for (let i = 0; i < this.platos.length; i++) {
+        if (this.platos[i].id === id){
+          this.platos.splice(i, 1)
+        }
+      }
+      let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlato' ,{data:{idplato: id}});
     }
   }
 }
