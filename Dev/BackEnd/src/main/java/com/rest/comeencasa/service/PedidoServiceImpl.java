@@ -1,5 +1,6 @@
 package com.rest.comeencasa.service;
 
+import com.rest.comeencasa.entities.Menu;
 import com.rest.comeencasa.entities.Pedido;
 import com.rest.comeencasa.entities.PedidoDTO;
 import com.rest.comeencasa.entities.Usuario;
@@ -29,21 +30,29 @@ public class PedidoServiceImpl implements PedidoService {
     public List<PedidoDTO> createListpedidoDTO(List<Pedido> pedidos) {
         List<PedidoDTO> listDto = new ArrayList<>();
         pedidos.forEach(pedido -> {
-            PedidoDTO pedidoDTO = makePedidoDto(pedido);
+            PedidoDTO pedidoDTO = makePedidoDto(pedido,pedido.getUsuario());
             listDto.add(pedidoDTO);
         });
         return listDto;
     }
 
     @Override
-    public PedidoDTO makePedidoDto(Pedido pedido) {
+    public PedidoDTO makePedidoDto(Pedido pedido, Usuario user) {
+        System.out.println(pedido);
        PedidoDTO pedidoDTO = new PedidoDTO();
-       pedidoDTO.setEstado(pedido.getEstado());
-       pedidoDTO.setId(pedido.getId());
-       pedidoDTO.setUsuario(pedido.getUsuario().getEmail());
-       pedidoDTO.setFecha_pedido(pedido.getFecha_pedido());
-       pedidoDTO.setUbicacion(pedido.getUbicacion());
-       pedidoDTO.setPrecio_final(pedido.getPrecio_final());
+       if (pedido != null){
+           pedidoDTO.setEstado(pedido.getEstado());
+           pedidoDTO.setId(pedido.getId());
+           pedidoDTO.setUsuario(pedido.getUsuario().getEmail());
+           pedidoDTO.setFecha_pedido(pedido.getFecha_pedido());
+           pedidoDTO.setUbicacion(pedido.getUbicacion());
+           pedidoDTO.setPrecio_final(pedido.getPrecio_final());
+       }else{
+           pedido = new Pedido();
+           pedido.setEstado("Pendiente");
+           pedido.setUsuario(user);
+           pedidoRepository.save(pedido);
+       }
        return pedidoDTO;
     }
 
@@ -68,4 +77,5 @@ public class PedidoServiceImpl implements PedidoService {
     public void savePedido(Pedido pedido) {
         pedidoRepository.save(pedido);
     }
+
 }
