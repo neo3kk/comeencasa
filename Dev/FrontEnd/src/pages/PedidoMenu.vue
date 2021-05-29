@@ -61,20 +61,48 @@ export default {
     },
     async seleccionarPlato(id) {
       var plato = this.getPlato(id)
-      console.log(this.platosSeleccinados)
+      var contains = false;
       if (this.platosSeleccinados.length !== 0) {
         for (let i = 0; i < this.platosSeleccinados.length; i++) {
-          if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
+          if (plato.id === this.platosSeleccinados[i].id){
+            console.log(1)
+            console.log(plato)
+            document.getElementById(plato.id).style.backgroundColor = "white"
+            this.platosSeleccinados.splice(i, 1)
+            contains = true
+          }
+          else if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
+            console.log(2)
             document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "white"
             this.platosSeleccinados.splice(i, 1)
             this.platosSeleccinados.push(plato)
             document.getElementById(plato.id).style.backgroundColor = "green"
-          } else if (i === this.platosSeleccinados.length - 1) {
-            this.platosSeleccinados.push(plato)
-            document.getElementById(plato.id).style.backgroundColor = "green"
+            contains = true;
+            i++;
           }
+          /*if (this.platosSeleccinados[i].id === plato.id){
+            console.log(1)
+            this.platosSeleccinados.splice(i, 1)
+            document.getElementById(plato.id).style.backgroundColor = "white"
+            console.log(this.platosSeleccinados)
+          }
+          else if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
+            console.log(2)
+            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "white"
+            this.platosSeleccinados.splice(i, 1)
+            console.log(this.platosSeleccinados.length)
+            this.platosSeleccinados.push(plato)
+            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "green"
+            console.log(this.platosSeleccinados.length)
+            contains = true;*/
+        }
+        if (!contains) {
+          console.log(4)
+          this.platosSeleccinados.push(plato)
+          document.getElementById(plato.id).style.backgroundColor = "green"
         }
       } else {
+        console.log(5)
         this.platosSeleccinados.push(plato)
         document.getElementById(plato.id).style.backgroundColor = "green"
       }
