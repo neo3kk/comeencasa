@@ -1,6 +1,7 @@
 package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.rest.comeencasa.entities.*;
 import com.rest.comeencasa.service.*;
 import com.rest.comeencasa.utils.utils;
@@ -10,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class PedidoController {
@@ -25,7 +24,13 @@ public class PedidoController {
     PedidoService pedidoService;
 
     @Autowired
+    PedidoMenuService pedidoMenuService;
+
+    @Autowired
     PlatoService platoService;
+
+    @Autowired
+    MenuService menuService;
 
     @Autowired
     PedidoPlatoService pedidoPlatoService;
@@ -82,7 +87,7 @@ public class PedidoController {
                 pedido.setEstado(estado);
                 pedido.setUsuario(user);
                 pedido.setPrecio_final(precio_final);
-                pedidoService.makePedidoDto(pedido);
+                pedidoService.makePedidoDto(pedido,user);
                 return new ResponseEntity<>("Se ha realizado el pedido correctamente",HttpStatus.ACCEPTED);
             }
         }
@@ -114,8 +119,8 @@ public class PedidoController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/getOpenPedido")
-    public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+    @GetMapping("/getOpenPedido")
+    public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth) throws Exception {
         Usuario user = null;
         if (auth != null && !auth.isEmpty()) {
             String token = auth.replace("Bearer ", "");
@@ -126,11 +131,9 @@ public class PedidoController {
             }
             if (validate != null) {
                 user = userService.getUserByEmail(validate);
-                Map<String, String> map = gson.fromJson(payload, HashMap.class);
-                String plato_id = map.get("plato_id");
                 String estado = "Pendiente";
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,estado);
-                PedidoDTO pedidoDTO = pedidoService.makePedidoDto(pedido);
+                PedidoDTO pedidoDTO = pedidoService.makePedidoDto(pedido,user);
                 return new ResponseEntity<>(gson.toJson(pedidoDTO),HttpStatus.ACCEPTED);
             }
         }
@@ -171,6 +174,64 @@ public class PedidoController {
                     pedidoPlato.setPlato(plato);
                     pedidoPlato.setPedido(pedido);
                     pedidoPlatoService.savePedidoPlato(pedidoPlato);
+                }
+                return new ResponseEntity<>("Se ha añadido el plato correctamente",HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/añadirMenu")
+    public ResponseEntity<String> añadirMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, List> map = gson.fromJson(payload, HashMap.class);
+                List platos = map.get("platos");
+                List<Plato> platosSeleccionados = new ArrayList<>();
+                Menu m = new Menu();
+                m.setFecha_menu(utils.getToday());
+                m.setNombre_menu("Mi nombre");
+                menuService.saveMenu(m);
+
+                List<PlatoMenu> platmens = new ArrayList<>();
+                platos.forEach(plato ->{
+                    System.out.println(plato);
+                    LinkedTreeMap<Object,Object> t = (LinkedTreeMap) plato;
+                    float idplato = Float.parseFloat(t.get("id").toString());
+                    Plato platoMenu = platoService.findPlatoById((long)idplato);
+                    platosSeleccionados.add(platoMenu);
+                    PlatoMenu platmen = new PlatoMenu();
+                    platmen.setPlato(platoMenu);
+                    platmen.setRutina(m);
+                    platmens.add(platmen);
+                });
+                m.setPlatoMenu(platmens);
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
+                PedidoMenu pm = new PedidoMenu();
+                pm.setMenu(m);
+                pm.setPedido(pedido);
+                pedidoMenuService.savePedidoMenu(pm);
+                pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
+
+                List<PedidoMenu> pedidoMenus = m.getPedidoMenus();
+                if (pedidoMenus == null){
+                    pedidoMenus = new ArrayList<>();
+                    pedidoMenus.add(pm);
+                }else{
+                    pedidoMenus.add(pm);
+                }
+                m.setPedidoMenus(pedidoMenus);
+                menuService.saveMenu(m);
+                if (pedido!=null){
+
                 }
                 return new ResponseEntity<>("Se ha añadido el plato correctamente",HttpStatus.ACCEPTED);
             }

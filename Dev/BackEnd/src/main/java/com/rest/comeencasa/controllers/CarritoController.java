@@ -45,13 +45,22 @@ public class CarritoController {
             if (validate != null) {
                 user = userService.getUserByEmail(validate);
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
-                List<PedidoPlato> pp = pedido.getPedidoPlato();
-                List<Plato> platos = new ArrayList<>();
-                pp.forEach(result ->{
-                    platos.add(result.getPlato());
-                });
-                List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
-                return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
+                if (pedido!=null){
+                    List<PedidoPlato> pp = pedido.getPedidoPlato();
+                    List<Plato> platos = new ArrayList<>();
+                    pp.forEach(result ->{
+                        platos.add(result.getPlato());
+                    });
+                    List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
+                    return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
+                }else{
+                    pedido = new Pedido();
+                    pedido.setUsuario(user);
+                    pedido.setEstado("Pendiente");
+                    pedidoService.savePedido(pedido);
+                    return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
+                }
+
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

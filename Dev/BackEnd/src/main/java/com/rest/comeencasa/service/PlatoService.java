@@ -1,5 +1,6 @@
 package com.rest.comeencasa.service;
 
+import com.rest.comeencasa.entities.Pedido;
 import com.rest.comeencasa.entities.Plato;
 import com.rest.comeencasa.entities.PlatoDTO;
 
@@ -11,4 +12,5 @@ public interface PlatoService {
     PlatoDTO makePlatoDto(Plato plato);
     List<Plato> findAll();
     Plato findPlatoById(Long id);
+
 }
