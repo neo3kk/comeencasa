@@ -80,21 +80,7 @@ export default {
             contains = true;
             i++;
           }
-          /*if (this.platosSeleccinados[i].id === plato.id){
-            console.log(1)
-            this.platosSeleccinados.splice(i, 1)
-            document.getElementById(plato.id).style.backgroundColor = "white"
-            console.log(this.platosSeleccinados)
-          }
-          else if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
-            console.log(2)
-            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "white"
-            this.platosSeleccinados.splice(i, 1)
-            console.log(this.platosSeleccinados.length)
-            this.platosSeleccinados.push(plato)
-            document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "green"
-            console.log(this.platosSeleccinados.length)
-            contains = true;*/
+
         }
         if (!contains) {
           console.log(4)
