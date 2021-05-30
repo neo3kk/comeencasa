@@ -105,14 +105,15 @@ export default {
     async hacerPedido() {
       if (this.platosSeleccinados.length < 4 && this.platosSeleccinados.length >= 1) {
         this.showNotification("Falta per seleccionar " + (4 - this.platosSeleccinados.length) + " plats", "error", "negative")
-        this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
       }
       if (this.platosSeleccinados.length === 1) {
         this.showNotification("Falta per seleccionar un plat", "error", "negative")
-      } else {
+      }
+      if (this.platosSeleccinados.length === 4){
         let sendMenu = await this.$axios.post(this.url_server_api + '/añadirMenu', {
           platos: this.platosSeleccinados
         })
+        this.showNotification("Se ha añadido el menu a tu pedido correctamente", "check_circle_outline", "positive")
       }
     },
     showNotification(content, icon, color) {
