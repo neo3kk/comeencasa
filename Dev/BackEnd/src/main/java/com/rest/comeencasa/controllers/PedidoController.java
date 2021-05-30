@@ -255,12 +255,7 @@ public class PedidoController {
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
                 List<PedidoPlato> pedidoPlatos = pedido.getPedidoPlato();
                 for (int i = 0; i <pedidoPlatos.size() ; i++) {
-                    System.out.println("al menos aqui llega");
-                    System.out.println(pedidoPlatos.get(i).getPlato().getId());
-                    System.out.println(idplato);
-
                     if ((double)pedidoPlatos.get(i).getPlato().getId() == idplato){
-                        System.out.println("esta eliminando");
                         pedidoPlatos.remove(pedidoPlatos.get(i));
                     }
                 }
