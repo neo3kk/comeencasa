@@ -3,7 +3,7 @@
 
     <q-list>
       Tu lista de productos
-      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null">
+      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( 'plato/:id='+plato.id)">
         <q-item-section>
           <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
@@ -13,8 +13,6 @@
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
           <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" /></q-item-label>
-
-
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
@@ -23,6 +21,9 @@
         <q-item-section>
           <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
           <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
+        </q-item-section>
+        <q-item-section side top>
+          <q-item-label caption><q-btn color="red" icon="delete" @click="deleteMenu(menu.idmenu)"label="Delete" /></q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
@@ -76,6 +77,14 @@ export default {
         }
       }
       let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlato' ,{data:{idplato: id}});
+    },
+    async deleteMenu(id){
+      for (let i = 0; i < this.menus.length; i++) {
+        if (this.menus[i].idmenu === id){
+          this.menus.splice(i, 1)
+        }
+      }
+      let menusFetch = await this.$axios.delete(this.url_server_api + '/deleteMenuPedido' ,{data:{idmenu: id}});
     }
   }
 }
