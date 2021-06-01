@@ -92,13 +92,6 @@ public class PlatoController {
                 String id = map.get("idplato");
                 Plato plato = platoService.findPlatoById(Long.valueOf(id));
                 PlatoDTO platoDTO = platoService.makePlatoDto(plato);
-                /*Menu menu = menuService.findById(id.longValue());
-                List<PlatoMenu> platoMenus = menu.getPlatoMenu();
-                List<Plato> platos = new ArrayList<>();
-                platoMenus.forEach(platoMenu ->{
-                    platos.add(platoMenu.getPlato());
-                });
-                List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);*/
 
 
                 return new ResponseEntity<>(gson.toJson(platoDTO),HttpStatus.ACCEPTED);
