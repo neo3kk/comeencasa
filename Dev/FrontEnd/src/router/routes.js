@@ -10,6 +10,7 @@ const routes = [
       {path: 'alergenos', component: () => import('pages/Alergenos.vue'), meta: {requiresAuth: false}},
       {path: 'auth/oauth2callback/', component: () => import('pages/Callback.vue'), meta: {requiresAuth: false}},
       {path: 'unauthorized', component: () => import('pages/Unauthorized.vue'), meta: {requiresAuth: false}},
+      {path: 'expired', component: () => import('pages/Expired.vue'), meta: {requiresAuth: false}},
 
     ]
   },

@@ -17,6 +17,7 @@ import Suggestions from "components/Suggestions";
 
 export default {
   name: 'PageIndex',
-  components: {Suggestions, Carrousel}
+  components: {Suggestions, Carrousel},
+
 }
 </script>

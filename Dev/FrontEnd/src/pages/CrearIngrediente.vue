@@ -24,7 +24,7 @@
     </div>
     <div class="q-pa-md">
       <q-list bordered>
-        <q-item clickable v-ripple v-for="ingrediente in ing">
+        <q-item clickable v-ripple v-for="ingrediente in ing" :key="id">
           <q-item-section thumbnail>
             <img src="https://cdn.quasar.dev/img/mountains.jpg">
           </q-item-section>

@@ -4,6 +4,7 @@ package com.rest.comeencasa.controllers;
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.repos.UsuarioRepository;
+import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,23 @@ public class TestController {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    LoginServiceOauth loginServiceOauth;
+
     @GetMapping("/test")
-    public ResponseEntity<String> test(@RequestHeader("Authorization") String auth) {
+    public ResponseEntity<String> test(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
         String email = tokenService.verifyToken(token);
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            email = userDetails.get("email");
+        }
+        System.out.println(email);
+        if (email != null) {
 
-        if (email!=null) {
             return new ResponseEntity<>(email, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("InvalidToken", HttpStatus.OK);
         }
     }
 
