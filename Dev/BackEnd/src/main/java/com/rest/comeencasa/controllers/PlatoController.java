@@ -76,4 +76,28 @@ public class PlatoController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/getPlatoById")
+    public ResponseEntity<String> getPlatoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, String> map = gson.fromJson(payload, HashMap.class);
+                String id = map.get("idplato");
+                Plato plato = platoService.findPlatoById(Long.valueOf(id));
+                PlatoDTO platoDTO = platoService.makePlatoDto(plato);
+
+
+                return new ResponseEntity<>(gson.toJson(platoDTO),HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
 }

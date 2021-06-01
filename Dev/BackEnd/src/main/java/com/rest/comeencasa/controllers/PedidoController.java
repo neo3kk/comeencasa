@@ -238,4 +238,33 @@ public class PedidoController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    @DeleteMapping("/deletePlato")
+    public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+                double idplato = map.get("idplato");
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
+                List<PedidoPlato> pedidoPlatos = pedido.getPedidoPlato();
+                for (int i = 0; i <pedidoPlatos.size() ; i++) {
+                    if ((double)pedidoPlatos.get(i).getPlato().getId() == idplato){
+                        pedidoPlatos.remove(pedidoPlatos.get(i));
+                    }
+                }
+                pedido.setPedidoPlato(pedidoPlatos);
+                pedidoService.savePedido(pedido);
+                return new ResponseEntity<>("Se ha añadido el plato correctamente",HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
 }
