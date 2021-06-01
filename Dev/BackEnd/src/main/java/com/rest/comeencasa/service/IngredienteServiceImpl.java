@@ -5,7 +5,6 @@ import com.rest.comeencasa.repos.IngredienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,11 +13,12 @@ public class IngredienteServiceImpl implements IngredienteService{
     IngredienteRepository ingredienteRepository;
 
     @Override
-    public boolean addIngrediente(String ingrediente) {
+    public boolean addIngrediente(String s, String ingrediente) {
        Ingrediente in = buscarIngrediente(ingrediente);
        if(in == null){
            in = new Ingrediente();
            in.setName(ingrediente);
+           in.setTraduccion(s);
            ingredienteRepository.save(in);
            return true;
        }else {

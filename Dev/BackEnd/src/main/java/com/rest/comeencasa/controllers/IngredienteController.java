@@ -35,7 +35,8 @@ public class IngredienteController {
     public ResponseEntity<String> addingredient(@RequestBody String payload ){
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         String ingrediente = map.get("name");
-        boolean add = ingredienteService.addIngrediente(ingrediente);
+        String traduccion = map.get("traduccion");
+        boolean add = ingredienteService.addIngrediente(ingrediente, traduccion);
         if(add){
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
