@@ -63,8 +63,6 @@ export default {
         this.$emit("user", this.user);
         if (this.user === "admin@gmail.com") {
           this.adminShow = true;
-        }else{
-          await this.$router.push("/");
         }
         /*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
               user: this.user
@@ -175,7 +173,6 @@ export default {
     },
 
     async validate() {
-
       let validate = await this.$axios.get(this.url_server_api + `/test`);
       console.log(validate.request.responseText.toString());
       if (validate.request.responseText.toString() === "InvalidToken") {

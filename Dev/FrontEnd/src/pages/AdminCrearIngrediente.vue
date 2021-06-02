@@ -42,6 +42,7 @@
         </q-item>
       </q-list>
     </div>
+    <indexed></indexed>
   </q-page>
 
 
@@ -49,8 +50,10 @@
 
 <script>
 import {SETTINGS} from "src/settings";
+import Indexed from "components/indexed";
 
 export default {
+  components: {Indexed},
   data() {
     return {
       url_server_api: SETTINGS.URL_SERVER_API,
@@ -61,7 +64,6 @@ export default {
   },
   created() {
     this.getIngredientes();
-
   },
 
   methods: {

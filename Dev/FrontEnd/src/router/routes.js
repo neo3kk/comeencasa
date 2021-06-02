@@ -39,7 +39,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/Admin.vue'), meta: {requiresAuth: true}},
-      {path: 'nuevoingrediente', component: () => import('pages/CrearIngrediente.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevoingrediente', component: () => import('pages/AdminCrearIngrediente.vue'), meta: {requiresAuth: true}},
       {path: 'nuevoplato', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
     ]
   },

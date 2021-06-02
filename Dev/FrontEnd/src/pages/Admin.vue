@@ -1,5 +1,6 @@
 <template>
-  <q-page>
+  <q-page class="text-center justify-center">
+    <h3>Benvingut {{user}}</h3>
     <div class="q-pa-md q-gutter-md fit flex wrap justify-center items-center content-center">
 
       <q-card class="my-card">
@@ -47,22 +48,24 @@ import {SETTINGS} from "src/settings";
 
 export default {
   name: 'AdminPage',
+  props:{
+    user:{type:String}
+  },
 
   data() {
     return {
-      admin: "",
+      admin: this.user,
       post: "",
       url_server_api: SETTINGS.URL_SERVER_API
     };
   },
-  created() {
-    this.getPost()
+  async created() {
+    if(this.user !== "admin@gmail.com") {
+      await this.$router.push("/unauthorized");
+    }
   },
   methods: {
-    async getPost() {
-      let data = await this.$axios.get(this.url_server_api + `/test`);
-      this.admin = data.data;
-    }
+
   }
 }
 </script>

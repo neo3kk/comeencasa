@@ -1,23 +1,23 @@
 <template>
-  <q-page>
-    <div>
-      <q-img src="https://entrenosotros.consum.es/public/Image/2019/3/muchos1_Mediano.jpg" style="width: 50%"  native-context-menu>
-        <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
-          <q-tooltip>
-            Tooltip
-          </q-tooltip>
-        </q-icon>
-        <div class="absolute-bottom text-subtitle1 text-center">
-          <div class="q-pa-md row items-start q-gutter-md">
-            <p>Añade a tu pedido un menu en el que te incluye un entrante, el primer plato, el postre y la bebida!</p>
-          </div>
-          <div class="q-pa-md row items-start q-gutter-md">
-            <q-btn color="white" text-color="black" label="Prepara tu menu!" @click="$router.replace('/profile/pedidomenu')"/>
-          </div>
-
+  <q-page class="text-center">
+    <q-img src="https://entrenosotros.consum.es/public/Image/2019/3/muchos1_Mediano.jpg" style="width: 50%"
+           native-context-menu>
+      <q-icon class="absolute all-pointer-events" size="32px" name="info" color="white" style="top: 8px; left: 8px">
+        <q-tooltip>
+          Tooltip
+        </q-tooltip>
+      </q-icon>
+      <div class="absolute-bottom text-subtitle1 text-center">
+        <div class="q-pa-md row items-start q-gutter-md">
+          <p>Añade a tu pedido un menu en el que te incluye un entrante, el primer plato, el postre y la bebida!</p>
         </div>
-      </q-img>
-    </div>
+        <div class="q-pa-md row items-start q-gutter-md">
+          <q-btn color="white" text-color="black" label="Prepara tu menu!"
+                 @click="$router.replace('/profile/pedidomenu')"/>
+        </div>
+
+      </div>
+    </q-img>
     <div class="q-pa-md row items-start q-gutter-md">
       <q-card class="my-card" v-for="plato in platos" key="plato.id">
         <img :src="plato.image" class="comida">
@@ -68,7 +68,7 @@ export default {
       this.platos = platosFetch.data
       console.log(this.platos)
     },
-    async añadirPlato(id){
+    async añadirPlato(id) {
       console.log(id, "hola")
       let addPlato = await this.$axios.post(this.url_server_api + '/addPlatoPedido', {
         plato_id: id.toString()
