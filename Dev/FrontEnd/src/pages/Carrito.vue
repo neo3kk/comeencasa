@@ -3,7 +3,7 @@
 
     <q-list>
       Tu lista de productos
-      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( 'plato/:id='+plato.id)">
+      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( 'plato/'+plato.id)">
         <q-item-section>
           <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
@@ -17,7 +17,7 @@
         <q-separator spaced inset/>
       </q-item>
 
-      <q-item v-for="menu in menus" key="menu.idmenu" v-if="menus!=null">
+      <q-item v-for="menu in menus" key="menu.idmenu" v-if="menus!=null" clickable @click="$router.replace( 'pedidomenu/'+menu.idmenu)">
         <q-item-section>
           <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
           <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
