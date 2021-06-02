@@ -1,5 +1,6 @@
 package com.rest.comeencasa.service;
 
+import com.rest.comeencasa.entities.Menu;
 import com.rest.comeencasa.entities.Pedido;
 import com.rest.comeencasa.entities.PedidoMenu;
 import com.rest.comeencasa.repos.PedidoMenuRepository;
@@ -19,5 +20,10 @@ public class PedidoMenuServiceImpl implements PedidoMenuService{
     @Override
     public PedidoMenu getPedidoMenuByPedido(Pedido pedido) {
        return pedidoMenuRepository.findPedidoMenuByPedido(pedido);
+    }
+
+    @Override
+    public PedidoMenu findPedidoMenuByMenu(Menu menu) {
+        return pedidoMenuRepository.findPedidoMenuByMenu(menu);
     }
 }

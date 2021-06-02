@@ -90,6 +90,7 @@ public class CarritoController {
                     List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
                     return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
                 }else{
+                    System.out.println("adios");
                     pedido = new Pedido();
                     pedido.setUsuario(user);
                     pedido.setEstado("Pendiente");

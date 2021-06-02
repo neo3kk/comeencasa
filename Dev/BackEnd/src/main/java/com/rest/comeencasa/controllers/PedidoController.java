@@ -39,6 +39,9 @@ public class PedidoController {
     TokenService tokenService;
 
     @Autowired
+    PlatoMenuService platoMenuService;
+
+    @Autowired
     LoginServiceOauth loginServiceOauth;
 
 
@@ -233,7 +236,53 @@ public class PedidoController {
                 if (pedido!=null){
 
                 }
-                return new ResponseEntity<>("Se ha añadido el plato correctamente",HttpStatus.ACCEPTED);
+                return new ResponseEntity<>("Se ha añadido el menu correctamente",HttpStatus.ACCEPTED);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    @PostMapping("/guardarMenu")
+    public ResponseEntity<String> guardarMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        if (auth != null && !auth.isEmpty()) {
+            String token = auth.replace("Bearer ", "");
+            String validate = tokenService.verifyToken(token);
+            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate != null) {
+                user = userService.getUserByEmail(validate);
+                Map<String, List> map1 = gson.fromJson(payload, HashMap.class);
+                Map<String, String> map2 = gson.fromJson(payload, HashMap.class);
+                List platos = map1.get("platos");
+                String idmenu = map2.get("idmenu");
+                List<Plato> platosSeleccionados = new ArrayList<>();
+                Menu m = menuService.findById(Long.valueOf(idmenu));
+                PedidoMenu pm = pedidoMenuService.findPedidoMenuByMenu(m);
+
+                List<PlatoMenu> platmens = m.getPlatoMenu();
+                for (int i = 0; i <platos.size() ; i++) {
+                    System.out.println(platos.get(i));
+                    LinkedTreeMap<Object,Object> t = (LinkedTreeMap) platos.get(i);
+                    float idplato = Float.parseFloat(t.get("id").toString());
+                    Plato platoMenu = platoService.findPlatoById((long)idplato);
+                    platosSeleccionados.add(platoMenu);
+                    PlatoMenu platmen = platmens.get(i);
+                    platmen.setPlato(platoMenu);
+                    platoMenuService.savePlatoMenu(platmen);
+                    platmens.add(platmen);
+
+                }
+                m.setPlatoMenu(platmens);
+                menuService.saveMenu(m);
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
+                pm.setMenu(m);
+                pm.setPedido(pedido);
+                pedidoMenuService.savePedidoMenu(pm);
+                pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
+
+                return new ResponseEntity<>("Se ha guardado el menu correctamente",HttpStatus.ACCEPTED);
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
