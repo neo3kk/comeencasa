@@ -2,6 +2,7 @@ package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Ingrediente;
+import com.rest.comeencasa.entities.IngredienteDTO;
 import com.rest.comeencasa.service.IngredienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,8 @@ public class IngredienteController {
     @GetMapping("/admin/getAllIngredientes")
     public ResponseEntity<String> getAllIngredientes(){
         List<Ingrediente> ingredienteList = ingredienteService.ingredientes();
-        return new ResponseEntity<>(gson.toJson(ingredienteList), HttpStatus.ACCEPTED);
+        List<IngredienteDTO> ingredienteDTOS = ingredienteService.createListIngredienteDTO(ingredienteList);
+        return new ResponseEntity<>(gson.toJson(ingredienteDTOS), HttpStatus.ACCEPTED);
     }
 
     @Transactional

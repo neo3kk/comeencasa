@@ -44,6 +44,16 @@ public class PlatoServiceImpl implements PlatoService{
     }
 
     @Override
+    public void save(Plato plato){
+        platoRepository.save(plato);
+    }
+
+    @Override
+    public Plato findPlatoByName(String nombre) {
+        return platoRepository.findPlatoByNombre(nombre);
+    }
+
+    @Override
     public Plato findPlatoById(Long id) {
         Plato plato = platoRepository.findAllById(id);
         if (plato!=null){

@@ -10,4 +10,6 @@ public interface PlatoRepository extends JpaRepository<Plato, Long> {
     List<Plato> findAll();
 
     Plato findAllById(Long id);
+
+    Plato findPlatoByNombre(String nombre);
 }

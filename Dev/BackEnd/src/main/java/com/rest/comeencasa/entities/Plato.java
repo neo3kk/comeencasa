@@ -20,6 +20,9 @@ public class Plato implements Serializable {
     @Column(name ="nombre", columnDefinition = "TEXT")
     String nombre;
 
+    @Column(name ="traduccion", columnDefinition = "TEXT")
+    String traduccion;
+
     @Column(name ="description", columnDefinition = "TEXT")
     String description;
 
@@ -56,6 +59,10 @@ public class Plato implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getTraduccion() { return traduccion; }
+
+    public void setTraduccion(String traduccion) { this.traduccion = traduccion; }
 
     public String getDescription() {
         return description;

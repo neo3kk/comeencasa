@@ -12,5 +12,7 @@ public interface PlatoService {
     PlatoDTO makePlatoDto(Plato plato);
     List<Plato> findAll();
     Plato findPlatoById(Long id);
+    void save(Plato plato);
 
+    Plato findPlatoByName(String nombre);
 }
