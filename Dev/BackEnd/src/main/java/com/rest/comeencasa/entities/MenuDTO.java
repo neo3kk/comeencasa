@@ -12,7 +12,6 @@ public class MenuDTO {
     private Long id;
     String nombre_menu;
     String fecha_menu;
-    List<PlatoMenu> platoMenu;
 
     public Long getId() {
         return id;
@@ -38,11 +37,4 @@ public class MenuDTO {
         this.fecha_menu = fecha_menu;
     }
 
-    public List<PlatoMenu> getPlatoMenu() {
-        return platoMenu;
-    }
-
-    public void setPlatoMenu(List<PlatoMenu> platoMenu) {
-        this.platoMenu = platoMenu;
-    }
 }

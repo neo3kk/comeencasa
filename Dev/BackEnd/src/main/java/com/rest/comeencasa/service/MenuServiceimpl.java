@@ -43,7 +43,6 @@ public class MenuServiceimpl implements MenuService {
         menuDTO.setFecha_menu(menu.getFecha_menu());
         menuDTO.setNombre_menu(menu.getNombre_menu());
         menuDTO.setId(menu.getId());
-        menuDTO.setPlatoMenu(menu.getPlatoMenu());
         return menuDTO;
     }
 
