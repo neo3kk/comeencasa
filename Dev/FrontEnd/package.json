@@ -16,6 +16,7 @@
     "core-js": "^3.6.5",
     "leaflet": "^1.7.1",
     "quasar": "^1.0.0",
+    "vue-currency-input": "^1.22.6",
     "vue2-leaflet": "^2.7.0",
     "vuelidate": "^0.7.5"
   },
