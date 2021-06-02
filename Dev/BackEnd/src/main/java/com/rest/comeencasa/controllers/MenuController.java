@@ -1,19 +1,14 @@
 package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
-import com.rest.comeencasa.entities.Pedido;
-import com.rest.comeencasa.entities.PedidoMenu;
-import com.rest.comeencasa.entities.PedidoPlato;
-import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.entities.*;
 import com.rest.comeencasa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,10 +55,10 @@ public class MenuController {
                 user = userService.getUserByEmail(validate);
                 Map<String, Double> map = gson.fromJson(payload, HashMap.class);
                 double idmenu = map.get("idmenu");
-                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user,"Pendiente");
+                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
                 List<PedidoMenu> pedidoMenus = pedido.getPedidoMenus();
-                for (int i = 0; i <pedidoMenus.size() ; i++) {
-                    if ((double)pedidoMenus.get(i).getMenu().getId() == idmenu){
+                for (int i = 0; i < pedidoMenus.size(); i++) {
+                    if ((double) pedidoMenus.get(i).getMenu().getId() == idmenu) {
                         pedidoMenus.remove(pedidoMenus.get(i));
                     }
                 }
@@ -73,5 +68,19 @@ public class MenuController {
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/getPlatosByMenuId")
+    public ResponseEntity<String> menuById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        long idmenu = Long.parseLong(map.get("idmenu"));
+        Menu menu = menuService.findById(idmenu);
+        List<Plato> platos = new ArrayList<>();
+        menu.getPlatoMenu().forEach(platoMenu -> {
+            platos.add(platoMenu.getPlato());
+        });
+        List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
+        return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
     }
 }

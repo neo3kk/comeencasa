@@ -2,6 +2,7 @@ package com.rest.comeencasa.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.event.internal.OnUpdateVisitor;
 
 import javax.persistence.*;
 import java.io.Serializable;
