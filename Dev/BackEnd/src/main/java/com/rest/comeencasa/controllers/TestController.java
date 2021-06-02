@@ -33,7 +33,7 @@ public class TestController {
     @Autowired
     LoginServiceOauth loginServiceOauth;
 
-    @GetMapping("/test")
+    @GetMapping("/getAdmin")
     public ResponseEntity<String> test(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
         String email = tokenService.verifyToken(token);

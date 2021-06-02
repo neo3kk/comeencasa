@@ -23,8 +23,10 @@
             <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
           </template>
         </q-input>
-        <UserInfo v-show=showUserInfo></UserInfo>
+        <UserInfo v-show=showUserInfo @user="user = $event"></UserInfo>
+
       </q-toolbar>
+
     </q-header>
 
     <q-drawer
@@ -47,9 +49,8 @@
         />
       </q-list>
     </q-drawer>
-
     <q-page-container>
-      <router-view/>
+      <router-view :user="user"/>
     </q-page-container>
   </q-layout>
 </template>
@@ -100,8 +101,10 @@ const linksData = [
 export default {
   name: 'MainLayout',
   components: {UserInfo, EssentialLink},
+
   data() {
     return {
+      user: "",
       leftDrawerOpen: false,
       essentialLinks: linksData,
       showUserInfo: false,

@@ -32,6 +32,7 @@ const routes = [
       {path: 'pedidomenu', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
       {path: 'pedidomenu/:id', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
       {path: 'plato/:id', component: () => import('pages/Plato.vue'), meta: {requiresAuth: true}},
+
     ]
   }, {
     path: '/admin',

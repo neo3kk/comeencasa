@@ -60,8 +60,11 @@ export default {
     if (localStorage.getItem("user") != null) {
       if (await this.validate() === true) {
         this.user = localStorage.getItem("user")
+        this.$emit("user", this.user);
         if (this.user === "admin@gmail.com") {
           this.adminShow = true;
+        }else{
+          await this.$router.push("/");
         }
         /*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
               user: this.user
