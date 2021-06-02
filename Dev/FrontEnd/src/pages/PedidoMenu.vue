@@ -1,11 +1,11 @@
 <template>
   <q-page>
-    <div v-for="category in categories" :key="id">
+    <div v-for="category in categories" :key="category">
       <q-btn color="indigo" :label="category" style="width: 100%"></q-btn>
       <q-list style="min-width: 100px">
         <q-item>
           <div class="q-pa-md row items-start q-gutter-md">
-            <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="category === plato.tipo_de_plato"
+            <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="category.toLowerCase() === plato.tipo_de_plato.toLowerCase()"
                     @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
               <img :src="plato.image" class="comida">
               <q-card-section>
@@ -39,6 +39,7 @@ export default {
   name: "PedidoMenu",
   data() {
     return {
+      id: '',
       lorem: "loremimpsum",
       platos: [],
       categories: ["entrante", "primero", "postre", "bebida"],
@@ -52,8 +53,19 @@ export default {
   },
   created() {
     this.getPlatos();
+    this.id = this.$router.currentRoute.params.id
+    if (this.id !== undefined){
+      this.getMenuById(this.id)
+    }
   },
   methods: {
+    async getMenuById(id){
+      let menuFetch = await this.$axios.post(this.url_server_api + '/getPlatosByMenuId',{
+        idmenu: id
+      });
+      this.platosSeleccinados = menuFetch.data;
+      this.pintarPlatos(this.platosSeleccinados)
+    },
     async getPlatos() {
       let platosFetch = await this.$axios.get(this.url_server_api + '/platos');
       this.platos = platosFetch.data
@@ -95,6 +107,11 @@ export default {
 
 
     },
+    pintarPlatos(platos){
+      for (let i = 0; i < platos.length; i++) {
+        document.getElementById(platos[i].id).style.backgroundColor = "green"
+      }
+    },
     getPlato(id) {
       for (let i = 0; i < this.platos.length; i++) {
         if (this.platos[i].id === id) {
@@ -103,17 +120,24 @@ export default {
       }
     },
     async hacerPedido() {
-      if (this.platosSeleccinados.length < 4 && this.platosSeleccinados.length >= 1) {
-        this.showNotification("Falta per seleccionar " + (4 - this.platosSeleccinados.length) + " plats", "error", "negative")
-      }
-      if (this.platosSeleccinados.length === 1) {
-        this.showNotification("Falta per seleccionar un plat", "error", "negative")
-      }
-      if (this.platosSeleccinados.length === 4){
-        let sendMenu = await this.$axios.post(this.url_server_api + '/añadirMenu', {
-          platos: this.platosSeleccinados
+      if (this.id !== undefined){
+        let sendMenu = await this.$axios.post(this.url_server_api + '/guardarMenu', {
+          platos: this.platosSeleccinados,
+          idmenu: this.id
         })
-        this.showNotification("Se ha añadido el menu a tu pedido correctamente", "check_circle_outline", "positive")
+      }else{
+        if (this.platosSeleccinados.length < 4 && this.platosSeleccinados.length >= 1) {
+          this.showNotification("Falta per seleccionar " + (4 - this.platosSeleccinados.length) + " plats", "error", "negative")
+        }
+        if (this.platosSeleccinados.length === 1) {
+          this.showNotification("Falta per seleccionar un plat", "error", "negative")
+        }
+        if (this.platosSeleccinados.length === 4){
+          let sendMenu = await this.$axios.post(this.url_server_api + '/añadirMenu', {
+            platos: this.platosSeleccinados
+          })
+          this.showNotification("Se ha añadido el menu a tu pedido correctamente", "check_circle_outline", "positive")
+        }
       }
     },
     showNotification(content, icon, color) {

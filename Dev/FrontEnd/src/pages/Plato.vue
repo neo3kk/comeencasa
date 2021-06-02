@@ -3,17 +3,20 @@
 </template>
 
 <script>
+import {SETTINGS} from "src/settings";
+
 export default {
   props: ['id'],
   name: "Plato.vue",
   data () {
     return {
-      id: this.id
+      id: '',
+      url_server_api: SETTINGS.URL_SERVER_API
     }
   },
   created() {
-    this.$router.currentRoute.params(id)
-    console.log(this.id)
+    this.id = this.$router.currentRoute.params.id
+
   },
 
 }
