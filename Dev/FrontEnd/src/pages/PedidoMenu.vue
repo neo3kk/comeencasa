@@ -83,7 +83,7 @@ export default {
             this.platosSeleccinados.splice(i, 1)
             contains = true
           }
-          else if (this.platosSeleccinados[i].tipo_de_plato === plato.tipo_de_plato) {
+          else if (this.platosSeleccinados[i].tipo_de_plato.toLowerCase() === plato.tipo_de_plato.toLowerCase()) {
             console.log(2)
             document.getElementById(this.platosSeleccinados[i].id + "").style.backgroundColor = "white"
             this.platosSeleccinados.splice(i, 1)
