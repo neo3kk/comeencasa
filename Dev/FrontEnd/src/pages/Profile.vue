@@ -1,7 +1,7 @@
 <template>
   <q-page>
     hola
-    {{ this.user }}
+    {{ this.user.name }}
     <div>
 
     </div>
@@ -15,7 +15,7 @@
 export default {
   name: 'ProfilePage',
   props:{
-    user: {type: String}
+    user: {type: Object}
   },
   data(){
     return {

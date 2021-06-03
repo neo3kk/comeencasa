@@ -34,7 +34,8 @@ const routes = [
       {path: 'plato/:id', component: () => import('pages/Plato.vue'), meta: {requiresAuth: true}},
 
     ]
-  }, {
+  },
+  {
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
     children: [

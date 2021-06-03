@@ -11,7 +11,7 @@
               <q-img :src="image" alt=""/>
             </q-avatar>
 
-            <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user }}</div>
+            <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user.name }}</div>
 
             <q-btn
               color="primary"
@@ -32,7 +32,7 @@
                 <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('/profile')">
                   <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
                 </q-btn>
-                <q-btn v-show="adminShow" round color="negative" icon="account_circle" @click="$router.push('/admin')">
+                <q-btn v-show="user.admin" round color="negative" icon="account_circle" @click="$router.push('/admin')">
                   <q-tooltip content-class="bg-accent">Admin</q-tooltip>
                 </q-btn>
 
@@ -51,19 +51,22 @@ export default {
   data() {
     return {
       image: 'https://placeimg.com/500/300/nature',
-      user: "",
-      adminShow: false,
+      user: {
+        name: "",
+        admin: false,
+        img:""
+      },
       url_server_api: SETTINGS.URL_SERVER_API
     }
   },
   async created() {
     if (localStorage.getItem("user") != null) {
       if (await this.validate() === true) {
-        this.user = localStorage.getItem("user")
-        this.$emit("user", this.user);
-        if (this.user === "admin@gmail.com") {
-          this.adminShow = true;
+        this.user.name = localStorage.getItem("user")
+        if (this.user.name === "admin@gmail.com") {
+          this.user.admin = true;
         }
+        this.$emit("user", this.user);
         /*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
               user: this.user
             }).then(response => {
