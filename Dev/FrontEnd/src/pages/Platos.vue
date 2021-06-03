@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="my-card" v-for="plato in platos" key="plato.id">
+    <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible">
       <img :src="plato.image" class="comida">
 
       <q-card-section>

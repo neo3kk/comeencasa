@@ -8,6 +8,8 @@
           <q-select v-model="tipo_plato" :options="options" label="Tipo de plato"/>
           <q-input v-model="description" filled type="textarea"/>
           <q-input outlined v-model="precio" type="float" prefix="€">
+            <q-btn-toggle v-model="visible" push glossy toggle-color="primary" :options="[
+              {label: 'Visible', value: true},{label: 'Invisible', value: false}]"/>
             <template v-slot:append>
               <q-avatar>
                 <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
@@ -75,6 +77,7 @@
     name: 'CrearIngrediente',
     data() {
       return {
+        visible: false,
         separator: 'vertical',
         tipo_plato: null,
         options: ['Entrante', 'Primero', 'Postre', 'Bebida'],
@@ -107,6 +110,7 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
+            visible: this.visible
           }).then(response=>{
             if (response.data === 400){
               this.showNotification("Ya existe un plato con el mismo nombre en la base de datos", "error", "negative")
@@ -123,6 +127,7 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
+            visible: this.visible
           })
         }
 
@@ -152,7 +157,7 @@
         this.nombre = plato.nombre
         this.precio = plato.precio
         this.tipo_plato = plato.tipo_de_plato
-
+        this.visible = plato.visible
         console.log(this.plato)
       },
       añadirIngrediente(id){

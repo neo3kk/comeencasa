@@ -57,7 +57,10 @@
           <td class="text-right">{{plato.nombre}}</td>
           <td class="text-right">{{plato.traduccion}}</td>
           <td class="text-right">{{plato.precio}}</td>
-          <td class="text-right"><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete"/>
+          <td class="text-right">
+            <q-btn-toggle v-model="plato.visible" push glossy toggle-color="primary" :options="[
+              {label: 'Visible', value: true},{label: 'Invisible', value: false}]" @click="setVisibility(plato)"/>
+            <q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete"/>
             <q-btn color="blue" icon="edit" @click="$router.replace( 'admin/editplato/'+plato.id)"label="Editar"/></td>
         </tr>
         </tbody>
@@ -107,6 +110,17 @@
         let platosFetch = await this.$axios.delete(this.url_server_api + '/deletePlato',{data:{idplato: id}}).then(response => {
           this.showNotification("Se ha borrado el plato correctamente", "check_circle_outline", "positive")
         });
+        for (let i = 0; i <this.platos.length ; i++) {
+          if (this.platos[i].id === id){
+            this.platos.splice(i, 1)
+          }
+        }
+      },
+      async setVisibility(plato){
+        let setVisibility = await this.$axios.post(this.url_server_api + '/setVisibility', {
+          idplato: plato.id,
+          visible: plato.visible,
+        })
       },
       showNotification(content, icon, color) {
         this.$q.notify({

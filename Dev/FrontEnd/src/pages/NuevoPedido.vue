@@ -19,7 +19,7 @@
       </div>
     </q-img>
     <div class="q-pa-md row items-start q-gutter-md">
-      <q-card class="my-card" v-for="plato in platos" key="plato.id">
+      <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible">
         <img :src="plato.image" class="comida">
 
         <q-card-section>
