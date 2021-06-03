@@ -44,30 +44,25 @@ public class MenuController {
     @DeleteMapping("/deleteMenuPedido")
     public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
-                Map<String, Double> map = gson.fromJson(payload, HashMap.class);
-                double idmenu = map.get("idmenu");
-                Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-                List<PedidoMenu> pedidoMenus = pedido.getPedidoMenus();
-                for (int i = 0; i < pedidoMenus.size(); i++) {
-                    if ((double) pedidoMenus.get(i).getMenu().getId() == idmenu) {
-                        pedidoMenus.remove(pedidoMenus.get(i));
-                    }
-                }
-                pedido.setPedidoMenus(pedidoMenus);
-                pedidoService.savePedido(pedido);
-                return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
+
+        String token = auth.replace("Bearer ", "");
+        String validate = tokenService.verifyToken(token);
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        validate = userDetails.get("email");
+        user = userService.getUserByEmail(validate);
+
+        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+        double idmenu = map.get("idmenu");
+        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+        List<PedidoMenu> pedidoMenus = pedido.getPedidoMenus();
+        for (int i = 0; i < pedidoMenus.size(); i++) {
+            if ((double) pedidoMenus.get(i).getMenu().getId() == idmenu) {
+                pedidoMenus.remove(pedidoMenus.get(i));
             }
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        pedido.setPedidoMenus(pedidoMenus);
+        pedidoService.savePedido(pedido);
+        return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/getPlatosByMenuId")
