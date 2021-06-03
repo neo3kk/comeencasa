@@ -92,7 +92,7 @@ export default {
     };
   },
   async created() {
-    if (this.user.name !== "admin@gmail.com") {
+    if (this.user.admin !== true) {
       await this.$router.push("/unauthorized");
     } else {
       await this.getPlatos()

@@ -8,9 +8,9 @@ const routes = [
       {path: 'tarifas', component: () => import('pages/Tarifas.vue'), meta: {requiresAuth: false}},
       {path: 'envios', component: () => import('pages/Envios.vue'), meta: {requiresAuth: false}},
       {path: 'alergenos', component: () => import('pages/Alergenos.vue'), meta: {requiresAuth: false}},
-      {path: 'auth/oauth2callback/', component: () => import('pages/Callback.vue'), meta: {requiresAuth: false}},
-      {path: 'unauthorized', component: () => import('pages/Unauthorized.vue'), meta: {requiresAuth: false}},
-      {path: 'expired', component: () => import('pages/Expired.vue'), meta: {requiresAuth: false}},
+      {path: 'auth/oauth2callback/', component: () => import('pages/Status/Callback.vue'), meta: {requiresAuth: false}},
+      {path: 'unauthorized', component: () => import('pages/Status/Unauthorized.vue'), meta: {requiresAuth: false}},
+      {path: 'expired', component: () => import('pages/Status/Expired.vue'), meta: {requiresAuth: false}},
 
     ]
   },
@@ -39,8 +39,8 @@ const routes = [
     path: '/admin',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      {path: '', component: () => import('pages/Admin.vue'), meta: {requiresAuth: true}},
-      {path: 'nuevoingrediente', component: () => import('pages/AdminCrearIngrediente.vue'), meta: {requiresAuth: true}},
+      {path: '', component: () => import('pages/Admin/Admin.vue'), meta: {requiresAuth: true}},
+      {path: 'nuevoingrediente', component: () => import('pages/Admin/AdminCrearIngrediente.vue'), meta: {requiresAuth: true}},
       {path: 'nuevoplato', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
       {path: 'editplato/:id', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
     ]
@@ -50,7 +50,7 @@ const routes = [
   // but you can also remove it
   {
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('pages/Status/Error404.vue')
   }
 ]
 

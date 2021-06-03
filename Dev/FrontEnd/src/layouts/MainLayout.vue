@@ -35,7 +35,7 @@
                     <q-img :src="user.img" alt=""/>
                   </q-avatar>
 
-                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user.name }}</div>
+                  <div class="text-subtitle1 q-mt-md q-mb-xs">{{ user.email }}</div>
 
                   <q-btn
                     color="primary"
@@ -151,6 +151,8 @@ export default {
     return {
       user: {
         name: "",
+        email:"",
+        direccion:"",
         admin: false,
         img: 'https://placeimg.com/500/300/nature',
       },
@@ -165,8 +167,8 @@ export default {
   async created() {
     if (localStorage.getItem("user") != null) {
       if (await this.validate() === true) {
-        this.user.name = localStorage.getItem("user")
-        if (this.user.name === "admin@gmail.com") {
+        this.user.email = localStorage.getItem("user")
+        if (this.user.email === "admin@gmail.com") {
           this.user.admin = true;
         }
         /*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
