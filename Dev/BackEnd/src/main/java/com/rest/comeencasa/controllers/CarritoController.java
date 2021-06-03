@@ -55,10 +55,12 @@ public class CarritoController {
             List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
             return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
         } else {
-            pedido = new Pedido();
-            pedido.setUsuario(user);
-            pedido.setEstado("Pendiente");
-            pedidoService.savePedido(pedido);
+            if (user !=null){
+                pedido = new Pedido();
+                pedido.setUsuario(user);
+                pedido.setEstado("Pendiente");
+                pedidoService.savePedido(pedido);
+            }
             return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
         }
     }
@@ -83,11 +85,12 @@ public class CarritoController {
             List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
             return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
         } else {
-            System.out.println("adios");
-            pedido = new Pedido();
-            pedido.setUsuario(user);
-            pedido.setEstado("Pendiente");
-            pedidoService.savePedido(pedido);
+            if (user !=null){
+                pedido = new Pedido();
+                pedido.setUsuario(user);
+                pedido.setEstado("Pendiente");
+                pedidoService.savePedido(pedido);
+            }
             return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
         }
     }

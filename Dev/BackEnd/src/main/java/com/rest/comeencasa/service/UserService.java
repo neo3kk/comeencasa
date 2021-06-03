@@ -29,4 +29,6 @@ public interface UserService {
     boolean createUser(Usuario user);
 
     String processAvatar(String avatar, String userId);
+
+    void save(Usuario user);
 }
