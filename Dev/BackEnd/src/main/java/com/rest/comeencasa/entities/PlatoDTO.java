@@ -8,6 +8,7 @@ public class PlatoDTO {
     String precio;
     String traduccion;
     String description;
+    Boolean visible;
     String tipo_de_plato;
 
     public Long getId() {
@@ -48,6 +49,14 @@ public class PlatoDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     public String getTipo_de_plato() {

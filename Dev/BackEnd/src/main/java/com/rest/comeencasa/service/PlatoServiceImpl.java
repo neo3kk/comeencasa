@@ -36,6 +36,7 @@ public class PlatoServiceImpl implements PlatoService{
         platoDTO.setPrecio(plato.getPrecio());
         platoDTO.setId(plato.getId());
         platoDTO.setTraduccion(plato.getTraduccion());
+        platoDTO.setVisible(plato.isVisible());
         return platoDTO;
     }
 

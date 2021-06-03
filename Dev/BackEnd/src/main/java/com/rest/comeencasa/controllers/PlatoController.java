@@ -55,6 +55,16 @@ public class PlatoController {
         List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
     }
+    @PostMapping("/setVisibility")
+    public ResponseEntity<String> setVisibility(@RequestBody String payload) {
+        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+        Map<String, Boolean> map2 = gson.fromJson(payload, HashMap.class);
+        Double id = map.get("idplato");
+        Plato plato = platoService.findPlatoById(Math.round(id));
+        plato.setVisible(map2.get("visible"));
+        platoService.save(plato);
+        return new ResponseEntity<>("Se ha cambiado la visibilidad del plato", HttpStatus.ACCEPTED);
+    }
 
     @PostMapping("/getPlatosMenu")
     public ResponseEntity<String> getPlatosMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
@@ -98,6 +108,7 @@ public class PlatoController {
             plato.setDescription(map.get("description"));
             plato.setTipo_de_plato(map.get("tipo_plato"));
             plato.setTraduccion(map.get("traduccion"));
+            plato.setVisible(Boolean.parseBoolean(map.get("visible")));
             platoService.save(plato);
             Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
             List ingredientes = map2.get("ingredientes");
@@ -164,6 +175,7 @@ public class PlatoController {
         plato.setDescription(map.get("description"));
         plato.setTipo_de_plato(map.get("tipo_plato"));
         plato.setTraduccion(map.get("traduccion"));
+        plato.setVisible(Boolean.parseBoolean(map.get("visible")));
         Plato finalPlato = plato;
         ingredientes.forEach(ingrediente -> {
             LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingrediente;

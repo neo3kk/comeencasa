@@ -32,6 +32,9 @@ public class Plato implements Serializable {
     @Column(name = "tipo_de_plato", columnDefinition = "TEXT")
     String tipo_de_plato;
 
+    @Column(name = "visible", columnDefinition = "TEXT")
+    boolean visible;
+
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<PlatoMenu> platoMenu;
@@ -86,6 +89,14 @@ public class Plato implements Serializable {
 
     public void setPrecio(String precio) {
         this.precio = precio;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public String getTipo_de_plato() {
