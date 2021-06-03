@@ -9,7 +9,7 @@
           <div class="text-subtitle2">Edita la lista de ingredientes</div>
         </q-card-section>
 
-        <q-separator />
+        <q-separator/>
 
         <q-card-actions align="around">
           <q-btn flat @click="$router.push('/admin/nuevoingrediente')">Entra</q-btn>
@@ -24,6 +24,9 @@
         <q-card-actions align="around">
           <q-btn flat @click="$router.push('/admin/nuevoplato')">Entra</q-btn>
         </q-card-actions>
+        <q-card-actions align="around">
+          <q-btn flat @click="platosInvisible = !platosInvisible">Edita tus platos</q-btn>
+        </q-card-actions>
       </q-card>
       <q-card class="my-card">
         <q-card-section class="bg-green text-white">
@@ -36,6 +39,33 @@
         </q-card-actions>
       </q-card>
     </div>
+    <div  v-if="platosInvisible">
+      <div class="text-h3">Clicka sobre el plato a modificar</div>
+      <q-markup-table flat bordered >
+        <thead>
+        <tr>
+          <th class="text-left">Id</th>
+          <th class="text-right">Nombre del plato</th>
+          <th class="text-right">Nombre Traducido</th>
+          <th class="text-right">Precio</th>
+          <th class="text-right">Buttons</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="plato in platos" :key="plato.id" >
+          <td class="text-left">{{plato.id}}</td>
+          <td class="text-right">{{plato.nombre}}</td>
+          <td class="text-right">{{plato.traduccion}}</td>
+          <td class="text-right">{{plato.precio}}</td>
+          <td class="text-right"><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete"/>
+            <q-btn color="blue" icon="edit" @click="$router.replace( 'admin/editplato/'+plato.id)"label="Editar"/></td>
+        </tr>
+        </tbody>
+      </q-markup-table>
+    </div>
+
+
+
   </q-page>
 
 
@@ -44,36 +74,62 @@
 <script>
 
 
-import {SETTINGS} from "src/settings";
+  import {SETTINGS} from "src/settings";
 
-export default {
-  name: 'AdminPage',
-  props:{
-    user:{type:String}
-  },
+  export default {
+    name: 'AdminPage',
+    props: {
+      user: {type: String}
+    },
 
-  data() {
-    return {
-      admin: this.user,
-      post: "",
-      url_server_api: SETTINGS.URL_SERVER_API
-    };
-  },
-  async created() {
-    if(this.user !== "admin@gmail.com") {
-      await this.$router.push("/unauthorized");
+    data() {
+      return {
+        admin: this.user,
+        post: "",
+        platosInvisible: false,
+        platos: [],
+        url_server_api: SETTINGS.URL_SERVER_API
+      };
+    },
+    async created() {
+      if (this.user !== "admin@gmail.com") {
+        await this.$router.push("/unauthorized");
+      } else {
+        await this.getPlatos()
+      }
+    },
+    methods: {
+      async getPlatos() {
+        let platosFetch = await this.$axios.get(this.url_server_api + '/platos');
+        this.platos = platosFetch.data
+      },
+      async deletePlato(id){
+        let platosFetch = await this.$axios.delete(this.url_server_api + '/deletePlato',{data:{idplato: id}}).then(response => {
+          this.showNotification("Se ha borrado el plato correctamente", "check_circle_outline", "positive")
+        });
+      },
+      showNotification(content, icon, color) {
+        this.$q.notify({
+          message: content,
+          color: color,
+          icon: icon,
+          actions: [
+            {
+              label: 'OK', color: 'white', handler: () => {
+                this.tab = "nuevoPedido"
+              }
+            }
+          ]
+        })
+      },
     }
-  },
-  methods: {
-
   }
-}
 </script>
 
 <style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 250px
+  .my-card
+    width: 100%
+    max-width: 250px
 </style>
 
 

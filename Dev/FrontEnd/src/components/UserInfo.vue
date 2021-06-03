@@ -173,7 +173,7 @@ export default {
     },
 
     async validate() {
-      let validate = await this.$axios.get(this.url_server_api + `/test`);
+      let validate = await this.$axios.get(this.url_server_api + `/getAdmin`);
       console.log(validate.request.responseText.toString());
       if (validate.request.responseText.toString() === "InvalidToken") {
         return false

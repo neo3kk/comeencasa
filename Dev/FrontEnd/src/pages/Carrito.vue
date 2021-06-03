@@ -76,7 +76,7 @@ export default {
           this.platos.splice(i, 1)
         }
       }
-      let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlato' ,{data:{idplato: id}});
+      let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlatoPedido' ,{data:{idplato: id}});
     },
     async deleteMenu(id){
       for (let i = 0; i < this.menus.length; i++) {
