@@ -3,6 +3,7 @@ package com.rest.comeencasa.service;
 import com.rest.comeencasa.entities.Pedido;
 import com.rest.comeencasa.entities.Plato;
 import com.rest.comeencasa.entities.PlatoDTO;
+import com.rest.comeencasa.entities.PlatoIngrediente;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,5 @@ public interface PlatoService {
     void save(Plato plato);
 
     Plato findPlatoByName(String nombre);
+    void deletePlato(Plato plato);
 }

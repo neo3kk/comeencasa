@@ -281,7 +281,7 @@ public class PedidoController {
 
     }
 
-    @DeleteMapping("/deletePlato")
+    @DeleteMapping("/deletePlatoPedido")
     public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
