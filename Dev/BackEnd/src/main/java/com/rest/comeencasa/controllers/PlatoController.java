@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 public class PlatoController {
@@ -56,84 +58,134 @@ public class PlatoController {
 
     @PostMapping("/getPlatosMenu")
     public ResponseEntity<String> getPlatosMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
-                Map<String, Double> map = gson.fromJson(payload, HashMap.class);
-                Double id = map.get("idmenu");
-                Menu menu = menuService.findById(id.longValue());
-                List<PlatoMenu> platoMenus = menu.getPlatoMenu();
-                List<Plato> platos = new ArrayList<>();
-                platoMenus.forEach(platoMenu -> {
-                    platos.add(platoMenu.getPlato());
-                });
-                List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
 
+        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+        Double id = map.get("idmenu");
+        Menu menu = menuService.findById(id.longValue());
+        List<PlatoMenu> platoMenus = menu.getPlatoMenu();
+        List<Plato> platos = new ArrayList<>();
+        platoMenus.forEach(platoMenu -> {
+            platos.add(platoMenu.getPlato());
+        });
+        List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
 
-                return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/getPlatoById")
     public ResponseEntity<String> getPlatoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
-                Map<String, String> map = gson.fromJson(payload, HashMap.class);
-                String id = map.get("idplato");
-                Plato plato = platoService.findPlatoById(Long.valueOf(id));
-                PlatoDTO platoDTO = platoService.makePlatoDto(plato);
+
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String id = map.get("idplato");
+        Plato plato = platoService.findPlatoById(Long.valueOf(id));
+        PlatoDTO platoDTO = platoService.makePlatoDto(plato);
 
 
-                return new ResponseEntity<>(gson.toJson(platoDTO), HttpStatus.ACCEPTED);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(gson.toJson(platoDTO), HttpStatus.ACCEPTED);
+
     }
 
     @PostMapping("/crearPlato")
     public ResponseEntity<String> creatPlato(@RequestBody String payload) throws Exception {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        Plato plato = new Plato();
+        System.out.println(platoService.findPlatoByName(map.get("nombre")).getId());
+        if (platoService.findPlatoByName(map.get("nombre")).getId() != null) {
+            return new ResponseEntity<>("400", HttpStatus.OK);
+        } else {
+            Plato plato = new Plato();
+            plato.setNombre(map.get("nombre"));
+            plato.setPrecio(map.get("precio"));
+            plato.setDescription(map.get("description"));
+            plato.setTipo_de_plato(map.get("tipo_plato"));
+            plato.setTraduccion(map.get("traduccion"));
+            platoService.save(plato);
+            Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
+            List ingredientes = map2.get("ingredientes");
+
+            List<PlatoIngrediente> platoIngredientes = new ArrayList<>();
+            Plato finalPlato = platoService.findPlatoByName(map.get("nombre"));
+            ingredientes.forEach(ingrediente -> {
+                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingrediente;
+                float idIngrediente = Float.parseFloat(t.get("id").toString());
+                Ingrediente ingrediente1 = ingredienteService.findIngredienteById((long) idIngrediente);
+                PlatoIngrediente platoIngrediente = new PlatoIngrediente();
+                platoIngrediente.setPlato(finalPlato);
+                platoIngrediente.setIngrediente(ingrediente1);
+                platoIngredientes.add(platoIngrediente);
+                platoIngredienteService.save(platoIngrediente);
+            });
+            finalPlato.setPlatoIngrediente(platoIngredientes);
+            platoService.save(finalPlato);
+
+
+            PlatoDTO platoDTO = platoService.makePlatoDto(plato);
+
+
+            return new ResponseEntity<>(gson.toJson(platoDTO), HttpStatus.ACCEPTED);
+        }
+    }
+
+    @PostMapping("/guardarPlato")
+    public ResponseEntity<String> guardarPlato(@RequestBody String payload) throws Exception {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        Map<String, Double> map1 = gson.fromJson(payload, HashMap.class);
+
+        Plato plato = platoService.findPlatoById(Math.round((map1.get("id"))));
+
+        plato = platoService.findPlatoById(Math.round((map1.get("id"))));
+        List<PlatoIngrediente> platoIngredientes = platoIngredienteService.findByPlato(plato);
+
+        Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
+        List ingredientes = map2.get("ingredientes");
+        List ingredientes2 = map2.get("ingredientes");
+
+        for (int i = 0; i <platoIngredientes.size() ; i++) {
+            AtomicReference<Boolean> borrar = new AtomicReference<>(true);
+            for (int j = 0; j < ingredientes2.size(); j++) {
+                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingredientes2.get(j);
+                float idIngrediente = Float.parseFloat(t.get("id").toString());
+                Ingrediente ingrediente1 = ingredienteService.findIngredienteById((long) idIngrediente);
+                if (ingrediente1 == platoIngredientes.get(i).getIngrediente()) {
+                    borrar.set(false);
+
+                }
+                if (borrar.get()) {
+                    platoIngredientes.remove(platoIngredientes.get(i));
+                }
+            }
+        }
+
+        System.out.println(platoIngredientes.size());
+        platoIngredientes.forEach(platoIngrediente -> {
+
+        });
         plato.setNombre(map.get("nombre"));
         plato.setPrecio(map.get("precio"));
         plato.setDescription(map.get("description"));
         plato.setTipo_de_plato(map.get("tipo_plato"));
         plato.setTraduccion(map.get("traduccion"));
-        platoService.save(plato);
-        Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
-        List ingredientes = map2.get("ingredientes");
-
-        List<PlatoIngrediente> platoIngredientes = new ArrayList<>();
-        Plato finalPlato =  platoService.findPlatoByName(map.get("nombre"));
-        ingredientes.forEach(ingrediente ->{
-            LinkedTreeMap<Object,Object> t = (LinkedTreeMap) ingrediente;
+        Plato finalPlato = plato;
+        ingredientes.forEach(ingrediente -> {
+            LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingrediente;
             float idIngrediente = Float.parseFloat(t.get("id").toString());
-            Ingrediente ingrediente1 = ingredienteService.findIngredienteById((long)idIngrediente);
-            PlatoIngrediente platoIngrediente = new PlatoIngrediente();
-            platoIngrediente.setPlato(finalPlato);
-            platoIngrediente.setIngrediente(ingrediente1);
-            platoIngredientes.add(platoIngrediente);
-            platoIngredienteService.save(platoIngrediente);
+            Ingrediente ingrediente1 = ingredienteService.findIngredienteById((long) idIngrediente);
+            AtomicBoolean esIgual = new AtomicBoolean(false);
+            platoIngredientes.forEach(platoIngrediente -> {
+                if (ingrediente1 == platoIngrediente.getIngrediente()) {
+                    esIgual.set(true);
+                }
+            });
+            if (!esIgual.get()) {
+                PlatoIngrediente platoIngrediente = new PlatoIngrediente();
+                platoIngrediente.setPlato(finalPlato);
+                platoIngrediente.setIngrediente(ingrediente1);
+                platoIngredientes.add(platoIngrediente);
+                platoIngredienteService.save(platoIngrediente);
+            }
         });
-        finalPlato.setPlatoIngrediente(platoIngredientes);
-        platoService.save(finalPlato);
+        plato.getPlatoIngrediente().clear();
+        plato.getPlatoIngrediente().addAll(platoIngredientes);
+        platoService.save(plato);
 
 
         PlatoDTO platoDTO = platoService.makePlatoDto(plato);
@@ -141,6 +193,32 @@ public class PlatoController {
 
         return new ResponseEntity<>(gson.toJson(platoDTO), HttpStatus.ACCEPTED);
 
+    }
+
+    @PostMapping("/getIngredientesByPlato")
+    public ResponseEntity<String> getIngredientesByPlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String id = map.get("idplato");
+        Plato plato = platoService.findPlatoById(Long.valueOf(id));
+        List<PlatoIngrediente> platoIngredientes = plato.getPlatoIngrediente();
+        List<Ingrediente> ingredientes = new ArrayList<>();
+        platoIngredientes.forEach(platoIngrediente -> {
+            ingredientes.add(platoIngrediente.getIngrediente());
+        });
+        List<IngredienteDTO> ingredienteDTOS = ingredienteService.createListIngredienteDTO(ingredientes);
+        return new ResponseEntity<>(gson.toJson(ingredienteDTOS), HttpStatus.ACCEPTED);
+
+    }
+
+    @DeleteMapping("/deletePlato")
+    public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+
+        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+
+        Plato plato = platoService.findPlatoById(Math.round(map.get("idplato")));
+        platoService.deletePlato(plato);
+        return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
 
     }
 

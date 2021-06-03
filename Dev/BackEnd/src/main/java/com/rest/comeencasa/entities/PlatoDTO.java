@@ -6,6 +6,7 @@ public class PlatoDTO {
     private Long id;
     String nombre;
     String precio;
+    String traduccion;
     String description;
     String tipo_de_plato;
 
@@ -31,6 +32,14 @@ public class PlatoDTO {
 
     public void setPrecio(String precio) {
         this.precio = precio;
+    }
+
+    public String getTraduccion() {
+        return traduccion;
+    }
+
+    public void setTraduccion(String traduccion) {
+        this.traduccion = traduccion;
     }
 
     public String getDescription() {

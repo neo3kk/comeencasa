@@ -35,6 +35,7 @@ public class PlatoServiceImpl implements PlatoService{
         platoDTO.setNombre(plato.getNombre());
         platoDTO.setPrecio(plato.getPrecio());
         platoDTO.setId(plato.getId());
+        platoDTO.setTraduccion(plato.getTraduccion());
         return platoDTO;
     }
 
@@ -51,6 +52,11 @@ public class PlatoServiceImpl implements PlatoService{
     @Override
     public Plato findPlatoByName(String nombre) {
         return platoRepository.findPlatoByNombre(nombre);
+    }
+
+    @Override
+    public void deletePlato(Plato plato) {
+        platoRepository.delete(plato);
     }
 
     @Override
