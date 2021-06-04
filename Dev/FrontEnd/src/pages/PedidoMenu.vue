@@ -5,23 +5,24 @@
       <q-list style="min-width: 100px">
         <q-item>
           <div class="q-pa-md row items-start q-gutter-md">
-            <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="category.toLowerCase() === plato.tipo_de_plato.toLowerCase()"
-                    @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
+            <q-card class="my-card" v-for="plato in platos" :key="plato.id" v-if="category.toLowerCase() === plato.tipo_de_plato.toLowerCase()">
               <img :src="plato.image" class="comida">
-              <q-card-section>
-                <div>
-                  <div class="text-h6">{{ plato.nombre }}</div>
-                  <div class="text-subtitle2">{{ plato.description }}</div>
-                </div>
-              </q-card-section>
+              <div  @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
+                <q-card-section>
+                  <div>
+                    <div class="text-h6">{{ plato.nombre }}</div>
+                    <div class="text-subtitle2">{{ plato.description }}</div>
+                  </div>
+                </q-card-section>
 
-              <q-card-section class="q-pt-none">
-                Ingredientes:
-              </q-card-section>
-              <q-separator/>
+                <q-card-section class="q-pt-none">
+                  Ingredientes:
+                </q-card-section>
+                <q-separator/>
+              </div>
 
               <q-card-actions align="right">
-                <q-btn flat color="primary" @click="startComputing(1)">Mas información</q-btn>
+                <q-btn flat color="primary" @click="$router.replace( '/plato/'+plato.id)">Mas información</q-btn>
               </q-card-actions>
             </q-card>
           </div>
@@ -78,6 +79,8 @@ export default {
         for (let i = 0; i < this.platosSeleccinados.length; i++) {
           if (plato.id === this.platosSeleccinados[i].id){
             console.log(1)
+            console.log(this.platosSeleccinados)
+            console.log(this.platosSeleccinados[i])
             console.log(plato)
             document.getElementById(plato.id).style.backgroundColor = "white"
             this.platosSeleccinados.splice(i, 1)

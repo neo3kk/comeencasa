@@ -3,7 +3,7 @@
 
     <q-list>
       Tu lista de productos
-      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( 'plato/'+plato.id)">
+      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( '/plato/'+plato.id)">
         <q-item-section>
           <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>

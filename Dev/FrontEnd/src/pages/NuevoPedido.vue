@@ -34,7 +34,7 @@
 
         <q-card-actions align="right">
           <q-btn flat color="secondary" @click="añadirPlato(plato.id)">Añadir Plato</q-btn>
-          <q-btn flat color="primary" @click="startComputing(1)">Mas información</q-btn>
+          <q-btn flat color="primary" @click="$router.replace( '/plato/'+plato.id)">Mas información</q-btn>
         </q-card-actions>
       </q-card>
     </div>

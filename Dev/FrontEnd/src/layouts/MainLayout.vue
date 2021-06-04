@@ -278,6 +278,13 @@ export default {
         }
       })
       this.showUserInfo = true
+      let name = await this.$axios.post(this.url_server_api + 'getNameByEmail', {
+        email: this.user.email
+      });
+      console.log(name.data)
+      let validate = await this.$axios.get(this.url_server_api + '/images/users/'+name.data);
+      this.user.img = validate.data
+      console.log(validate.data)
     }
   },
   methods:{
