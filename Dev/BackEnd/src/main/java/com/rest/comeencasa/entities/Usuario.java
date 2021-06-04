@@ -16,7 +16,7 @@ public class Usuario{
     private Long id;
 
     @Column(name ="avatarUrl", columnDefinition = "TEXT")
-    private byte[] avatarUrl;
+    private String avatarUrl;
 
     @Column(name ="email", columnDefinition = "TEXT")
     String email = null;
@@ -42,11 +42,11 @@ public class Usuario{
         this.id = id;
     }
 
-    public byte[] getAvatarUrl() {
+    public String getAvatarUrl() {
         return avatarUrl;
     }
 
-    public void setAvatarUrl(byte[] avatarUrl) {
+    public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
 

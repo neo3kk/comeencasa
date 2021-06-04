@@ -39,6 +39,10 @@ public class LoginController {
     @Autowired
     UserServiceImpl userService;
 
+    @Value("${server.domain}")
+    String serverDomain;
+
+
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody String payload) {
@@ -80,7 +84,7 @@ public class LoginController {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setAvatarUrl(bytes);
+        user.setAvatarUrl( "http://"+ serverDomain +"/images/users/" + userService.processAvatar(avatar, user.getName()));
         if (userService.getUser(user)==null){
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
@@ -103,7 +107,7 @@ public class LoginController {
         String email = map.get("user");
         Usuario usuario = userService.getUserByEmail(email);
 
-        return new ResponseEntity<String>(Arrays.toString(usuario.getAvatarUrl()), HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>(usuario.getAvatarUrl(), HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/getImage2")
@@ -112,7 +116,7 @@ public class LoginController {
         String email = map.get("user");
         Usuario usuario = userService.getUserByEmail(email);
 
-        return new ResponseEntity<String>(Arrays.toString(usuario.getAvatarUrl()), HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>(usuario.getAvatarUrl(), HttpStatus.ACCEPTED);
     }
 
 

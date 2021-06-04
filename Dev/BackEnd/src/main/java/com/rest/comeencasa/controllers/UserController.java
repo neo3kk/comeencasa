@@ -78,4 +78,16 @@ public class UserController {
         return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
 
     }
+    @PostMapping("/getNameByEmail")
+    public ResponseEntity<String> getNameByEmail(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        user = userService.getUserByEmail(map.get("email"));
+        System.out.println(user.getName());
+
+
+        return new ResponseEntity<>(gson.toJson(user.getName()), HttpStatus.ACCEPTED);
+
+    }
 }
