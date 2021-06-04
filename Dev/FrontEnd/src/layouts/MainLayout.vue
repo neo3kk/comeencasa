@@ -281,7 +281,9 @@ export default {
       let name = await this.$axios.post(this.url_server_api + 'getNameByEmail', {
         email: this.user.email
       });
+      console.log("gola")
       console.log(name.data)
+      console.log("gola")
       let validate = await this.$axios.get(this.url_server_api + '/images/users/'+name.data);
       this.user.img = validate.data
       console.log(validate.data)
