@@ -87,7 +87,7 @@ public class UserController {
         System.out.println(user.getName());
 
 
-        return new ResponseEntity<>(gson.toJson(user.getName()), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(gson.toJson(user.getAvatarUrl()), HttpStatus.ACCEPTED);
 
     }
 }

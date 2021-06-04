@@ -84,7 +84,7 @@ public class LoginController {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setAvatarUrl( "http://"+ serverDomain +"/images/users/" + userService.processAvatar(avatar, user.getName()));
+        user.setAvatarUrl(userService.processAvatar(avatar, user.getName()));
         if (userService.getUser(user)==null){
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
