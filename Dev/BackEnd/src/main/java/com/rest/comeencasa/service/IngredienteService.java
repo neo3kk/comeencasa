@@ -13,4 +13,6 @@ public interface IngredienteService {
    IngredienteDTO makeIngredienteDTO(Ingrediente ingrediente);
    List<IngredienteDTO> createListIngredienteDTO(List<Ingrediente> ingredientes);
    Ingrediente findIngredienteById(Long id);
+
+    boolean delete(String ingrediente);
 }

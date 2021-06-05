@@ -32,22 +32,6 @@ public class IngredienteServiceImpl implements IngredienteService {
         }
     }
 
-/*    @Override
-    public boolean updateIngredient(String ingrediente, int energy, int sugar, int fsat, int prot) {
-        Ingrediente in = buscarIngrediente(ingrediente);
-        System.out.println(in.getEnergia());
-        if (in.getEnergia() == 0) {
-            in.setEnergia(energy);
-            in.setAzucar(sugar);
-            in.setGrasas(fsat);
-            in.setProteinas(prot);
-            ingredienteRepository.save(in);
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-
     @Override
     public Ingrediente buscarIngrediente(String ingrediente) {
         Ingrediente in = ingredienteRepository.findIngredienteByName(ingrediente);
@@ -73,6 +57,17 @@ public class IngredienteServiceImpl implements IngredienteService {
     @Override
     public Ingrediente findIngredienteById(Long id) {
         return ingredienteRepository.findIngredienteById(id);
+    }
+
+    @Override
+    public boolean delete(String ingrediente) {
+        Ingrediente in = buscarIngrediente(ingrediente);
+        if (in != null) {
+            ingredienteRepository.delete(in);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
