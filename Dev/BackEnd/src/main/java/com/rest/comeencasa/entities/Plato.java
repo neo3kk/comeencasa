@@ -55,6 +55,20 @@ public class Plato implements Serializable {
         this.id = id;
     }
 
+    public void addChild(PlatoIngrediente aSon)
+    {
+        this.PlatoIngrediente.add(aSon);
+    }
+
+    public void removeChild(PlatoIngrediente aSon)
+    {
+        this.PlatoIngrediente.remove(aSon);
+    }
+    public void clear()
+    {
+        this.PlatoIngrediente.clear();;
+    }
+
     public String getNombre() {
         return nombre;
     }
