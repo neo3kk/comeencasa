@@ -31,15 +31,39 @@
 
     </div>
     <div class="q-pa-md">
-      <q-list bordered>
-        <q-item clickable v-ripple v-for="ingrediente in ing" :key="ingrediente.id">
-          <q-item-section>{{ ingrediente.name }}</q-item-section>
-          <q-item-section>{{ ingrediente.traduccion }}</q-item-section>
-          <q-item-section>{{ ingrediente.energia }}</q-item-section>
-          <q-item-section>{{ ingrediente.azucar }}</q-item-section>
-          <q-btn color="red">Borrar</q-btn>
-        </q-item>
-      </q-list>
+      <!--      <q-list bordered>
+              <q-item clickable v-ripple v-for="ingrediente in ing" :key="ingrediente.id">
+                <q-item-section>{{ ingrediente.name }}</q-item-section>
+                <q-item-section>{{ ingrediente.traduccion }}</q-item-section>
+                <q-item-section>{{ ingrediente.energia }}</q-item-section>
+                <q-item-section>{{ ingrediente.azucar }}</q-item-section>
+                <q-btn color="red">Borrar</q-btn>
+              </q-item>
+            </q-list>-->
+      <q-markup-table>
+        <thead>
+        <tr>
+          <th class="text-left">Aliments (100g porcio)</th>
+          <th class="text-right">calorias</th>
+          <th class="text-right">Grasas Sat (g)</th>
+          <th class="text-right">Azucar (g)</th>
+          <th class="text-right">Proteinas (g)</th>
+          <th class="text-right">Action</th>
+        </tr>
+        </thead>
+        <tbody v-for="x in ing" :key="x.id">
+        <tr>
+          <td class="text-left">{{ x.name }}</td>
+          <td class="text-right">{{ Math.round(x.energia) }}</td>
+          <td class="text-right">{{ Math.round(x.grasas) }}</td>
+          <td class="text-right">{{ Math.round(x.azucar) }}</td>
+          <td class="text-right">{{ Math.round(x.proteinas) }}</td>
+          <td class="text-right">
+            <q-btn color="red" @click="delIngredient(x.name)">Borrar</q-btn>
+          </td>
+        </tr>
+        </tbody>
+      </q-markup-table>
     </div>
   </q-page>
 
@@ -63,7 +87,7 @@ export default {
         traduccion: "",
         azucar: "",
         energia: "",
-        grasasSat: "",
+        grasas: "",
         proteinas: ""
       }
     }
@@ -71,7 +95,6 @@ export default {
   async created() {
     await this.getIngredientes();
     this.db = await this.getDb();
-    //await this.reloadIdb();
 
   },
 
@@ -79,18 +102,16 @@ export default {
     async onSubmit() {
       await this.addIngredientDB(this.name, this.traduccion);
       await this.getIngredientes();
-      //await this.reloadIdb();
 
     },
 
     async addToDb(ingredient) {
-      console.log(ingredient)
       let add = await this.$axios.post(this.url_server_api + '/admin/addingredient', {
         name: ingredient.name,
         traduccion: ingredient.traduccion,
         energia: ingredient.energia.toString(),
         azucar: ingredient.azucar.toString(),
-        grasasSat: ingredient.grasasSat.toString(),
+        grasas: ingredient.grasas.toString(),
         proteinas: ingredient.proteinas.toString()
       });
       if (add.request.status === 202) {
@@ -112,9 +133,19 @@ export default {
     },
 
     async addIngredientDB(nameIng, tradIng) {
-      let comp = await this.comprovarElementIDXDB(nameIng, tradIng)
+      let comp = await this.comprovarElementIDXDB(nameIng)
       if (!comp.result) {
-        await this.comprovaKcal(nameIng, tradIng)
+        let ingredient = await this.comprovaKcal(nameIng, tradIng)
+        if (ingredient) {
+          await this.addAlimentBd(ingredient);
+        } else {
+          this.$q.notify({
+            color: 'red-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'This is not an ingredient'
+          })
+        }
       } else {
         await this.addToDb(comp.result)
       }
@@ -123,6 +154,30 @@ export default {
     async getIngredientes() {
       let ingredientes = await this.$axios.get(this.url_server_api + '/admin/getAllIngredientes')
       this.ing = ingredientes.data;
+    },
+
+    async delIngredient(ing) {
+      let del = await this.$axios.delete(this.url_server_api + '/admin/deleteIngredient', {
+        data: {
+          name: ing
+        }
+      });
+      if (del.request.status === 202) {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Deleted'
+        })
+        this.getIngredientes();
+      } else {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Error to delete ingredient in database'
+        })
+      }
     },
 
 
@@ -167,7 +222,6 @@ export default {
     async comprovarElementIDXDB(ingrediente) {
       return new Promise((resolve, reject) => {
         let trans = this.db.transaction(["Llista"], "readwrite");
-
         let objectStore = trans.objectStore("Llista");
         let myIndex = objectStore.index("Index");
         let elementValidat = myIndex.get(ingrediente);
@@ -178,24 +232,23 @@ export default {
     },
 
     async comprovaKcal(ing, trad) {
-      let kcalAliment = await this.kcal(ing);
+      let kcalAliment = await this.kcal(trad);
       if (kcalAliment && kcalAliment.calories > 0) {
         let ingredient = {
           energia: "",
           azucar: "",
-          grasasSat: "",
+          grasas: "",
           proteinas: "",
           name: "",
           traduccion: "",
         };
         ingredient.energia = kcalAliment.calories;
         ingredient.azucar = kcalAliment.totalNutrients.SUGAR.quantity;
-        ingredient.grasasSat = kcalAliment.totalNutrients.FASAT.quantity;
+        ingredient.grasas = kcalAliment.totalNutrients.FASAT.quantity;
         ingredient.proteinas = kcalAliment.totalNutrients.PROCNT.quantity;
         ingredient.name = ing
         ingredient.traduccion = trad
-
-        await this.addAlimentBd(ingredient);
+        return ingredient;
       }
     },
 
@@ -208,39 +261,8 @@ export default {
         };
         let store = trans.objectStore("Llista");
         store.add(ingredient);
-        //this.updateIngredient(ingredient.name, ingredient.energia.toString(), ingredient.azucar.toString(), ingredient.grasasSat.toString(), ingredient.proteinas.toString())
       });
     },
-
-
-    /*
-        async updateIngredient(nameIng, enerIng, azuIng, grasIng, proting) {
-          let upd = await this.$axios.post(this.url_server_api + '/admin/updateIngredient', {
-            name: nameIng,
-            energia: enerIng,
-            azucar: azuIng,
-            grasasSat: grasIng,
-            proteinas: proting,
-          });
-          if (upd.request.status === 202) {
-            this.$q.notify({
-              color: 'green-4',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: 'Submitted'
-            })
-            this.getIngredientes();
-          } else {
-            this.$q.notify({
-              color: 'red-4',
-              textColor: 'white',
-              icon: 'cloud_done',
-              message: 'Update Error'
-            })
-          }
-
-        },
-    */
 
 
     async kcal(ing) {
@@ -261,7 +283,6 @@ export default {
         }
       });
       let caloriesJson = await calories.json();
-      console.log(caloriesJson)
       return caloriesJson;
     },
 
