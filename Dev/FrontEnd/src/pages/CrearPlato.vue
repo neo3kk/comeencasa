@@ -8,14 +8,14 @@
           <q-select v-model="tipo_plato" :options="options" label="Tipo de plato"/>
           <q-input v-model="description" filled type="textarea"/>
           <q-input outlined v-model="precio" type="float" prefix="€">
-            <q-btn-toggle v-model="visible" push glossy toggle-color="primary" :options="[
-              {label: 'Visible', value: true},{label: 'Invisible', value: false}]"/>
             <template v-slot:append>
               <q-avatar>
                 <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
               </q-avatar>
             </template>
           </q-input>
+          <q-btn-toggle v-model="visible" push glossy toggle-color="primary" :options="[
+              {label: 'Visible', value: true},{label: 'Invisible', value: false}]"/>
           <div>
             <q-btn label="Submit" type="submit" color="primary"/>
           </div>
@@ -72,6 +72,8 @@
 
 
   import {SETTINGS} from "src/settings";
+  const stripe = require('stripe')('sk_test_KnQIFLmpCoWbMWGMXTP23W7V00jj1MLOZi');
+  import { StripeCheckout } from '@vue-stripe/vue-stripe';
 
   export default {
     name: 'CrearIngrediente',
@@ -88,6 +90,7 @@
         traduccion: '',
         ingredientesSeleccionados: [],
         url_server_api: SETTINGS.URL_SERVER_API,
+        publishableKey: SETTINGS.STRIPE_PUBLISHABLE_KEY,
         plato: '',
         id: '',
       }
@@ -118,6 +121,12 @@
               this.showNotification("Se ha añadido el plato correctamente", "check_circle_outline", "positive")
             }
           })
+
+
+          const product = await stripe.products.create({
+            name: this.nombre,
+          });
+
         }else{
           let guardarPlato = await this.$axios.post(this.url_server_api + '/guardarPlato', {
             id: this.id,

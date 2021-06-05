@@ -65,12 +65,11 @@
 <script>
   // https://github.com/stripe/stripe-js
   import {loadStripe} from '@stripe/stripe-js/pure';
-
+  import {SETTINGS} from "src/settings";
   export default {
     props: {
       data: {type: Object, required: false, default: () => {}}
     },
-
     data() {
       return {
         loading: false,
@@ -86,10 +85,10 @@
           cardExpiry: '',
           cardCvc: ''
         },
+        url_server_api: SETTINGS.URL_SERVER_API,
         submissionError: null
       }
     },
-
     computed: {
       isCardNumberValid() {
         return this.isValid('cardNumber');
@@ -101,11 +100,16 @@
         return this.isValid('cardCvc');
       }
     },
-
     methods: {
+      async myfunc(elements) {
+        let crearPlato = await this.$axios.post(this.url_server_api + '/charge',{
+          amount: elements.amount,
+          description: elements.description,
+          source: elements.source
+        })
+      },
       async submitForm(e) {
         e.preventDefault();
-
         try {
           this.loading = true;
           this.submissionError = null;
@@ -117,6 +121,13 @@
           } else {
             this.resetForm();
             console.log(token)
+            var elements = {
+              amount: '20.00',
+              description: "no tengo ni idea de que poner",
+              source: token.id
+            }
+
+            await this.myfunc(elements)
             this.$emit('success', token);
           }
         } catch (error) {
@@ -125,17 +136,14 @@
           this.loading = false;
         }
       },
-
       resetForm() {
         for (const [elementType, item] of Object.entries(this.card)) {
           this.card[elementType].clear();
         }
       },
-
       updated(e) {
         const elementType = e['elementType'];
         const error = e['error'];
-
         if (error) {
           this.errors[elementType] = e['error']['message'];
           return null;
@@ -145,18 +153,14 @@
           }
         }
       },
-
       isValid(elementType) {
         return this.errors[elementType] === '';
       },
-
       errorMessage(elementType) {
         return this.isValid(elementType) ? this.errors[elementType] : false;
       }
     },
-
     async mounted() {
-
       const style = {
         base: {
           fontFamily: '"Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -165,14 +169,11 @@
           },
         },
       };
-
       if (!this.stripe) {
         this.stripe = await loadStripe('pk_test_LESShQ47cPmtRV4MhkefvSax00lZTqQsOv');
       }
-
       if (!this.elements) {
         const cardElements = ['cardNumber', 'cardExpiry', 'cardCvc']
-
         this.elements = this.stripe.elements();
         console.log(this.elements)
         cardElements.forEach(element => {
@@ -190,4 +191,3 @@
     border-color: transparent
   }
 </style>
-
