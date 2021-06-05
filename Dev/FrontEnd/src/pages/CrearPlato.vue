@@ -102,7 +102,7 @@
     },
     methods: {
       async onSubmit(){
-        if (this.id === ''){
+        if (this.id === '' || this.id == undefined){
           let crearPlato = await this.$axios.post(this.url_server_api + '/crearPlato', {
             nombre: this.nombre,
             precio: this.precio,
@@ -110,7 +110,7 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
-            visible: this.visible
+            visible: this.visible.toString()
           }).then(response=>{
             if (response.data === 400){
               this.showNotification("Ya existe un plato con el mismo nombre en la base de datos", "error", "negative")
@@ -127,7 +127,7 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
-            visible: this.visible
+            visible: this.visible.toString()
           })
         }
 
@@ -158,7 +158,6 @@
         this.precio = plato.precio
         this.tipo_plato = plato.tipo_de_plato
         this.visible = plato.visible
-        console.log(this.plato)
       },
       añadirIngrediente(id){
         var esta = false;
