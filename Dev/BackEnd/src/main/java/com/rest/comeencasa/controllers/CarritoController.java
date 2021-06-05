@@ -54,12 +54,6 @@ public class CarritoController {
             List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
             return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
         } else {
-            if (user !=null){
-                pedido = new Pedido();
-                pedido.setUsuario(user);
-                pedido.setEstado("Pendiente");
-                pedidoService.savePedido(pedido);
-            }
             return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
         }
     }

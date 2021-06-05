@@ -162,19 +162,20 @@ public class PedidoController {
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
                 if (pedido != null) {
                     Plato plato = platoService.findPlatoById(Long.valueOf(object));
+                    pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())+ Double.valueOf(plato.getPrecio())));
+                    pedidoService.savePedido(pedido);
                     PedidoPlato pedidoPlato = new PedidoPlato();
                     pedidoPlato.setPlato(plato);
                     pedidoPlato.setPedido(pedido);
                     pedidoPlatoService.savePedidoPlato(pedidoPlato);
                 } else {
+                    Plato plato = platoService.findPlatoById(Long.valueOf(object));
                     pedido = new Pedido();
-                    pedido.setFecha_pedido(utils.getToday());
-                    pedido.setUsuario(user);
                     pedido.setFecha_pedido(utils.getToday());
                     pedido.setEstado("Pendiente");
                     pedido.setUsuario(user);
+                    pedido.setPrecio_final(plato.getPrecio());
                     pedidoService.savePedido(pedido);
-                    Plato plato = platoService.findPlatoById(Long.valueOf(object));
                     PedidoPlato pedidoPlato = new PedidoPlato();
                     pedidoPlato.setPlato(plato);
                     pedidoPlato.setPedido(pedido);
@@ -219,6 +220,18 @@ public class PedidoController {
         Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
         PedidoMenu pm = new PedidoMenu();
         pm.setMenu(m);
+        if (pedido!=null){
+            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())+ 12));
+
+        }else{
+            pedido = new Pedido();
+            pedido.setFecha_pedido(utils.getToday());
+            pedido.setUsuario(user);
+            pedido.setEstado("Pendiente");
+            pedido.setPrecio_final("12.00");
+
+        }
+        pedidoService.savePedido(pedido);
         pm.setPedido(pedido);
         pedidoMenuService.savePedidoMenu(pm);
         pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
@@ -232,9 +245,8 @@ public class PedidoController {
         }
         m.setPedidoMenus(pedidoMenus);
         menuService.saveMenu(m);
-        if (pedido != null) {
 
-        }
+
         return new ResponseEntity<>("Se ha añadido el menu correctamente", HttpStatus.ACCEPTED);
     }
 
@@ -292,14 +304,17 @@ public class PedidoController {
         user = userService.getUserByEmail(validate);
         Map<String, Double> map = gson.fromJson(payload, HashMap.class);
         double idplato = map.get("idplato");
+        String precioquitar = "0.00";
         Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
         List<PedidoPlato> pedidoPlatos = pedido.getPedidoPlato();
         for (int i = 0; i < pedidoPlatos.size(); i++) {
             if ((double) pedidoPlatos.get(i).getPlato().getId() == idplato) {
+                precioquitar = pedidoPlatos.get(i).getPlato().getPrecio();
                 pedidoPlatos.remove(pedidoPlatos.get(i));
             }
         }
         pedido.setPedidoPlato(pedidoPlatos);
+        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())- Double.valueOf(precioquitar)));
         pedidoService.savePedido(pedido);
         return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
 

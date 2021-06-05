@@ -61,6 +61,7 @@ public class MenuController {
             }
         }
         pedido.setPedidoMenus(pedidoMenus);
+        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())- 12.00));
         pedidoService.savePedido(pedido);
         return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
     }
