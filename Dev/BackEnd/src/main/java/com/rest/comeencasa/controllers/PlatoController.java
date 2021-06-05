@@ -146,28 +146,26 @@ public class PlatoController {
 
         Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
         List ingredientes = map2.get("ingredientes");
-        List ingredientes2 = map2.get("ingredientes");
 
         for (int i = 0; i <platoIngredientes.size() ; i++) {
             AtomicReference<Boolean> borrar = new AtomicReference<>(true);
-            for (int j = 0; j < ingredientes2.size(); j++) {
-                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingredientes2.get(j);
+            for (int j = 0; j < ingredientes.size(); j++) {
+                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingredientes.get(j);
                 float idIngrediente = Float.parseFloat(t.get("id").toString());
                 Ingrediente ingrediente1 = ingredienteService.findIngredienteById((long) idIngrediente);
                 if (ingrediente1 == platoIngredientes.get(i).getIngrediente()) {
                     borrar.set(false);
-
                 }
-                if (borrar.get()) {
-                    platoIngredientes.remove(platoIngredientes.get(i));
-                }
+            }
+            if (borrar.get()) {
+                System.out.println("lo borra");
+                platoIngredientes.remove(platoIngredientes.get(i));
+                i--;
             }
         }
 
         System.out.println(platoIngredientes.size());
-        platoIngredientes.forEach(platoIngrediente -> {
 
-        });
         plato.setNombre(map.get("nombre"));
         plato.setPrecio(map.get("precio"));
         plato.setDescription(map.get("description"));
@@ -194,7 +192,7 @@ public class PlatoController {
             }
         });
         plato.getPlatoIngrediente().clear();
-        plato.getPlatoIngrediente().addAll(platoIngredientes);
+        platoIngredientes.forEach(plato::addChild);
         platoService.save(plato);
 
 
