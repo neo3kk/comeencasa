@@ -17,12 +17,23 @@ public class Ingrediente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "nombre")
+    @Column(name = "nombre")
     private String name;
 
-    @Column(name= "traduccion")
+    @Column(name = "traduccion")
     private String traduccion;
 
+    @Column(name = "energia")
+    private double energia;
+
+    @Column(name = "azucar")
+    private double azucar;
+
+    @Column(name = "grasas")
+    private double grasas;
+
+    @Column(name= "proteinas")
+    private double proteinas;
 
 
     @OneToMany(mappedBy = "ingrediente", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,6 +64,38 @@ public class Ingrediente implements Serializable {
         this.traduccion = traduccion;
     }
 
+    public double getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(double energia) {
+        this.energia = energia;
+    }
+
+    public double getAzucar() {
+        return azucar;
+    }
+
+    public void setAzucar(double azucar) {
+        this.azucar = azucar;
+    }
+
+    public double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(double grasas) {
+        this.grasas = grasas;
+    }
+
+    public double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(double proteinas) {
+        this.proteinas = proteinas;
+    }
+
     public List<com.rest.comeencasa.entities.PlatoIngrediente> getPlatoIngrediente() {
         return PlatoIngrediente;
     }
@@ -66,12 +109,12 @@ public class Ingrediente implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ingrediente that = (Ingrediente) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(traduccion, that.traduccion) && Objects.equals(PlatoIngrediente, that.PlatoIngrediente);
+        return energia == that.energia && azucar == that.azucar && grasas == that.grasas && proteinas == that.proteinas && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(traduccion, that.traduccion) && Objects.equals(PlatoIngrediente, that.PlatoIngrediente);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, traduccion, PlatoIngrediente);
+        return Objects.hash(id, name, traduccion, energia, azucar, grasas, proteinas, PlatoIngrediente);
     }
 
     @Override
@@ -80,6 +123,10 @@ public class Ingrediente implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", traduccion='" + traduccion + '\'' +
+                ", energia=" + energia +
+                ", azucar=" + azucar +
+                ", grasas=" + grasas +
+                ", proteinas=" + proteinas +
                 ", PlatoIngrediente=" + PlatoIngrediente +
                 '}';
     }

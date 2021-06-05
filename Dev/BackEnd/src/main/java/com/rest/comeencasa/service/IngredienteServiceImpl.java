@@ -2,8 +2,6 @@ package com.rest.comeencasa.service;
 
 import com.rest.comeencasa.entities.Ingrediente;
 import com.rest.comeencasa.entities.IngredienteDTO;
-import com.rest.comeencasa.entities.Plato;
-import com.rest.comeencasa.entities.PlatoDTO;
 import com.rest.comeencasa.repos.IngredienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,23 +10,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class IngredienteServiceImpl implements IngredienteService{
+public class IngredienteServiceImpl implements IngredienteService {
     @Autowired
     IngredienteRepository ingredienteRepository;
 
     @Override
-    public boolean addIngrediente(String s, String ingrediente) {
-       Ingrediente in = buscarIngrediente(ingrediente);
-       if(in == null){
-           in = new Ingrediente();
-           in.setName(ingrediente);
-           in.setTraduccion(s);
-           ingredienteRepository.save(in);
-           return true;
-       }else {
-           return false;
-       }
+    public boolean addIngrediente(String traduccion, String ingrediente, double energy, double sugar, double fsat, double prot ) {
+        Ingrediente in = buscarIngrediente(ingrediente);
+        if (in == null) {
+            in = new Ingrediente();
+            in.setName(ingrediente);
+            in.setTraduccion(traduccion);
+            in.setEnergia(energy);
+            in.setAzucar(sugar);
+            in.setGrasas(fsat);
+            in.setProteinas(prot);
+            ingredienteRepository.save(in);
+            return true;
+        } else {
+            return false;
+        }
     }
+
+/*    @Override
+    public boolean updateIngredient(String ingrediente, int energy, int sugar, int fsat, int prot) {
+        Ingrediente in = buscarIngrediente(ingrediente);
+        System.out.println(in.getEnergia());
+        if (in.getEnergia() == 0) {
+            in.setEnergia(energy);
+            in.setAzucar(sugar);
+            in.setGrasas(fsat);
+            in.setProteinas(prot);
+            ingredienteRepository.save(in);
+            return true;
+        } else {
+            return false;
+        }
+    }*/
 
     @Override
     public Ingrediente buscarIngrediente(String ingrediente) {
@@ -63,6 +81,10 @@ public class IngredienteServiceImpl implements IngredienteService{
         ingredienteDTO.setId(ingrediente.getId());
         ingredienteDTO.setName(ingrediente.getName());
         ingredienteDTO.setTraduccion(ingrediente.getTraduccion());
+        ingredienteDTO.setAzucar(ingrediente.getAzucar());
+        ingredienteDTO.setEnergia(ingrediente.getEnergia());
+        ingredienteDTO.setGrasas(ingrediente.getGrasas());
+        ingredienteDTO.setProteinas(ingrediente.getProteinas());
         return ingredienteDTO;
     }
 }

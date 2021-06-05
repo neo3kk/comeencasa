@@ -23,7 +23,7 @@
             <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''"/>
           </template>
         </q-input>
-        <div class="q-pa-md">
+        <div class="q-pa-md" v-show=showUserInfo>
           <q-btn round>
             <q-avatar size="42px">
               <q-img :src="user.img" alt=""/>
@@ -278,7 +278,7 @@ export default {
         }
       })
       this.showUserInfo = true
-      let name = await this.$axios.post(this.url_server_api + 'getNameByEmail', {
+     /* let name = await this.$axios.post(this.url_server_api + 'getNameByEmail', {
         email: this.user.email
       });
       console.log("gola")
@@ -286,7 +286,7 @@ export default {
       console.log("gola")
       let validate = await this.$axios.get(this.url_server_api + '/images/users/'+name.data);
       this.user.img = validate.data
-      console.log(validate.data)
+      console.log(validate.data)*/
     }
   },
   methods:{

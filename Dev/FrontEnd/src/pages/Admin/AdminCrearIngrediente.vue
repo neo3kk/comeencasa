@@ -33,11 +33,10 @@
     <div class="q-pa-md">
       <q-list bordered>
         <q-item clickable v-ripple v-for="ingrediente in ing" :key="ingrediente.id">
-          <q-item-section thumbnail>
-            <img src="https://cdn.quasar.dev/img/mountains.jpg">
-          </q-item-section>
           <q-item-section>{{ ingrediente.name }}</q-item-section>
           <q-item-section>{{ ingrediente.traduccion }}</q-item-section>
+          <q-item-section>{{ ingrediente.energia }}</q-item-section>
+          <q-item-section>{{ ingrediente.azucar }}</q-item-section>
           <q-btn color="red">Borrar</q-btn>
         </q-item>
       </q-list>
@@ -72,21 +71,27 @@ export default {
   async created() {
     await this.getIngredientes();
     this.db = await this.getDb();
-    for (const ing of this.ing) {
-      let comp = await this.comprovarElement(ing.name)
-      if (comp.result) {
-        console.log("element a la llista")
-      } else {
-        await this.comprovaKcal(ing.name);
-      }
-    }
+    //await this.reloadIdb();
+
   },
 
   methods: {
     async onSubmit() {
+      await this.addIngredientDB(this.name, this.traduccion);
+      await this.getIngredientes();
+      //await this.reloadIdb();
+
+    },
+
+    async addToDb(ingredient) {
+      console.log(ingredient)
       let add = await this.$axios.post(this.url_server_api + '/admin/addingredient', {
-        name: this.name,
-        traduccion: this.traduccion
+        name: ingredient.name,
+        traduccion: ingredient.traduccion,
+        energia: ingredient.energia.toString(),
+        azucar: ingredient.azucar.toString(),
+        grasasSat: ingredient.grasasSat.toString(),
+        proteinas: ingredient.proteinas.toString()
       });
       if (add.request.status === 202) {
         this.$q.notify({
@@ -101,20 +106,26 @@ export default {
           color: 'red-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Error'
+          message: 'Error to add ingredient in database'
         })
       }
+    },
 
+    async addIngredientDB(nameIng, tradIng) {
+      let comp = await this.comprovarElementIDXDB(nameIng, tradIng)
+      if (!comp.result) {
+        await this.comprovaKcal(nameIng, tradIng)
+      } else {
+        await this.addToDb(comp.result)
+      }
     },
-    onReset() {
-      this.name = null
-      this.traduccion = null
-    },
+
     async getIngredientes() {
       let ingredientes = await this.$axios.get(this.url_server_api + '/admin/getAllIngredientes')
       this.ing = ingredientes.data;
-
     },
+
+
     async getDb() {
       return new Promise((resolve, reject) => {
         let request = indexedDB.open(["ingredients"], 1);
@@ -140,7 +151,20 @@ export default {
         };
       });
     },
-    async comprovarElement(ingrediente) {
+
+
+    /*    async reloadIdb() {
+          for (const ing of this.ing) {
+            let comp = await this.comprovarElementIDXDB(ing.name, ing.energia)
+            if (comp.result) {
+              console.log("element a la llista")
+            } else {
+              await this.comprovaKcal(ing.name, ing.traduccion);
+            }
+          }
+        },*/
+
+    async comprovarElementIDXDB(ingrediente) {
       return new Promise((resolve, reject) => {
         let trans = this.db.transaction(["Llista"], "readwrite");
 
@@ -152,35 +176,73 @@ export default {
         };
       });
     },
-    async comprovaKcal(ing) {
+
+    async comprovaKcal(ing, trad) {
       let kcalAliment = await this.kcal(ing);
       if (kcalAliment && kcalAliment.calories > 0) {
-        let ingredient= {
-          energia:"",
-          azucar:"",
-          grasasSat:"",
-          proteinas:"",
-          name:""
+        let ingredient = {
+          energia: "",
+          azucar: "",
+          grasasSat: "",
+          proteinas: "",
+          name: "",
+          traduccion: "",
         };
         ingredient.energia = kcalAliment.calories;
         ingredient.azucar = kcalAliment.totalNutrients.SUGAR.quantity;
         ingredient.grasasSat = kcalAliment.totalNutrients.FASAT.quantity;
         ingredient.proteinas = kcalAliment.totalNutrients.PROCNT.quantity;
         ingredient.name = ing
+        ingredient.traduccion = trad
 
         await this.addAlimentBd(ingredient);
       }
     },
-    async addAlimentBd(al) {
+
+    async addAlimentBd(ingredient) {
       return new Promise((resolve, reject) => {
         let trans = this.db.transaction("Llista", "readwrite");
-        trans.oncomplete = e => {
+        trans.oncomplete = async e => {
+          await this.addToDb(ingredient)
           resolve();
         };
         let store = trans.objectStore("Llista");
-        store.add(al);
+        store.add(ingredient);
+        //this.updateIngredient(ingredient.name, ingredient.energia.toString(), ingredient.azucar.toString(), ingredient.grasasSat.toString(), ingredient.proteinas.toString())
       });
     },
+
+
+    /*
+        async updateIngredient(nameIng, enerIng, azuIng, grasIng, proting) {
+          let upd = await this.$axios.post(this.url_server_api + '/admin/updateIngredient', {
+            name: nameIng,
+            energia: enerIng,
+            azucar: azuIng,
+            grasasSat: grasIng,
+            proteinas: proting,
+          });
+          if (upd.request.status === 202) {
+            this.$q.notify({
+              color: 'green-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Submitted'
+            })
+            this.getIngredientes();
+          } else {
+            this.$q.notify({
+              color: 'red-4',
+              textColor: 'white',
+              icon: 'cloud_done',
+              message: 'Update Error'
+            })
+          }
+
+        },
+    */
+
+
     async kcal(ing) {
       const appId = "58fd51c1";
       const apyKey = "5731f61303e7d6c4f10ba1518812e0bd";
@@ -201,7 +263,13 @@ export default {
       let caloriesJson = await calories.json();
       console.log(caloriesJson)
       return caloriesJson;
-    }
+    },
+
+
+    onReset() {
+      this.name = null
+      this.traduccion = null
+    },
   }
 }
 </script>

@@ -35,18 +35,41 @@ public class IngredienteController {
     @Transactional
     @PostMapping("/admin/addingredient")
     public ResponseEntity<String> addingredient(@RequestBody String payload ){
+        System.out.println();
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         String ingrediente = map.get("name");
         String traduccion = map.get("traduccion");
-        boolean add = ingredienteService.addIngrediente(ingrediente, traduccion);
+        double energy = Double.parseDouble(map.get("energia"));
+        double sugar = Double.parseDouble(map.get("azucar"));
+        double prot = Double.parseDouble(map.get("proteinas"));
+        double fsat = Double.parseDouble(map.get("grasasSat"));
+        boolean add = ingredienteService.addIngrediente(ingrediente, traduccion, energy, sugar, fsat, prot);
         if(add){
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
         else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-
     }
+/*
+    @Transactional
+    @PostMapping("/admin/updateIngredient")
+    public ResponseEntity<String> updateIngredient(@RequestBody String payload ){
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String ingrediente = map.get("name");
+        int energy = Integer.parseInt(map.get("energia"));
+        int sugar = Integer.parseInt(map.get("azucar"));
+        int prot = Integer.parseInt(map.get("proteinas"));
+        int fsat = Integer.parseInt(map.get("grasasSat"));
+
+        boolean upd = ingredienteService.updateIngredient(ingrediente, energy, sugar, fsat, prot);
+        if(upd){
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+    }*/
 
 }

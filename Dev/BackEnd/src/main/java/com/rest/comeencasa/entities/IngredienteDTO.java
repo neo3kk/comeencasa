@@ -5,6 +5,10 @@ public class IngredienteDTO {
     private Long id;
     private String name;
     private String traduccion;
+    private double energia;
+    private double azucar;
+    private double grasas;
+    private double proteinas;
 
     public Long getId() {
         return id;
@@ -28,5 +32,37 @@ public class IngredienteDTO {
 
     public void setTraduccion(String traduccion) {
         this.traduccion = traduccion;
+    }
+
+    public double getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(double energia) {
+        this.energia = energia;
+    }
+
+    public double getAzucar() {
+        return azucar;
+    }
+
+    public void setAzucar(double azucar) {
+        this.azucar = azucar;
+    }
+
+    public double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(double grasas) {
+        this.grasas = grasas;
+    }
+
+    public double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(double proteinas) {
+        this.proteinas = proteinas;
     }
 }
