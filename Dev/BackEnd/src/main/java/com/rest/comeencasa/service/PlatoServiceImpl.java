@@ -55,6 +55,14 @@ public class PlatoServiceImpl implements PlatoService{
         return platoRepository.findPlatoByNombre(nombre);
     }
 
+    public boolean exists(String nombre) {
+        if (platoRepository.findPlatoByNombre(nombre) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void deletePlato(Plato plato) {
         platoRepository.delete(plato);
