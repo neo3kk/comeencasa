@@ -160,6 +160,7 @@ public class PlatoController {
             if (borrar.get()) {
                 System.out.println("lo borra");
                 platoIngredientes.remove(platoIngredientes.get(i));
+                i--;
             }
         }
 
