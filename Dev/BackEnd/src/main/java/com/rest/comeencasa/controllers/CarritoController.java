@@ -37,14 +37,13 @@ public class CarritoController {
 
     @GetMapping("/getCarrito")
     public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
+        String email = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
-
-        user = userService.getUserByEmail(validate);
+        if (userDetails.get("email") != null) {
+            email = userDetails.get("email");
+        }
+        Usuario user = userService.getUserByEmail(email);
         Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
         if (pedido != null) {
             List<PedidoPlato> pp = pedido.getPedidoPlato();
@@ -67,14 +66,13 @@ public class CarritoController {
 
     @GetMapping("/getMenus")
     public ResponseEntity<String> getMenu(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
+        String email = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
-
-        user = userService.getUserByEmail(validate);
+        if (userDetails.get("email") != null) {
+            email = userDetails.get("email");
+        }
+        Usuario user = userService.getUserByEmail(email);
         Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
         List<Menu> menus = new ArrayList<>();
         if (pedido != null) {
