@@ -45,9 +45,9 @@ export default {
       url_server_api: SETTINGS.URL_SERVER_API
     };
   },
-  created() {
-    this.getPlatos();
-    this.getMenus()
+  async created() {
+    await this.getPlatos();
+    await this.getMenus()
   },
   methods: {
     async getPlatos() {
