@@ -16,12 +16,14 @@
     "core-js": "^3.6.5",
     "leaflet": "^1.7.1",
     "quasar": "^1.0.0",
+    "stripe": "^8.153.0",
     "vue-currency-input": "^1.22.6",
     "vue2-leaflet": "^2.7.0",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
+    "@stripe/stripe-js": "^1.15.0",
     "components": "^0.1.0"
   },
   "browserslist": [
