@@ -17,3 +17,6 @@ client-id =
 client-secret =
 
 redirect-uri=http://localhost:8080/auth/oauth2callback/
+
+STRIPE_SECRET_KEY=
+STRIPE_PUBLIC_KEY=

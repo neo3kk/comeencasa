@@ -47,7 +47,8 @@ public class LoginOauthController {
         Map<String, Object> restMap = new HashMap<>();
         restMap.put("tokenLogin", accessToken);
         restMap.put("user", userDetails.get("email"));
-
+        restMap.put("picture", userDetails.get("picture"));
+        System.out.println(userDetails);
         if (!userService.isRegistred(us)) {
             us.setOauth(1);
             userService.addUser(us);
