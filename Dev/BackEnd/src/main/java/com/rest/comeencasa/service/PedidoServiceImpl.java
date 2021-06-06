@@ -21,6 +21,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public List<Pedido> findAll() {
         return pedidoRepository.findAll();
@@ -38,7 +41,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoDTO makePedidoDto(Pedido pedido, Usuario user) {
-        System.out.println(pedido);
        PedidoDTO pedidoDTO = new PedidoDTO();
        if (pedido != null){
            pedidoDTO.setEstado(pedido.getEstado());
@@ -67,6 +69,13 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoRepository.findPedidoByUsuarioAndEstado(usuario,estado);
         return pedido;
     }
+
+    @Override
+    public Pedido findPedidoById(long id) {
+        Pedido pedido = pedidoRepository.findPedidoById(id);
+        return pedido;
+    }
+
 
     @Override
     public Pedido updatePedido(Pedido pedido) {

@@ -45,7 +45,7 @@ public class PedidoController {
     LoginServiceOauth loginServiceOauth;
 
 
-    @PostMapping("/pedidos")
+    @GetMapping("/pedidos")
     public ResponseEntity<String> getAllByUser(@RequestHeader("Authorization") String auth) throws Exception {
         Usuario user = null;
         if (auth != null && !auth.isEmpty()) {
@@ -66,6 +66,13 @@ public class PedidoController {
             return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/getPrecioPedido")
+    public ResponseEntity<String> getPrecioPedido(@RequestBody String payload) throws Exception {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
+        return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/pedidos")
@@ -162,7 +169,7 @@ public class PedidoController {
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
                 if (pedido != null) {
                     Plato plato = platoService.findPlatoById(Long.valueOf(object));
-                    pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())+ Double.valueOf(plato.getPrecio())));
+                    pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + Double.valueOf(plato.getPrecio())));
                     pedidoService.savePedido(pedido);
                     PedidoPlato pedidoPlato = new PedidoPlato();
                     pedidoPlato.setPlato(plato);
@@ -220,10 +227,10 @@ public class PedidoController {
         Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
         PedidoMenu pm = new PedidoMenu();
         pm.setMenu(m);
-        if (pedido!=null){
-            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())+ 12));
+        if (pedido != null) {
+            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
 
-        }else{
+        } else {
             pedido = new Pedido();
             pedido.setFecha_pedido(utils.getToday());
             pedido.setUsuario(user);
@@ -314,10 +321,19 @@ public class PedidoController {
             }
         }
         pedido.setPedidoPlato(pedidoPlatos);
-        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())- Double.valueOf(precioquitar)));
+        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) - Double.valueOf(precioquitar)));
         pedidoService.savePedido(pedido);
         return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
 
+    }
+
+    @PostMapping("/setPedidoPagado")
+    public ResponseEntity<String> setPedidoPagado(@RequestBody String payload) throws Exception {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
+        pedido.setEstado("Pagado");
+        pedidoService.savePedido(pedido);
+        return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
     }
 
 }

@@ -90,17 +90,6 @@ public class Usuario{
         this.pedidos = pedidos;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", oauth=" + oauth +
-                ", pedidos=" + pedidos +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {
