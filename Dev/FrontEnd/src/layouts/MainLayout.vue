@@ -154,7 +154,7 @@ export default {
         email:"",
         direccion:"",
         admin: false,
-        img: 'https://placeimg.com/500/300/nature',
+        img: '',
       },
       url_server_api: SETTINGS.URL_SERVER_API,
       leftDrawerOpen: false,
@@ -168,6 +168,7 @@ export default {
     if (localStorage.getItem("user") != null) {
       if (await this.validate() === true) {
         this.user.email = localStorage.getItem("user")
+        this.user.img = localStorage.getItem("picture")
         if (this.user.email === "admin@gmail.com") {
           this.user.admin = true;
         }
