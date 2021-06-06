@@ -3,8 +3,8 @@
 
     <q-list>
       Tu lista de productos
-      <q-item v-for="plato in platos" key="pedido.id" v-if="platos!=null" clickable @click="$router.replace( '/plato/'+plato.id)">
-        <q-item-section>
+      <q-item v-for="plato in platos" key="plato.id" v-if="platos!=null" clickable>
+        <q-item-section @click="$router.replace( '/plato/'+plato.id)">
           <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
         </q-item-section>
@@ -29,6 +29,7 @@
       </q-item>
 
     </q-list>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="$router.replace( 'pago/'+pedidoId)"></q-btn>
   </q-page>
 </template>
 
@@ -39,6 +40,7 @@ export default {
   name: "carrito.vue",
   data() {
     return {
+      pedidoId: '',
       menus: [],
       platos: [],
       tab: "pedidos",
@@ -48,8 +50,13 @@ export default {
   async created() {
     await this.getPlatos();
     await this.getMenus()
+    await this.getPedido()
   },
   methods: {
+    async getPedido() {
+      let pedidoId = await this.$axios.get(this.url_server_api + '/getPedido');
+      this.pedidoId = pedidoId.data
+    },
     async getPlatos() {
       let platosFetch = await this.$axios.get(this.url_server_api + '/getCarrito');
       this.platos = platosFetch.data

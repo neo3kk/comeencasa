@@ -66,12 +66,19 @@
   // https://github.com/stripe/stripe-js
   import {loadStripe} from '@stripe/stripe-js/pure';
   import {SETTINGS} from "src/settings";
+
   export default {
     props: {
-      data: {type: Object, required: false, default: () => {}}
+      data: {
+        type: Object, required: false, default: () => {
+        }
+      },
+      props: ['id'],
     },
     data() {
       return {
+        id: '',
+        precio_final: '',
         loading: false,
         stripe: null,
         elements: null,
@@ -101,29 +108,51 @@
       }
     },
     methods: {
+      showNotification(content, icon, color) {
+        this.$q.notify({
+          message: content,
+          color: color,
+          icon: icon,
+          actions: [
+            {
+              label: 'OK', color: 'white', handler: () => {
+                this.tab = "nuevoPedido"
+              }
+            }
+          ]
+        })
+      },
       async myfunc(elements) {
-        let crearPlato = await this.$axios.post(this.url_server_api + '/charge',{
+        let crearPlato = await this.$axios.post(this.url_server_api + '/charge', {
           amount: elements.amount,
           description: elements.description,
           source: elements.source
         })
+        if (crearPlato.data.status === "succeeded") {
+          this.showNotification("Se ha realizado el pago de manera correcta", "check_circle_outline", "positive")
+          var pagado = await this.$axios.post(this.url_server_api + '/setPedidoPagado', {
+            pedidoid: this.id
+          });
+        } else {
+          this.showNotification("Ha habido un error con el pago, pruebe mas tarde", "error", "negative")
+        }
       },
       async submitForm(e) {
         e.preventDefault();
         try {
           this.loading = true;
           this.submissionError = null;
-          const { token, error } = await this.stripe.createToken(this.card['cardNumber']);
+          const {token, error} = await this.stripe.createToken(this.card['cardNumber']);
           console.log(error);
-          if(error) {
+          if (error) {
             this.submissionError = error.message;
             this.$emit('failed', error);
           } else {
             this.resetForm();
             console.log(token)
             var elements = {
-              amount: '20.00',
-              description: "no tengo ni idea de que poner",
+              amount: this.precio_final,
+              description: "Pedido numero: "+this.id,
               source: token.id
             }
 
@@ -159,8 +188,14 @@
       errorMessage(elementType) {
         return this.isValid(elementType) ? this.errors[elementType] : false;
       }
-    },
+    }
+    ,
     async mounted() {
+      this.id = this.$router.currentRoute.params.id
+      var preciofinal = await this.$axios.post(this.url_server_api + '/getPrecioPedido', {
+        pedidoid: this.id
+      });
+      this.precio_final = preciofinal.data
       const style = {
         base: {
           fontFamily: '"Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -182,7 +217,7 @@
           this.card[element].addEventListener('change', (e) => this.updated(e));
         });
       }
-    }
+    },
   }
 </script>
 

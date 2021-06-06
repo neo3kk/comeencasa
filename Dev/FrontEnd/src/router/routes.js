@@ -32,7 +32,7 @@ const routes = [
       {path: 'carrito', component: () => import('pages/Carrito.vue'), meta: {requiresAuth: true}},
       {path: 'pedidomenu', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
       {path: 'pedidomenu/:id', component: () => import('pages/PedidoMenu.vue'), meta: {requiresAuth: true}},
-      {path: 'nose', component: () => import('pages/CheckOut.vue'), meta: {requiresAuth: true}},
+      {path: 'pago/:id', component: () => import('pages/CheckOut.vue'), meta: {requiresAuth: true}},
 
     ]
   },

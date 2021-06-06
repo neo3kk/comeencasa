@@ -29,7 +29,7 @@
         </q-item>
       </q-list>
     </div>
-    <q-btn color="indigo" label="Confirma tu pedido" style="width: 100%" @click="hacerPedido"></q-btn>
+    <q-btn color="indigo" label="Confirma tu menu" style="width: 100%" @click="hacerPedido"></q-btn>
   </q-page>
 </template>
 

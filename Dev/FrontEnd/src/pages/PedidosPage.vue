@@ -6,7 +6,7 @@
       <q-item v-for="pedido in pedidos" key="pedido.id">
         <q-item-section>
           <q-item-label>Orden de pedido {{ pedido.id }}</q-item-label>
-          <q-item-label caption>Precio total: {{ pedido.precio_final }}</q-item-label>
+          <q-item-label caption>Precio total: {{ pedido.precio_final }}€</q-item-label>
         </q-item-section>
 
         <q-item-section side top>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     async getPedidos() {
-      let pedidosFetch = await this.$axios.post(this.url_server_api + '/pedidos');
+      let pedidosFetch = await this.$axios.get(this.url_server_api + '/pedidos');
       this.pedidos = pedidosFetch.data
     }
   }
