@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImageServiceImpl implements ImageService{
+public class ImageServiceImpl implements ImageService {
 
     @Autowired
     ImageRepository imageRepo;
 
     @Override
-    public Image getImageByFileName(String fileName){
-        return imageRepo.findImageByFileNameContains( fileName );
+    public Image getImageByFileName(String fileName) {
+        Image im = imageRepo.findImageByFileName(fileName);
+        System.out.println(im);
+        return im;
     }
 }
