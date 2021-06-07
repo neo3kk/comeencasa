@@ -31,7 +31,8 @@
                        :error="$v.email.$invalid"
               />
 
-              <q-btn class="q-my-lg" color="secondary" label="Update" @click="updateUser"/>
+              <q-btn class="q-my-lg" color="secondary" label="Guardar" @click="updateUser"/>
+              <q-btn label="Cambia la contraseña" color="primary" @click="prompt = true" />
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -70,8 +71,38 @@
         </q-expansion-item>
       </q-list>
     </div>
-  </q-page>
+    <q-dialog v-model="prompt" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Tu antiguar contaseña</div>
+        </q-card-section>
 
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="last_password" autofocus @keyup.enter="prompt = false"  type="password"/>
+        </q-card-section>
+        <q-card-section>
+          <div class="text-h6">Tu nueva contaseña</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="new_password" autofocus @keyup.enter="prompt = false"  type="password" :error="$v.new_password.$invalid" :error-message="mensaError('new_password')"/>
+        </q-card-section>
+        <q-card-section>
+          <div class="text-h6">Repite tu nueva contaseña</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input dense v-model="same_new_password" autofocus @keyup.enter="prompt = false"  type="password"/>
+        </q-card-section>
+
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Add address" v-close-popup @click="updatePassword()"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </q-page>
 
 </template>
 
@@ -85,11 +116,16 @@ export default {
   },
   data() {
     return {
+      last_password: '',
+      new_password: '',
+      same_new_password:'',
       name: '',
       last_name: '',
       email: '',
       tab: "login",
-      url_server_api: SETTINGS.URL_SERVER_API}
+      url_server_api: SETTINGS.URL_SERVER_API,
+      prompt: false,
+    }
   },
   validations: {
     name: {
@@ -104,6 +140,10 @@ export default {
       required,
       minLength: minLength(3)
     },
+    new_password: {
+      required,
+      minLength: minLength(4)
+    },
   },
   async created() {
     if (localStorage.getItem("tokenLogin")) {
@@ -114,6 +154,23 @@ export default {
     }
   },
   methods:{
+    async updatePassword(){
+      if (this.new_password === this.same_new_password){
+        let sendRegister = await this.$axios.post(this.url_server_api + '/changePassword', {
+          last_password: this.last_password,
+          new_password: this.new_password,
+        })
+        console.log(sendRegister.data)
+        if (sendRegister.data===200){
+          this.showNotification("Se ha cambiado la contraseña correctamente", "check_circle_outline", "positive")
+        }else{
+          this.showNotification("Te has equivocado con la contraseña anterior", "error", "negative")
+        }
+      }else{
+        this.showNotification("Las contraseñas no son iguales", "error", "negative")
+      }
+
+    },
     async updateUser() {
       this.$v.$touch()
       if (this.$v.$invalid) {
@@ -166,6 +223,10 @@ export default {
       if (data === 'email') {
         if (!this.$v.email.email) return 'Introdueix el teu correu electrònic'
         if (!this.$v.email.required) return 'Camp requerit'
+      }
+      if (data === 'new_password') {
+        if (!this.$v.same_new_password) return 'La contraseña es demasiado corta'
+        if (!this.$v.same_new_password.required) return 'Camp requerit'
       }
     }
   }
