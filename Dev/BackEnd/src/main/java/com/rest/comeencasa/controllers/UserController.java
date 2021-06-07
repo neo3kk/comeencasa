@@ -6,6 +6,7 @@ import com.rest.comeencasa.entities.*;
 import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserService;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,16 +82,20 @@ public class UserController {
 
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
 
         user = userService.getUserByEmail(validate);
         Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
+        System.out.println(user.getPassword());
+        System.out.println(map1.get("new_password"));
+        if (BCrypt.checkpw(map1.get("last_password"),user.getPassword())){
+            String passEncripted = BCrypt.hashpw(map1.get("new_password"), BCrypt.gensalt(10));
+            user.setPassword(passEncripted);
+            userService.save(user);
+            return new ResponseEntity<>("200", HttpStatus.ACCEPTED);
+        }
 
-        user.setPassword(map1.get("password"));
-        userService.save(user);
 
-        return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("ha habido un problema", HttpStatus.ACCEPTED);
 
     }
     @PostMapping("/getNameByEmail")
