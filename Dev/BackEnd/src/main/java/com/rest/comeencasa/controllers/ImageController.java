@@ -18,15 +18,9 @@ public class ImageController {
     @Autowired
     ImageService imageService;
 
-    @GetMapping(value = "/images/users/{name}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/images/users/{name}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String name){
-        System.out.println("adios");
-        System.out.println(name);
-        System.out.println("adios");
         Image i = imageService.getImageByFileName( name );
-        System.out.println("hola");
-        System.out.println(Arrays.toString(i.getBytes()));
-        System.out.println("hola");
         return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);
 
     }

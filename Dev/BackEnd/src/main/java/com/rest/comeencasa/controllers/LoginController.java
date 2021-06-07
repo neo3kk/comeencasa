@@ -4,7 +4,9 @@ package com.rest.comeencasa.controllers;
 import com.google.gson.Gson;
 import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.repos.ImageRepository;
 import com.rest.comeencasa.repos.UsuarioRepository;
+import com.rest.comeencasa.service.ImageService;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
 import org.apache.commons.codec.binary.Base64;
@@ -28,7 +30,7 @@ import java.util.Map;
 
 @RestController
 public class LoginController {
-   Gson gson = new Gson();
+    Gson gson = new Gson();
 
     @Autowired
     TokenService tokenService;
@@ -39,9 +41,11 @@ public class LoginController {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    ImageService imageService;
+
     @Value("${server.domain}")
     String serverDomain;
-
 
 
     @PostMapping("/login")
@@ -56,18 +60,15 @@ public class LoginController {
         if (!userService.isRegistred(us)) {
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "Incorrect email or password.");
-            return new ResponseEntity<>(gson.toJson(restMap),HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.UNAUTHORIZED);
         }
-
-/*        if (!loginService.checkUserAndPassword(email, password)) {
-            Map<String, Object> restMap = new HashMap<>();
-            restMap.put("message", "Incorrect email or password.");
-            return new ResponseEntity<>(gson.toJson(restMap),HttpStatus.UNAUTHORIZED);
-        }*/
+        Usuario logged = userService.getUser(us);
         String token = tokenService.newToken(email);
         Map<String, Object> restMap = new HashMap<>();
         restMap.put("tokenLogin", token);
         restMap.put("user", email);
+        restMap.put("picture", logged.getAvatarUrl());
+
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 
@@ -84,8 +85,9 @@ public class LoginController {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-        user.setAvatarUrl(userService.processAvatar(avatar, user.getName()));
-        if (userService.getUser(user)==null){
+
+        user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
+        if (userService.getUser(user) == null) {
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "done");
