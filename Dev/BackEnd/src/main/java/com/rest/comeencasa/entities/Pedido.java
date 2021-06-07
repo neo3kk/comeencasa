@@ -117,15 +117,5 @@ public class Pedido implements Serializable {
         return Objects.hash(id, fecha_pedido, ubicacion, precio_final, usuario, pedidoMenus);
     }
 
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", fecha_pedido='" + fecha_pedido + '\'' +
-                ", ubicacion='" + ubicacion + '\'' +
-                ", precio_final='" + precio_final + '\'' +
-                ", usuario=" + usuario +
-                ", pedidoMenus=" + pedidoMenus +
-                '}';
-    }
+
 }

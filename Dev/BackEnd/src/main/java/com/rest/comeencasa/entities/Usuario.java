@@ -27,6 +27,9 @@ public class Usuario{
     @Column(name ="name", columnDefinition = "TEXT")
     String name = null;
 
+    @Column(name ="last_name", columnDefinition = "TEXT")
+    String last_name = null;
+
     @Column(name = "oauth")
     int oauth;
 
@@ -74,6 +77,14 @@ public class Usuario{
         this.name = name;
     }
 
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
     public int getOauth() {
         return oauth;
     }
@@ -90,17 +101,6 @@ public class Usuario{
         this.pedidos = pedidos;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", oauth=" + oauth +
-                ", pedidos=" + pedidos +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -58,6 +58,23 @@ public class CarritoController {
         }
     }
 
+    @GetMapping("/getPedido")
+    public ResponseEntity<String> getPedido(@RequestHeader("Authorization") String auth) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = tokenService.verifyToken(token);
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            email = userDetails.get("email");
+        }
+        Usuario user = userService.getUserByEmail(email);
+        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+        if (pedido != null) {
+            return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
+        }
+    }
+
     @GetMapping("/getMenus")
     public ResponseEntity<String> getMenu(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");

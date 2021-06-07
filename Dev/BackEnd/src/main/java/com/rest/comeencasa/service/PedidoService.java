@@ -17,4 +17,5 @@ public interface PedidoService {
     Pedido findPedidoByUsuarioAndEstado(Usuario usuario,String estado);
     Pedido updatePedido(Pedido pedido);
     void savePedido(Pedido pedido);
+    Pedido findPedidoById(long id);
 }
