@@ -79,11 +79,13 @@ public class LoginController {
         String email = map.get("email");
         String password = map.get("password");
         String name = map.get("name");
+        String last_name = map.get("last_name");
         String avatar = map.get("file");
         byte[] bytes = Base64.encodeBase64(avatar.getBytes());
         Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
+        user.setLast_name(last_name);
         user.setPassword(password);
 
         user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
