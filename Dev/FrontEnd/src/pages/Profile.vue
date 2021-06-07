@@ -85,7 +85,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input dense v-model="new_password" autofocus @keyup.enter="prompt = false"  type="password" :error="$v.new_password.$invalid" :error-message="mensaError('new_password')"/>
+          <q-input dense v-model="new_password" autofocus @keyup.enter="prompt = false"  type="password"/>
         </q-card-section>
         <q-card-section>
           <div class="text-h6">Repite tu nueva contaseña</div>
@@ -139,11 +139,7 @@ export default {
     last_name: {
       required,
       minLength: minLength(3)
-    },
-    new_password: {
-      required,
-      minLength: minLength(4)
-    },
+    }
   },
   async created() {
     if (localStorage.getItem("tokenLogin")) {
