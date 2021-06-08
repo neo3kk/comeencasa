@@ -165,14 +165,13 @@ export default {
     }
   },
   async created() {
-    if (localStorage.getItem("user") != null) {
-      if (await this.validate() === true) {
-        this.user.email = localStorage.getItem("user")
-        this.user.img = localStorage.getItem("picture")
-        if (this.user.email === "admin@gmail.com") {
-          this.user.admin = true;
-        }
-        /*          let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
+    this.user.email = localStorage.getItem("user")
+    this.user.img = localStorage.getItem("picture")
+    if (this.user.email === "admin@gmail.com") {
+      this.user.admin = true;
+    }
+/*
+              let sendRegister = await this.$axios.post(this.url_server_api + '/getImage', {
               user: this.user
             }).then(response => {
               console.log(response)
@@ -266,12 +265,12 @@ export default {
                 }
               }
               this.image = Base64.encode(response.data);
-            })*/
+            })*!/
       } else {
         localStorage.clear()
         await this.$router.push("/expired");
       }
-    }
+    }*/
     if (localStorage.getItem("tokenLogin")) {
       this.essentialLinks.forEach(function (z) {
         if (z.title === "Mi cuenta") {
@@ -296,7 +295,7 @@ export default {
       this.$router.push("/login");
     },
 
-    async validate() {
+/*    async validate() {
       let validate = await this.$axios.get(this.url_server_api + `/getAdmin`);
       console.log(validate.request.responseText.toString());
       if (validate.request.responseText.toString() === "InvalidToken") {
@@ -304,7 +303,7 @@ export default {
       } else {
         return true
       }
-    }
+    }*/
   }
 }
 </script>
