@@ -112,12 +112,6 @@ const linksData = [
     link: '/platos'
   },
   {
-    title: 'Tarifas',
-    caption: 'Una tarifa para cada ocasión',
-    icon: 'credit_card',
-    link: '/tarifas'
-  },
-  {
     title: 'Envios',
     caption: 'Descubre si estas en nuestro radio de actividad',
     icon: 'delivery_dining',
@@ -278,15 +272,6 @@ export default {
         }
       })
       this.showUserInfo = true
-     /* let name = await this.$axios.post(this.url_server_api + 'getNameByEmail', {
-        email: this.user.email
-      });
-      console.log("gola")
-      console.log(name.data)
-      console.log("gola")
-      let validate = await this.$axios.get(this.url_server_api + '/images/users/'+name.data);
-      this.user.img = validate.data
-      console.log(validate.data)*/
     }
   },
   methods:{
@@ -294,16 +279,6 @@ export default {
       localStorage.clear()
       this.$router.push("/login");
     },
-
-/*    async validate() {
-      let validate = await this.$axios.get(this.url_server_api + `/getAdmin`);
-      console.log(validate.request.responseText.toString());
-      if (validate.request.responseText.toString() === "InvalidToken") {
-        return false
-      } else {
-        return true
-      }
-    }*/
   }
 }
 </script>

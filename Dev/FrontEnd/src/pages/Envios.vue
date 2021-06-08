@@ -79,19 +79,19 @@ export default {
         center: [39.6012567777098, 2.6893242690042873],
         radius: 1000,
         color: 'yellow',
-        name: "Free delivery"
+        name: "Envio gratis"
       },
       delivery: {
         center: [39.6012567777098, 2.6893242690042873],
         radius: 3000,
         color: 'green',
-        name: "Delivery 10%"
+        name: "Envio del 5% del importe del pedido"
       },
       extraDelivery: {
         center: [39.6012567777098, 2.6893242690042873],
         radius: 20000,
         color: 'red',
-        name: "Delivery 15%"
+        name: "Envio del 10% del importe del pedido"
       },
 
     }

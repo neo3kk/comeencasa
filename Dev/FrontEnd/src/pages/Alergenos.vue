@@ -8,8 +8,6 @@
 
 <script>
 
-import Carrousel from 'src/components/Carrousel.vue'
-import Suggestions from "components/Suggestions";
 import AlergenosComponent from "components/AlergenosComponent";
 
 export default {
