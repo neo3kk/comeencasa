@@ -19,9 +19,12 @@ public class ImageController {
     ImageService imageService;
 
     @GetMapping(value = "/images/users/{name}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable String name){
-        Image i = imageService.getImageByFileName( name );
-        return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);
-
+    public ResponseEntity<byte[]> getImage(@PathVariable String name) {
+        Image i = imageService.getImageByFileName(name);
+        if (i != null) {
+            return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 }
