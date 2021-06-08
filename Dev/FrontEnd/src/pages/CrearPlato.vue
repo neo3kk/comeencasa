@@ -93,6 +93,11 @@
         publishableKey: SETTINGS.STRIPE_PUBLISHABLE_KEY,
         plato: '',
         id: '',
+        energia:0,
+        azucar:0,
+        grasas:0,
+        proteinas:0
+
       }
     },
     async created() {
@@ -113,6 +118,10 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
+            energia: this.energia,
+            azucar: this.azucar,
+            grasas: this.grasas,
+            proteinas: this.proteinas,
             visible: this.visible.toString()
           }).then(response=>{
             if (response.data === 400){
@@ -136,7 +145,11 @@
             tipo_plato: this.tipo_plato,
             traduccion: this.traduccion,
             ingredientes: this.ingredientesSeleccionados,
-            visible: this.visible.toString()
+            visible: this.visible.toString(),
+            energia: this.energia,
+            azucar: this.azucar,
+            grasas: this.grasas,
+            proteinas: this.proteinas,
           })
         }
 
@@ -144,6 +157,11 @@
       deleteIngrediente(id){
         for (let i = 0; i <this.ingredientesSeleccionados.length ; i++) {
           if (this.ingredientesSeleccionados[i].id === id){
+            this.energia = Math.abs(this.energia - parseFloat(this.ingredientesSeleccionados[i].energia))
+            this.azucar=Math.abs(this.azucar - parseFloat( this.ingredientesSeleccionados[i].azucar))
+            this.grasas= Math.abs(this.grasas - parseFloat(this.ingredientesSeleccionados[i].grasas))
+            this.proteinas= Math.abs(this.proteinas - parseFloat(this.ingredientesSeleccionados[i].proteinas))
+            console.log(this.proteinas)
             this.ingredientesSeleccionados.splice(i, 1)
           }
         }
@@ -167,6 +185,10 @@
         this.precio = plato.precio
         this.tipo_plato = plato.tipo_de_plato
         this.visible = plato.visible
+        this.energia = parseFloat(plato.energia)
+        this.grasas = parseFloat(plato.grasas)
+        this.azucar = parseFloat(plato.azucar)
+        this.proteinas = parseFloat(plato.proteinas)
       },
       añadirIngrediente(id){
         var esta = false;
@@ -177,6 +199,10 @@
         })
         this.ingredientes.forEach(ingrediente=>{
           if (ingrediente.id === id && !esta){
+              this.energia += parseFloat(ingrediente.energia)
+              this.azucar+= parseFloat(ingrediente.azucar)
+              this.grasas+= parseFloat(ingrediente.grasas)
+              this.proteinas+= parseFloat(ingrediente.proteinas)
             this.ingredientesSeleccionados.push(ingrediente)
           }
         })
