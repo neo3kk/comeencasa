@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +110,13 @@ public class PlatoController {
             plato.setTipo_de_plato(map.get("tipo_plato"));
             plato.setTraduccion(map.get("traduccion"));
             plato.setVisible(Boolean.parseBoolean(map.get("visible")));
+            Map<String, Double> map3 = gson.fromJson(payload, HashMap.class);
+            plato.setAzucar(map3.get("energia"));
+            plato.setEnergia(map3.get("azucar"));
+            plato.setGrasas(map3.get("grasas"));
+            plato.setProteinas(map3.get("proteinas"));
+
+
             platoService.save(plato);
             Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
             List ingredientes = map2.get("ingredientes");
@@ -172,6 +180,10 @@ public class PlatoController {
         plato.setTipo_de_plato(map.get("tipo_plato"));
         plato.setTraduccion(map.get("traduccion"));
         plato.setVisible(Boolean.parseBoolean(map.get("visible")));
+        plato.setAzucar(map1.get("azucar"));
+        plato.setEnergia(map1.get("energia"));
+        plato.setGrasas(map1.get("grasas"));
+        plato.setProteinas(map1.get("proteinas"));
         Plato finalPlato = plato;
         ingredientes.forEach(ingrediente -> {
             LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingrediente;

@@ -4,12 +4,17 @@ import java.util.Objects;
 
 public class PlatoDTO {
     private Long id;
-    String nombre;
-    String precio;
-    String traduccion;
-    String description;
-    Boolean visible;
-    String tipo_de_plato;
+    private String nombre;
+    private String precio;
+    private String traduccion;
+    private String description;
+    private Boolean visible;
+    private String tipo_de_plato;
+    private double energia;
+    private double azucar;
+    private double grasas;
+    private double proteinas;
+
 
     public Long getId() {
         return id;
@@ -65,6 +70,38 @@ public class PlatoDTO {
 
     public void setTipo_de_plato(String tipo_de_plato) {
         this.tipo_de_plato = tipo_de_plato;
+    }
+
+    public double getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(double energia) {
+        this.energia = energia;
+    }
+
+    public double getAzucar() {
+        return azucar;
+    }
+
+    public void setAzucar(double azucar) {
+        this.azucar = azucar;
+    }
+
+    public double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(double grasas) {
+        this.grasas = grasas;
+    }
+
+    public double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(double proteinas) {
+        this.proteinas = proteinas;
     }
 
     @Override
