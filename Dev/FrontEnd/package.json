@@ -13,11 +13,13 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "@vue-stripe/vue-stripe": "^4.2.4",
+    "apexcharts": "^3.27.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "leaflet": "^1.7.1",
     "quasar": "^1.0.0",
     "stripe": "^8.153.0",
+    "vue-apexcharts": "^1.6.1",
     "vue-currency-input": "^1.22.6",
     "vue2-leaflet": "^2.7.0",
     "vuelidate": "^0.7.5"
