@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-list class="">
       <q-item class="flex wrap column justify-center">
-        <q-item>
+        <q-item class="justify-center">
           <q-icon
             size="6em"
             name="img:alergenos/altramuces.png"
@@ -136,7 +136,7 @@
           @dragleave="onDragLeave"
           @dragover="onDragOver"
           @drop="onDrop"
-          class="drop-target"
+          class="drop-target justify-center"
         ></q-item>
       </q-item>
     </q-list>
@@ -152,7 +152,7 @@
   heigth: 6rem
 
 .drop-target
-  background-color: gainsboro
+  background-color: #d9d9d9
   height: 7em
 
 .drag-enter
@@ -221,10 +221,7 @@ export default {
       const draggedId = e.dataTransfer.getData("id");
       const draggedEl = document.getElementById(draggedId);
       draggedEl.dropable=true;
-      if (draggedEl.parentNode === e.target) {
-        e.target.classList.remove("drag-enter");
-        return;
-      }
+      e.target.classList.remove("drag-enter");
 
       // make the exchange
 
