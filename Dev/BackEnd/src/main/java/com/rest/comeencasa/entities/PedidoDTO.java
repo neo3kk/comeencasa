@@ -7,11 +7,11 @@ import java.util.Objects;
 public class PedidoDTO{
 
     private Long id;
-    String fecha_pedido;
-    String ubicacion;
-    String precio_final;
-    String estado;
-    String usuario;
+    private String fecha_pedido;
+    private String ubicacion;
+    private String precio_final;
+    private String estado;
+    private String usuario;
 
     public Long getId() {
         return id;

@@ -32,6 +32,18 @@ public class Plato implements Serializable {
     @Column(name = "tipo_de_plato", columnDefinition = "TEXT")
     String tipo_de_plato;
 
+    @Column(name = "energia")
+    private double energia;
+
+    @Column(name = "azucar")
+    private double azucar;
+
+    @Column(name = "grasas")
+    private double grasas;
+
+    @Column(name= "proteinas")
+    private double proteinas;
+
     @Column(name = "visible", columnDefinition = "TEXT")
     boolean visible;
 
@@ -119,6 +131,38 @@ public class Plato implements Serializable {
 
     public void setTipo_de_plato(String tipo_de_plato) {
         this.tipo_de_plato = tipo_de_plato;
+    }
+
+    public double getEnergia() {
+        return energia;
+    }
+
+    public void setEnergia(double energia) {
+        this.energia = energia;
+    }
+
+    public double getAzucar() {
+        return azucar;
+    }
+
+    public void setAzucar(double azucar) {
+        this.azucar = azucar;
+    }
+
+    public double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(double grasas) {
+        this.grasas = grasas;
+    }
+
+    public double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(double proteinas) {
+        this.proteinas = proteinas;
     }
 
     public List<PlatoMenu> getPlatoMenu() {
