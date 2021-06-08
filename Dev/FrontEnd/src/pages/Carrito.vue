@@ -29,7 +29,7 @@
       </q-item>
 
     </q-list>
-    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="$router.replace( 'pago/'+pedidoId)"></q-btn>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)"></q-btn>
   </q-page>
 </template>
 
@@ -77,6 +77,32 @@ export default {
       }
       this.menus = mymenus
     },
+    replace(pedidoId){
+      var boolean = false;
+      var name=0;
+      this.platos.forEach(plato=>{
+        console.log(plato.visible)
+        if (!plato.visible){
+          boolean = true;
+          name = plato.nombre
+        }
+      })
+      this.menus.forEach(menu=>{
+        menu.platos.forEach(plato=>{
+          console.log(plato.visible)
+          if (!plato.visible){
+            boolean = true;
+            name = plato.nombre
+          }
+        })
+      })
+      if (!boolean){
+        this.$router.replace( 'pago/'+pedidoId)
+      }else{
+        this.showNotification("El plato: "+name+" ya no se encuentra disponible en este momento, " +
+          "borrelo de su pedido elija otro producto, disculpe las molestias", "error", "negative")
+      }
+    },
     async deletePlato(id){
       for (let i = 0; i < this.platos.length; i++) {
         if (this.platos[i].id === id){
@@ -92,7 +118,21 @@ export default {
         }
       }
       let menusFetch = await this.$axios.delete(this.url_server_api + '/deleteMenuPedido' ,{data:{idmenu: id}});
-    }
+    },
+    showNotification(content, icon, color) {
+      this.$q.notify({
+        message: content,
+        color: color,
+        icon: icon,
+        actions: [
+          {
+            label: 'OK', color: 'white', handler: () => {
+              this.tab = "login"
+            }
+          }
+        ]
+      })
+    },
   }
 }
 </script>
