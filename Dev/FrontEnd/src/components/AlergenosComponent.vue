@@ -1,6 +1,6 @@
 <template>
   <q-item class="flex row justify-center">
-  <img src="public/alergenos/alergenos.png" style="max-width: 50%">
+  <img src="alergenos/alergenos.png" style="max-width: 50%">
   </q-item>
 </template>
 

@@ -44,7 +44,7 @@
         >
           <q-card>
             <q-card-section>
-              <DragAndDrop></DragAndDrop>
+              <DragAndDrop @alergens="alergenos = $event"></DragAndDrop>
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -129,6 +129,7 @@ export default {
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API,
       prompt: false,
+      alergenos:[]
     }
   },
   validations: {

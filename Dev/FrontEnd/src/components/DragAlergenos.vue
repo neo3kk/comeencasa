@@ -183,7 +183,9 @@ export default {
          append.parentNode.firstChild.appendChild(ev.target)
         }
         this.alergenos = alergenosnew;
+
       }
+      this.$emit("alergens", this.alergenos);
 
 
     },
@@ -228,8 +230,7 @@ export default {
 
       e.target.appendChild(draggedEl);
       this.alergenos.push(draggedEl.id);
-
-      this.$emit("alergenos", this.alergenos);
+      this.$emit("alergens", this.alergenos);
     }
   }
 };
