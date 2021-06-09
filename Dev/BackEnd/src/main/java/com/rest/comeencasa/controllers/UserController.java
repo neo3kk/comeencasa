@@ -55,6 +55,10 @@ public class UserController {
         myMap.put("name",user.getName());
         myMap.put("last_name",user.getLast_name());
         myMap.put("email",user.getEmail());
+        myMap.put("calle",user.getCalle());
+        myMap.put("codigo_postal",user.getCodigo_postal());
+        myMap.put("numero",user.getNumero());
+        myMap.put("letra",user.getLetra());
         return new ResponseEntity<>(gson.toJson(myMap), HttpStatus.ACCEPTED);
 
     }
