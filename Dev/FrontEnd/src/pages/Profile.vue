@@ -82,6 +82,14 @@
             </q-card-section>
           </q-card>
         </q-expansion-item>
+        <q-expansion-item icon="delete" label="Elimina tu cuenta">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Pulsa el boton para eliminar tu cuenta</div>
+              <q-btn label="Elimina tu cuenta" color="red" @click="del = true"/>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
       </q-list>
     </div>
     <q-dialog v-model="prompt" persistent>
@@ -112,6 +120,18 @@
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup/>
           <q-btn flat label="Add address" v-close-popup @click="updatePassword()"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="del" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Estas seguro de borrar tu cuenta?</div>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup/>
+          <q-btn flat label="Borrar igualmente" color="red" v-close-popup @click="deleteUser()"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -146,7 +166,8 @@ export default {
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API,
       prompt: false,
-      alergenos:[]
+      alergenos:[],
+      del: false
     }
   },
   validations: {
@@ -214,6 +235,13 @@ export default {
           }
 
         });
+      }
+    },
+    async deleteUser(){
+      let sendRegister = await this.$axios.get(this.url_server_api + '/deleteUser')
+      if (sendRegister.data === "ok"){
+        localStorage.clear()
+        this.$router.push("/login");
       }
     },
     async updateUserDirection(){
