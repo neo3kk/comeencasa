@@ -68,6 +68,9 @@ public class LoginController {
         restMap.put("tokenLogin", token);
         restMap.put("user", email);
         restMap.put("picture", logged.getAvatarUrl());
+        restMap.put("oauth", logged.isOauth());
+
+
 
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
@@ -81,12 +84,12 @@ public class LoginController {
         String name = map.get("name");
         String last_name = map.get("last_name");
         String avatar = map.get("file");
-        byte[] bytes = Base64.encodeBase64(avatar.getBytes());
         Usuario user = new Usuario();
         user.setName(name);
         user.setEmail(email);
         user.setLast_name(last_name);
         user.setPassword(password);
+        user.setOauth(false);
 
         user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
         if (userService.getUser(user) == null) {

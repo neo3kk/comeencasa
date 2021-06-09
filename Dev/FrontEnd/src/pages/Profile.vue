@@ -32,7 +32,7 @@
               />
 
               <q-btn class="q-my-lg" color="secondary" label="Guardar" @click="updateUser"/>
-              <q-btn label="Cambia la contraseña" color="primary" @click="prompt = true"/>
+              <q-btn label="Cambia la contraseña" color="primary" @click="prompt = true" v-if="user.oauth==='false'"/>
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -159,15 +159,15 @@ export default {
       name: '',
       last_name: '',
       email: '',
-      calle :'',
+      calle: '',
       codigo_postal: '',
       numero: '',
       letra: '',
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API,
       prompt: false,
-      alergenos:[],
-      del: false
+      alergenos: [],
+      del: false,
     }
   },
   validations: {
@@ -193,7 +193,7 @@ export default {
       this.calle = getUserDetails.data.calle
       this.codigo_postal = getUserDetails.data.codigo_postal
       this.numero = getUserDetails.data.numero
-      this.letra =getUserDetails.data.letra
+      this.letra = getUserDetails.data.letra
     }
   },
   methods: {
@@ -237,14 +237,14 @@ export default {
         });
       }
     },
-    async deleteUser(){
+    async deleteUser() {
       let sendRegister = await this.$axios.get(this.url_server_api + '/deleteUser')
-      if (sendRegister.data === "ok"){
+      if (sendRegister.data === "ok") {
         localStorage.clear()
         this.$router.push("/login");
       }
     },
-    async updateUserDirection(){
+    async updateUserDirection() {
       let sendRegister = await this.$axios.post(this.url_server_api + '/updateUserDirection', {
         calle: this.calle,
         codigo_postal: this.codigo_postal,

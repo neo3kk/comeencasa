@@ -45,7 +45,7 @@ public class Usuario{
 
 
     @Column(name = "oauth")
-    int oauth;
+    boolean oauth;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -131,11 +131,11 @@ public class Usuario{
         this.letra = letra;
     }
 
-    public int getOauth() {
+    public boolean isOauth() {
         return oauth;
     }
 
-    public void setOauth(int oauth) {
+    public void setOauth(boolean oauth) {
         this.oauth = oauth;
     }
 

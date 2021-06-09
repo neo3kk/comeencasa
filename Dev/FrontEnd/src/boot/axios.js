@@ -19,6 +19,7 @@ export default async ({Vue, router}) => {
       localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
       localStorage.setItem("user", response.data.user);
       localStorage.setItem("picture", response.data.picture);
+      localStorage.setItem("oauth", response.data.oauth);
       if (router.apps[0]._route.path == "/login") {
         router.push("/");
       }
@@ -37,6 +38,7 @@ export default async ({Vue, router}) => {
         localStorage.setItem("tokenLogin", "Bearer " + response.data.tokenLogin);
         localStorage.setItem("user", response.data.user);
         localStorage.setItem("picture", response.data.picture);
+        localStorage.setItem("oauth", response.data.oauth);
         return axios(originalRequest).catch(err => {
         });
       }

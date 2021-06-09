@@ -37,35 +37,31 @@ public class LoginOauthController {
 
     @PostMapping("/auth/oauth2callback/")
     @Transactional
-    public ResponseEntity<String> oauthCallback(@RequestParam String code, HttpSession session) throws Exception {
+    public ResponseEntity<String> oauthCallback(@RequestParam String code) throws Exception {
         String accessToken = loginServiceOauth.getAccessToken(code);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(accessToken);
-        session.setAttribute("userDetails", userDetails);
-        session.setAttribute("username", userDetails.get("email"));
         Usuario us = new Usuario();
         us.setEmail(userDetails.get("email"));
         Map<String, Object> restMap = new HashMap<>();
         restMap.put("tokenLogin", accessToken);
         restMap.put("user", userDetails.get("email"));
         restMap.put("picture", userDetails.get("picture"));
-        System.out.println(userDetails);
+
         if (!userService.isRegistred(us)) {
-            us.setOauth(1);
+            us.setOauth(true);
             us.setName(userDetails.get("email"));
             us.setCalle("");
             us.setAvatarUrl(userDetails.get("picture"));
             us.setCodigo_postal("");
             us.setLast_name("");
             userService.addUser(us);
-            Usuario userSession = userService.getUser(us);
-            session.setAttribute("usernameId", userSession.getId());
-            session.setAttribute("userObject", userSession);
+            restMap.put("oauth", us.isOauth());
             return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
 
         } else {
-            Usuario userSession = userService.getUser(us);
-            session.setAttribute("usernameId", userSession.getId());
-            session.setAttribute("userObject", userSession);
+            Usuario registredOauth = userService.getUser(us);
+            restMap.put("oauth", registredOauth.isOauth());
+
             return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
 
         }

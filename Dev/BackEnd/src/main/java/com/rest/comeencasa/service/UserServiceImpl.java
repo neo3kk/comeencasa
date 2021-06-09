@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         Usuario us = usuarioRepository.findUsuarioByEmail(usuari.getEmail());
 
         if (us != null) {
-            if (usuari.getOauth() == 1) {
+            if (usuari.isOauth()) {
                 return true;
             }
             boolean passDecrypt = BCrypt.checkpw(usuari.getPassword(), us.getPassword());

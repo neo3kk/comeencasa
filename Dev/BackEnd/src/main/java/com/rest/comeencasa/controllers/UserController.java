@@ -41,8 +41,8 @@ public class UserController {
         }
 
 
-
     }
+
     @GetMapping("/getUserDetails")
     public ResponseEntity<String> getUserDetails(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
@@ -50,19 +50,20 @@ public class UserController {
         if (email != null) {
             Usuario user = userService.getUserByEmail(email);
             Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
-            myMap.put("name",user.getName());
-            myMap.put("last_name",user.getLast_name());
-            myMap.put("email",user.getEmail());
-            myMap.put("calle",user.getCalle());
-            myMap.put("codigo_postal",user.getCodigo_postal());
-            myMap.put("numero",user.getNumero());
-            myMap.put("letra",user.getLetra());
+            myMap.put("name", user.getName());
+            myMap.put("last_name", user.getLast_name());
+            myMap.put("email", user.getEmail());
+            myMap.put("calle", user.getCalle());
+            myMap.put("codigo_postal", user.getCodigo_postal());
+            myMap.put("numero", user.getNumero());
+            myMap.put("letra", user.getLetra());
             return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("InvalidToken", HttpStatus.BAD_REQUEST);
         }
 
     }
+
     @PostMapping("/updateUser")
     public ResponseEntity<String> updateUser(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
@@ -112,7 +113,7 @@ public class UserController {
         Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
         System.out.println(user.getPassword());
         System.out.println(map1.get("new_password"));
-        if (BCrypt.checkpw(map1.get("last_password"),user.getPassword())){
+        if (BCrypt.checkpw(map1.get("last_password"), user.getPassword())) {
             String passEncripted = BCrypt.hashpw(map1.get("new_password"), BCrypt.gensalt(10));
             user.setPassword(passEncripted);
             userService.save(user);
@@ -123,6 +124,7 @@ public class UserController {
         return new ResponseEntity<>("ha habido un problema", HttpStatus.ACCEPTED);
 
     }
+
     @PostMapping("/getNameByEmail")
     public ResponseEntity<String> getNameByEmail(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
