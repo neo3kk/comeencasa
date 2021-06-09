@@ -30,6 +30,20 @@ public class Usuario{
     @Column(name ="last_name", columnDefinition = "TEXT")
     String last_name = null;
 
+    @Column(name ="codigo_postal", columnDefinition = "TEXT")
+    String codigo_postal = "";
+
+    @Column(name ="calle", columnDefinition = "TEXT")
+    String calle = "";
+
+    @Column(name ="numero", columnDefinition = "TEXT")
+    String numero = "";
+
+    @Column(name ="letra", columnDefinition = "TEXT")
+    String letra = "";
+
+
+
     @Column(name = "oauth")
     int oauth;
 
@@ -83,6 +97,38 @@ public class Usuario{
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public String getCodigo_postal() {
+        return codigo_postal;
+    }
+
+    public void setCodigo_postal(String codigo_postal) {
+        this.codigo_postal = codigo_postal;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getLetra() {
+        return letra;
+    }
+
+    public void setLetra(String letra) {
+        this.letra = letra;
     }
 
     public int getOauth() {
