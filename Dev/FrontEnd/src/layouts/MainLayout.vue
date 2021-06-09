@@ -149,6 +149,7 @@ export default {
         direccion:"",
         admin: false,
         img: '',
+        oauth:false
       },
       url_server_api: SETTINGS.URL_SERVER_API,
       leftDrawerOpen: false,
@@ -161,6 +162,7 @@ export default {
   async created() {
     this.user.email = localStorage.getItem("user")
     this.user.img = localStorage.getItem("picture")
+    this.user.oauth = localStorage.getItem("oauth")
     if (this.user.email === "admin@gmail.com") {
       this.user.admin = true;
     }
