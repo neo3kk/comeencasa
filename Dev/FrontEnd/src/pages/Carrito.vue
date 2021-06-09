@@ -12,7 +12,7 @@
         <q-item-section side top>
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
-          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" /></q-item-label>
+          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" v-if="id === ''"/></q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
@@ -23,13 +23,13 @@
           <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
         </q-item-section>
         <q-item-section side top>
-          <q-item-label caption><q-btn color="red" icon="delete" @click="deleteMenu(menu.idmenu)"label="Delete" /></q-item-label>
+          <q-item-label caption><q-btn color="red" icon="delete" label="Delete" @click="deleteMenu(menu.idmenu)" v-if="id === ''"></q-btn></q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
 
     </q-list>
-    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)"></q-btn>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === ''"></q-btn>
   </q-page>
 </template>
 
@@ -40,6 +40,7 @@ export default {
   name: "carrito.vue",
   data() {
     return {
+      id: '',
       pedidoId: '',
       menus: [],
       platos: [],
@@ -48,9 +49,38 @@ export default {
     };
   },
   async created() {
-    await this.getPlatos();
-    await this.getMenus();
-    await this.getPedido();
+    this.id = this.$router.currentRoute.params.id
+    if (this.id !== undefined) {
+      let pedidoId = await this.$axios.post(this.url_server_api + '/getPedidoById',{
+        id: this.id
+      });
+      this.pedidoId = pedidoId.data
+      let platosFetch = await this.$axios.post(this.url_server_api + '/getCarritoById',{
+        id: this.id
+      });
+      this.platos = platosFetch.data
+      var mymenus = []
+      let menusFetch = await this.$axios.post(this.url_server_api + '/getMenusById',{
+        id: this.id
+      });
+      for (const menu of menusFetch.data) {
+        let platosMenuFetch = await this.$axios.post(this.url_server_api + '/getPlatosMenu', {
+          idmenu: menu.id
+        });
+        mymenus.push({
+          'idmenu': menu.id,
+          'nombre_menu': menu.nombre_menu,
+          'platos': platosMenuFetch.data
+        })
+        console.log(platosMenuFetch.data)
+      }
+      this.menus = mymenus
+    }else{
+      await this.getPlatos();
+      await this.getMenus();
+      await this.getPedido();
+    }
+
   },
   methods: {
     async getPedido() {

@@ -4,7 +4,7 @@
     <q-list>
       Pedidos
       <q-item v-for="pedido in pedidos" key="pedido.id">
-        <q-item-section>
+        <q-item-section @click="$router.replace( 'pedido/'+pedido.id)">
           <q-item-label>Orden de pedido {{ pedido.id }}</q-item-label>
           <q-item-label caption>Precio total: {{ pedido.precio_final }}€</q-item-label>
         </q-item-section>
