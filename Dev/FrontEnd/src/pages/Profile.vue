@@ -57,7 +57,20 @@
         >
           <q-card>
             <q-card-section>
+              <q-input filled
+                       label="Codigo postal"
+                       v-model="codigo_postal"/>
+              <q-input filled
+                       label="Calle"
+                       v-model="calle"/>
 
+              <q-input filled
+                       label="Numero"
+                       v-model="numero"/>
+              <q-input filled
+                       label="Letra"
+                       v-model="letra"/>
+              <q-btn class="q-my-lg" color="secondary" label="Guardar Direccion" @click="updateUserDirection()"/>
             </q-card-section>
           </q-card>
         </q-expansion-item>
@@ -126,6 +139,10 @@ export default {
       name: '',
       last_name: '',
       email: '',
+      calle :'',
+      codigo_postal: '',
+      numero: '',
+      letra: '',
       tab: "login",
       url_server_api: SETTINGS.URL_SERVER_API,
       prompt: false,
@@ -152,6 +169,10 @@ export default {
       this.name = getUserDetails.data.name
       this.last_name = getUserDetails.data.last_name
       this.email = getUserDetails.data.email
+      this.calle = getUserDetails.data.calle
+      this.codigo_postal = getUserDetails.data.codigo_postal
+      this.numero = getUserDetails.data.numero
+      this.letra =getUserDetails.data.letra
     }
   },
   methods: {
@@ -194,6 +215,14 @@ export default {
 
         });
       }
+    },
+    async updateUserDirection(){
+      let sendRegister = await this.$axios.post(this.url_server_api + '/updateUserDirection', {
+        calle: this.calle,
+        codigo_postal: this.codigo_postal,
+        numero: this.numero,
+        letra: this.letra
+      })
     },
     showNotification(content, icon, color) {
       this.$q.notify({
