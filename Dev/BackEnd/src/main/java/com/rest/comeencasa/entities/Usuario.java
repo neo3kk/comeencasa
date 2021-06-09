@@ -43,13 +43,23 @@ public class Usuario{
     String letra = "";
 
 
-
     @Column(name = "oauth")
     boolean oauth;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<Pedido> pedidos;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<AlergenosUsuario> alergenosUsuarios;
+
+    public List<AlergenosUsuario> getAlergenosUsuarios() {
+        return alergenosUsuarios;
+    }
+
+    public void setAlergenosUsuarios(List<AlergenosUsuario> alergenosUsuarios) {
+        this.alergenosUsuarios = alergenosUsuarios;
+    }
 
     public Long getId() {
         return id;

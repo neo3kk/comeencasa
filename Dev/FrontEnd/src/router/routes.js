@@ -41,7 +41,8 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '', component: () => import('pages/Admin/Admin.vue'), meta: {requiresAuth: true}},
-      {path: 'nuevoingrediente', component: () => import('pages/Admin/AdminCrearIngrediente.vue'), meta: {requiresAuth: true}},
+      {path: 'ingredientes', component: () => import('pages/Admin/AdminCrearIngrediente.vue'), meta: {requiresAuth: true}},
+      {path: 'alergenos', component: () => import('pages/Admin/AdminCrearAlergenos.vue'), meta: {requiresAuth: true}},
       {path: 'nuevoplato', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
       {path: 'editplato/:id', component: () => import('pages/CrearPlato.vue'), meta: {requiresAuth: true}},
     ]

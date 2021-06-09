@@ -1,8 +1,9 @@
 package com.rest.comeencasa.controllers;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.reflect.TypeToken;
 import com.rest.comeencasa.entities.*;
+import com.rest.comeencasa.service.AlergenoService;
 import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,9 @@ public class UserController {
     TokenService tokenService;
     @Autowired
     LoginServiceOauth loginServiceOauth;
+
+    @Autowired
+    AlergenoService alergenoService;
 
     @GetMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String auth) throws Exception {
@@ -99,6 +104,34 @@ public class UserController {
 
         return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
 
+    }
+
+    @PostMapping("/profile/updateAlergenos")
+    public ResponseEntity<String> updateAlergenos(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+
+
+        if (email != null) {
+            Map<String, ArrayList> alergenos = gson.fromJson(payload, HashMap.class);
+            ArrayList arrayList = alergenos.get("alergenos");
+
+            List<AlergenosUsuario> alergenoList = new ArrayList<>();
+
+            Type Alergeno = new TypeToken<Alergeno>(){}.getType();
+            Usuario user = userService.getUserByEmail(email);
+            arrayList.forEach(al -> {
+                Alergeno alergeno = gson.fromJson(al.toString(), Alergeno);
+                AlergenosUsuario alu = new AlergenosUsuario();
+                alu.setAlergeno(alergeno);
+                alu.setUsuario(user);
+                alergenoService.adddAlergenoUsuario(alu);
+            });
+
+            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 

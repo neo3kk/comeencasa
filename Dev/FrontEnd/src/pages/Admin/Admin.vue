@@ -12,7 +12,19 @@
         <q-separator/>
 
         <q-card-actions align="around">
-          <q-btn flat @click="$router.push('/admin/nuevoingrediente')">Entra</q-btn>
+          <q-btn flat @click="$router.push('/admin/ingredientes')">Entra</q-btn>
+        </q-card-actions>
+      </q-card>
+      <q-card class="my-card">
+        <q-card-section class="bg-primary text-white">
+          <div class="text-h6">Alergenos</div>
+          <div class="text-subtitle2">Edita la lista de alergenos</div>
+        </q-card-section>
+
+        <q-separator/>
+
+        <q-card-actions align="around">
+          <q-btn flat @click="$router.push('/admin/alergenos')">Entra</q-btn>
         </q-card-actions>
       </q-card>
       <q-card class="my-card">

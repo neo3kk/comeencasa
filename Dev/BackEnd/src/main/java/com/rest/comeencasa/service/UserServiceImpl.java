@@ -103,10 +103,6 @@ public class UserServiceImpl implements UserService {
             String passEncripted = BCrypt.hashpw(usuari.getPassword(), BCrypt.gensalt(10));
 
             try {
-/*                Usuari userSave = new Usuari();
-                userSave.setEmail(usuari.getEmail());
-                userSave.setPwd(passEncripted);
-                userSave.setOauth(usuari.getOauth());*/
                 usuari.setPassword(passEncripted);
                 usuarioRepository.save(usuari);
                 return true;

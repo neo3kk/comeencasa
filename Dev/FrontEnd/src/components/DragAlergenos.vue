@@ -1,134 +1,137 @@
 <template>
   <div class="q-pa-md">
+    {{ alergenosSelected }}
     <q-list class="">
       <q-item class="flex wrap column justify-center">
         <q-item class="justify-center">
-          <q-icon
-            size="6em"
-            name="img:alergenos/altramuces.png"
-            id="altramuces"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
+          <q-icon v-for="al in alergenos" :key="al.id"
+                  size="6em"
+                  :name="'img:alergenos/'+al.name+'.png'"
+                  :id="al.id"
+                  :title="al.name"
+                  draggable="true"
+                  dropable="false"
+                  @dragstart="onDragStart"
+                  @click="clearAlergeno"
           />
-          <q-icon
-            size="6em"
-            name="img:alergenos/apio.png"
-            id="apio"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/cacahuetes.png"
-            id="cacahuetes"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/cereales.png"
-            id="cereales"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/crustaceo.png"
-            id="crustaceo"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/frutosdecascara.png"
-            id="frutosdecascara"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/huevos.png"
-            id="huevos"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/lacteos.png"
-            id="lacteos"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/moluscos.png"
-            id="moluscos"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/mostaza.png"
-            id="mostaza"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/pescado.png"
-            id="pescado"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/sesamo.png"
-            id="sesamo"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/soja.png"
-            id="soja"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
-          <q-icon
-            size="6em"
-            name="img:alergenos/sulfitos.png"
-            id="sulfitos"
-            draggable="true"
-            dropable="false"
-            @dragstart="onDragStart"
-            @click="clearAlergeno"
-          />
+          <!--          <q-icon
+                      size="6em"
+                      name="img:alergenos/apio.png"
+                      id="apio"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/cacahuetes.png"
+                      id="cacahuetes"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/cereales.png"
+                      id="cereales"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/crustaceo.png"
+                      id="crustaceo"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/frutosdecascara.png"
+                      id="frutosdecascara"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/huevos.png"
+                      id="huevos"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/lacteos.png"
+                      id="lacteos"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/moluscos.png"
+                      id="moluscos"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/mostaza.png"
+                      id="mostaza"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/pescado.png"
+                      id="pescado"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/sesamo.png"
+                      id="sesamo"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/soja.png"
+                      id="soja"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    <q-icon
+                      size="6em"
+                      name="img:alergenos/sulfitos.png"
+                      id="sulfitos"
+                      draggable="true"
+                      dropable="false"
+                      @dragstart="onDragStart"
+                      @click="clearAlergeno"
+                    />
+                    -->
         </q-item>
         <q-item
           id="alergenos"
@@ -138,6 +141,7 @@
           @drop="onDrop"
           class="drop-target justify-center"
         ></q-item>
+        <q-btn color="red" @click="updateAlergenos()">Actualizar</q-btn>
       </q-item>
     </q-list>
   </div>
@@ -162,27 +166,46 @@
 
 <script>
 
+import {SETTINGS} from "src/settings";
+
 export default {
   data() {
     return {
-      alergenos: []
+      url_server_api: SETTINGS.URL_SERVER_API,
+      alergenos: [],
+      alergenosSelected: []
     };
+  },
+  async created() {
+    await this.getAlergenos();
+
   },
 
   methods: {
+   async updateAlergenos() {
+     let updt = await this.$axios.post(this.url_server_api + '/profile/updateAlergenos', {
+      alergenos: this.alergenosSelected
+     });
+
+    },
+
+    async getAlergenos() {
+      let alergenosFetch = await this.$axios.get(this.url_server_api + '/profile/getAllAlergenos')
+      this.alergenos = alergenosFetch.data
+    },
     clearAlergeno(ev) {
       if (ev.target.dropable === true) {
-        let alergenosnew = this.alergenos.filter(function (value, index, arr) {
-          return value !== ev.target.id
+        let alergenosnew = this.alergenosSelected.filter(function (value, index, arr) {
+          return value.id !== ev.target.id
         })
-        console.log(ev.target)
-        ev.target.draggable=true;
+        console.log(alergenosnew)
+        ev.target.draggable = true;
 
-        if (document.querySelector("#alergenos").firstChild){
+        if (document.querySelector("#alergenos").firstChild) {
           let append = document.querySelector("#alergenos");
-         append.parentNode.firstChild.appendChild(ev.target)
+          append.parentNode.firstChild.appendChild(ev.target)
         }
-        this.alergenos = alergenosnew;
+        this.alergenosSelected = alergenosnew;
 
       }
       this.$emit("alergens", this.alergenos);
@@ -220,14 +243,21 @@ export default {
       }
       const draggedId = e.dataTransfer.getData("id");
       const draggedEl = document.getElementById(draggedId);
-      draggedEl.dropable=true;
+      draggedEl.dropable = true;
       e.target.classList.remove("drag-enter");
 
       // make the exchange
 
       e.target.appendChild(draggedEl);
-      this.alergenos.push(draggedEl.id);
-      this.$emit("alergens", this.alergenos);
+      let alergeno={
+        name:"",
+        id:""
+      };
+
+      alergeno.id=draggedEl.id
+      alergeno.name=draggedEl.title
+      this.alergenosSelected.push(alergeno);
+      this.$emit("alergens", this.alergenosSelected);
     }
   }
 };
