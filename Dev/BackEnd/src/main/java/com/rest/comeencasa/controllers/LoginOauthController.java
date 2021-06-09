@@ -51,6 +51,11 @@ public class LoginOauthController {
         System.out.println(userDetails);
         if (!userService.isRegistred(us)) {
             us.setOauth(1);
+            us.setName(userDetails.get("email"));
+            us.setCalle("");
+            us.setAvatarUrl(userDetails.get("picture"));
+            us.setCodigo_postal("");
+            us.setLast_name("");
             userService.addUser(us);
             Usuario userSession = userService.getUser(us);
             session.setAttribute("usernameId", userSession.getId());

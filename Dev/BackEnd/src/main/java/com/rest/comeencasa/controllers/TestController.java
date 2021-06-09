@@ -7,6 +7,7 @@ import com.rest.comeencasa.repos.UsuarioRepository;
 import com.rest.comeencasa.service.LoginServiceOauth;
 import com.rest.comeencasa.service.TokenService;
 import com.rest.comeencasa.service.UserServiceImpl;
+import com.rest.comeencasa.utils.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +37,10 @@ public class TestController {
     @GetMapping("/validateToken")
     public ResponseEntity<String> test(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
-        }
+        String email = userService.validateUser(token);
+
         System.out.println(email);
         if (email != null) {
-
             return new ResponseEntity<>(email, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("InvalidToken", HttpStatus.OK);

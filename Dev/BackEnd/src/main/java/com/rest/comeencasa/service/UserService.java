@@ -18,7 +18,7 @@ public interface UserService {
 
     boolean isRegistred(Usuario usuari);
 
-    boolean validateUser(String user);
+    String validateUser(String user) throws Exception;
 
     boolean validatePass(String pass);
 

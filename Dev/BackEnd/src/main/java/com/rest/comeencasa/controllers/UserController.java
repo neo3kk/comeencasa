@@ -30,34 +30,37 @@ public class UserController {
 
     @GetMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            userService.deleteUser(user);
+            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("InvalidToken", HttpStatus.BAD_REQUEST);
+        }
 
-        user = userService.getUserByEmail(validate);
-        userService.deleteUser(user);
 
-        return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
 
     }
     @GetMapping("/getUserDetails")
     public ResponseEntity<String> getUserDetails(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-
-        user = userService.getUserByEmail(validate);
-        Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
-        myMap.put("name",user.getName());
-        myMap.put("last_name",user.getLast_name());
-        myMap.put("email",user.getEmail());
-        myMap.put("calle",user.getCalle());
-        myMap.put("codigo_postal",user.getCodigo_postal());
-        myMap.put("numero",user.getNumero());
-        myMap.put("letra",user.getLetra());
-        return new ResponseEntity<>(gson.toJson(myMap), HttpStatus.ACCEPTED);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
+            myMap.put("name",user.getName());
+            myMap.put("last_name",user.getLast_name());
+            myMap.put("email",user.getEmail());
+            myMap.put("calle",user.getCalle());
+            myMap.put("codigo_postal",user.getCodigo_postal());
+            myMap.put("numero",user.getNumero());
+            myMap.put("letra",user.getLetra());
+            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("InvalidToken", HttpStatus.BAD_REQUEST);
+        }
 
     }
     @PostMapping("/updateUser")
