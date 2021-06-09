@@ -34,8 +34,6 @@ public class UserController {
 
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
 
         user = userService.getUserByEmail(validate);
         userService.deleteUser(user);
