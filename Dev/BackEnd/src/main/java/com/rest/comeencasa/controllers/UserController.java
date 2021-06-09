@@ -34,8 +34,6 @@ public class UserController {
 
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
 
         user = userService.getUserByEmail(validate);
         userService.deleteUser(user);
@@ -55,6 +53,10 @@ public class UserController {
         myMap.put("name",user.getName());
         myMap.put("last_name",user.getLast_name());
         myMap.put("email",user.getEmail());
+        myMap.put("calle",user.getCalle());
+        myMap.put("codigo_postal",user.getCodigo_postal());
+        myMap.put("numero",user.getNumero());
+        myMap.put("letra",user.getLetra());
         return new ResponseEntity<>(gson.toJson(myMap), HttpStatus.ACCEPTED);
 
     }
@@ -75,6 +77,26 @@ public class UserController {
         return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
 
     }
+
+    @PostMapping("/updateUserDirection")
+    public ResponseEntity<String> updateUserDirection(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+
+        String token = auth.replace("Bearer ", "");
+        String validate = tokenService.verifyToken(token);
+
+        user = userService.getUserByEmail(validate);
+        Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
+        user.setCalle(map1.get("calle"));
+        user.setCodigo_postal(map1.get("codigo_postal"));
+        user.setNumero(map1.get("numero"));
+        user.setLetra(map1.get("letra"));
+        userService.save(user);
+
+        return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
+
+    }
+
 
     @PostMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
