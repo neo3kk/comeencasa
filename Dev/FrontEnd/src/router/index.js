@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import {SETTINGS} from '../settings.js'
+import axios from 'axios';
 
 Vue.use(VueRouter)
 
@@ -16,7 +18,7 @@ Vue.use(VueRouter)
 
 export default function (/* { store, ssrContext } */) {
   const Router = new VueRouter({
-    scrollBehavior: () => ({ x: 0, y: 0 }),
+    scrollBehavior: () => ({x: 0, y: 0}),
     routes,
 
     // Leave these as they are and change in quasar.conf.js instead!
@@ -32,7 +34,13 @@ export default function (/* { store, ssrContext } */) {
     }
     if (to.meta.requiresAuth) {
       if (localStorage.getItem("tokenLogin")) {
-        next()
+        axios.get(SETTINGS.URL_SERVER_API + `/validateToken`).then(function (res) {
+          if (res.request.responseText === "InvalidToken") {
+            next({path: "expired"});
+          } else {
+            next();
+          }
+        })
       } else {
         next({name: "login"})
       }

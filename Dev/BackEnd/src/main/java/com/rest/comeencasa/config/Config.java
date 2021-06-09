@@ -33,6 +33,6 @@ public class Config implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns( "/", "/login", "/register", "/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios", "/upload/image", "/test", "/images/users/**");
         registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/admin", "/admin/*");
+                .addPathPatterns("/admin/**");
     }
 }

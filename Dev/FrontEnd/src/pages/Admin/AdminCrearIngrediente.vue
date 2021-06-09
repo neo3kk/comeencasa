@@ -31,15 +31,6 @@
 
     </div>
     <div class="q-pa-md">
-      <!--      <q-list bordered>
-              <q-item clickable v-ripple v-for="ingrediente in ing" :key="ingrediente.id">
-                <q-item-section>{{ ingrediente.name }}</q-item-section>
-                <q-item-section>{{ ingrediente.traduccion }}</q-item-section>
-                <q-item-section>{{ ingrediente.energia }}</q-item-section>
-                <q-item-section>{{ ingrediente.azucar }}</q-item-section>
-                <q-btn color="red">Borrar</q-btn>
-              </q-item>
-            </q-list>-->
       <q-markup-table>
         <thead>
         <tr>

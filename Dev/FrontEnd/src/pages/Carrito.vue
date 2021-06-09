@@ -49,8 +49,8 @@ export default {
   },
   async created() {
     await this.getPlatos();
-    await this.getMenus()
-    await this.getPedido()
+    await this.getMenus();
+    await this.getPedido();
   },
   methods: {
     async getPedido() {

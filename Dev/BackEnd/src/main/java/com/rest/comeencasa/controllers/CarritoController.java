@@ -54,7 +54,7 @@ public class CarritoController {
             List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
             return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
     }
 
@@ -71,7 +71,7 @@ public class CarritoController {
         if (pedido != null) {
             return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -100,7 +100,7 @@ public class CarritoController {
                 pedido.setEstado("Pendiente");
                 pedidoService.savePedido(pedido);
             }
-            return new ResponseEntity<>(gson.toJson(null), HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.CONTINUE);
         }
     }
 }
