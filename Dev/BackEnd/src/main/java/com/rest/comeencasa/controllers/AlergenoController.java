@@ -6,7 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rest.comeencasa.entities.Alergeno;
 import com.rest.comeencasa.entities.AlergenoDTO;
+import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.service.AlergenoService;
+import com.rest.comeencasa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +36,9 @@ public class AlergenoController {
     @Autowired
     AlergenoService alergenoService;
 
+    @Autowired
+    UserService userService;
+
     @PostConstruct
     private void postConstruct() throws IOException {
 
@@ -58,6 +63,20 @@ public class AlergenoController {
         List<Alergeno> alergenoList = alergenoService.getAlergenos();
         List<AlergenoDTO> alergenoDTOS = alergenoService.makeListAlergenoDTO(alergenoList);
         return new ResponseEntity<>(gson.toJson(alergenoDTOS), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/profile/gellAllFromUser")
+    public ResponseEntity<String> gellAllFromUser(@RequestHeader("Authorization") String auth) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            List<Alergeno> alergenoList = alergenoService.getUserAlergenos(user);
+            List<AlergenoDTO> alergenoDTOS = alergenoService.makeListAlergenoDTO(alergenoList);
+            return new ResponseEntity<>(gson.toJson(alergenoDTOS), HttpStatus.ACCEPTED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Transactional

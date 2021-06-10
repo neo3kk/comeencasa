@@ -16,4 +16,6 @@ public interface AlergenoService {
     boolean delete(String alergeno);
     AlergenoDTO makeAlergenoDTO(Alergeno alergeno);
     List<AlergenoDTO> makeListAlergenoDTO(List<Alergeno> alergenoList);
+
+    List<Alergeno> getUserAlergenos(Usuario user);
 }

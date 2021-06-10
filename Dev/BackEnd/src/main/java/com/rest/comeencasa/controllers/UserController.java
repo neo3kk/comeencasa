@@ -139,6 +139,7 @@ public class UserController {
 
             Type Alergeno = new TypeToken<Alergeno>(){}.getType();
             Usuario user = userService.getUserByEmail(email);
+            userService.deleteAlergenos(user);
             arrayList.forEach(al -> {
                 Alergeno alergeno = gson.fromJson(al.toString(), Alergeno);
                 AlergenosUsuario alu = new AlergenosUsuario();

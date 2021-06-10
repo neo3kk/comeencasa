@@ -3,6 +3,7 @@ package com.rest.comeencasa.service;
 import com.rest.comeencasa.entities.Alergeno;
 import com.rest.comeencasa.entities.AlergenoDTO;
 import com.rest.comeencasa.entities.AlergenosUsuario;
+import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.repos.AlergenoRepository;
 import com.rest.comeencasa.repos.AlergenosUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,16 @@ public class AlergenoServiceImpl implements AlergenoService {
             listDto.add(alergenoDTO);
         });
         return listDto;
+    }
+
+    @Override
+    public List<Alergeno> getUserAlergenos(Usuario user) {
+        List<AlergenosUsuario> alergenoList = alergenosUsuarioRepository.findAlergenosUsuarioByUsuario(user);
+        List<Alergeno> alergenos = new ArrayList<>();
+        alergenoList.forEach(alergenosUsuario -> {
+            alergenos.add(alergenosUsuario.getAlergeno());
+        });
+
+        return alergenos;
     }
 }

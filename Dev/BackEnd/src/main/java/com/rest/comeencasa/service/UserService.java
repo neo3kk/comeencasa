@@ -31,4 +31,6 @@ public interface UserService {
     String processAvatar(String avatar, String userId);
 
     void save(Usuario user);
+
+    boolean deleteAlergenos(Usuario usuario);
 }

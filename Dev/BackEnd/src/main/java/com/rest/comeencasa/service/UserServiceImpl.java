@@ -1,8 +1,10 @@
 package com.rest.comeencasa.service;
 
 import com.google.gson.Gson;
+import com.rest.comeencasa.entities.AlergenosUsuario;
 import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Usuario;
+import com.rest.comeencasa.repos.AlergenosUsuarioRepository;
 import com.rest.comeencasa.repos.ImageRepository;
 import com.rest.comeencasa.repos.UsuarioRepository;
 import org.apache.commons.codec.binary.Base64;
@@ -34,6 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     LoginServiceOauth loginServiceOauth;
+
+    @Autowired
+    AlergenosUsuarioRepository alergenosUsuarioRepository;
 
 
     @Override
@@ -130,6 +135,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(Usuario user) {
         usuarioRepository.save(user);
+    }
+
+    @Override
+    public boolean deleteAlergenos(Usuario usuario) {
+       List<AlergenosUsuario> alergenosUsuariosList = alergenosUsuarioRepository.findAlergenosUsuarioByUsuario(usuario);
+       alergenosUsuariosList.forEach(alergenosUsuario -> {
+           alergenosUsuarioRepository.delete(alergenosUsuario);
+       });
+        return true;
     }
 
     @Override
