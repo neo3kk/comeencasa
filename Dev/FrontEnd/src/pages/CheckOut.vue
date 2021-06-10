@@ -57,7 +57,30 @@
       color="accent"
       label="Make Payment"
       :loading="loading"
-      @click="submitForm"/>
+      @click="seguro = true"/>
+    <q-dialog v-model="seguro" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Estas seguro que tu direccion de envio sea correcta??</div>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Continuar con el pago" @click="submitForm"/>
+          <q-btn flat label="Mejor voy a comprobarlo" color="red" v-close-popup  @click="$router.push('/profile')"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="del" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">No has definido los datos de envio. Por favor, asegurate de guardarlos!</div>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Ir a tu perfil" color="red" v-close-popup  @click="$router.push('/profile')"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
   </div>
 </template>
@@ -77,6 +100,8 @@
     },
     data() {
       return {
+        seguro: false,
+        del: false,
         id: '',
         precio_final: '',
         loading: false,
@@ -152,7 +177,7 @@
             console.log(token)
             var elements = {
               amount: this.precio_final,
-              description: "Pedido numero: "+this.id,
+              description: "Pedido numero: " + this.id,
               source: token.id
             }
 
@@ -191,31 +216,38 @@
     }
     ,
     async mounted() {
-      this.id = this.$router.currentRoute.params.id
-      var preciofinal = await this.$axios.post(this.url_server_api + '/getPrecioPedido', {
-        pedidoid: this.id
-      });
-      this.precio_final = preciofinal.data
-      const style = {
-        base: {
-          fontFamily: '"Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif',
-          '::placeholder': {
-            color: '#CFD7E0',
-          },
-        },
-      };
-      if (!this.stripe) {
-        this.stripe = await loadStripe('pk_test_LESShQ47cPmtRV4MhkefvSax00lZTqQsOv');
-      }
-      if (!this.elements) {
-        const cardElements = ['cardNumber', 'cardExpiry', 'cardCvc']
-        this.elements = this.stripe.elements();
-        console.log(this.elements)
-        cardElements.forEach(element => {
-          this.card[element] = this.elements.create(element, {style: style});
-          this.card[element].mount('#' + element);
-          this.card[element].addEventListener('change', (e) => this.updated(e));
+      var userDirection = await this.$axios.get(this.url_server_api + '/userHaveDirection')
+      console.log(userDirection.data)
+      if (userDirection.data !== true){
+        console.log(userDirection.data)
+        this.del = true
+      } else {
+        this.id = this.$router.currentRoute.params.id
+        var preciofinal = await this.$axios.post(this.url_server_api + '/getPrecioPedido', {
+          pedidoid: this.id
         });
+        this.precio_final = preciofinal.data
+        const style = {
+          base: {
+            fontFamily: '"Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            '::placeholder': {
+              color: '#CFD7E0',
+            },
+          },
+        };
+        if (!this.stripe) {
+          this.stripe = await loadStripe('pk_test_LESShQ47cPmtRV4MhkefvSax00lZTqQsOv');
+        }
+        if (!this.elements) {
+          const cardElements = ['cardNumber', 'cardExpiry', 'cardCvc']
+          this.elements = this.stripe.elements();
+          console.log(this.elements)
+          cardElements.forEach(element => {
+            this.card[element] = this.elements.create(element, {style: style});
+            this.card[element].mount('#' + element);
+            this.card[element].addEventListener('change', (e) => this.updated(e));
+          });
+        }
       }
     },
   }
