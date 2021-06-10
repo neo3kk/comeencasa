@@ -1,5 +1,5 @@
 <template>
-  <div id="payment-form">
+  <div id="payment-form" class="q-pa-md">
 
     <div class="q-mt-md q-mb-md text-negative" v-if="submissionError">
       <div id="card-errors" role="alert">{{ submissionError }}</div>
