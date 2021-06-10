@@ -75,13 +75,6 @@
           </q-card>
         </q-expansion-item>
 
-        <q-expansion-item icon="menu_book" label="Historico pedidos">
-          <q-card>
-            <q-card-section>
-
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
         <q-expansion-item icon="delete" label="Elimina tu cuenta">
           <q-card>
             <q-card-section>
