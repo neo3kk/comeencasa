@@ -15,7 +15,9 @@
           <img
             alt="COME EN CASA"
             src="~src/assets/logomin.png"
-            id="logomin">
+            id="logomin"
+            @click="$router.push('/')"
+          >
         </q-toolbar-title>
         <q-input dark dense standout v-model="text" input-class="text-right" class="q-ml-md">
           <template v-slot:append>
@@ -112,7 +114,7 @@ const linksData = [
     link: '/platos'
   },
   {
-    title: 'Envios',
+    title: 'Donde estamos',
     caption: 'Descubre si estas en nuestro radio de actividad',
     icon: 'delivery_dining',
     link: '/envios'
