@@ -65,7 +65,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Continuar con el pago" @click="submitForm"/>
+          <q-btn flat label="Continuar con el pago" @click="submitForm" v-close-popup/>
           <q-btn flat label="Mejor voy a comprobarlo" color="red" v-close-popup  @click="$router.push('/profile')"/>
         </q-card-actions>
       </q-card>
