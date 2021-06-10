@@ -4,7 +4,7 @@
     <q-list>
       Tu lista de productos
       <q-item v-for="plato in platos" key="plato.id" v-if="platos!=null" clickable>
-        <q-item-section @click="$router.replace( '/plato/'+plato.id)">
+        <q-item-section @click="$router.push( '/plato/'+plato.id)">
           <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
         </q-item-section>
@@ -12,24 +12,25 @@
         <q-item-section side top>
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
-          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" v-if="id === ''"/></q-item-label>
+          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" v-if="id === undefined"/></q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
 
-      <q-item v-for="menu in menus" key="menu.idmenu" v-if="menus!=null" clickable @click="$router.replace( 'pedidomenu/'+menu.idmenu)">
+      <q-item v-for="menu in menus" key="menu.idmenu"  clickable @click="$router.push( '/profile/pedidomenu/'+menu.idmenu)">
         <q-item-section>
           <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
           <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
         </q-item-section>
         <q-item-section side top>
-          <q-item-label caption><q-btn color="red" icon="delete" label="Delete" @click="deleteMenu(menu.idmenu)" v-if="id === ''"></q-btn></q-item-label>
+          <q-item-label caption><q-btn color="red" icon="delete" label="Delete" @click="deleteMenu(menu.idmenu)" v-if="id === undefined"
+                                       ></q-btn></q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
 
     </q-list>
-    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === ''"></q-btn>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === undefined"></q-btn>
   </q-page>
 </template>
 
@@ -40,7 +41,7 @@ export default {
   name: "carrito.vue",
   data() {
     return {
-      id: '',
+      id: undefined,
       pedidoId: '',
       menus: [],
       platos: [],

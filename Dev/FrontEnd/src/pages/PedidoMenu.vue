@@ -10,7 +10,20 @@
           <q-card class="my-card" v-for="plato in platos" :key="plato.id"
                   v-if="category.toLowerCase() === plato.tipo_de_plato.toLowerCase()">
             <img :src="plato.image" class="comida">
-            <div @click="seleccionarPlato(plato.id)" clickable :id="plato.id">
+            <div @click="seleccionarPlato(plato.id)" clickable :id="plato.id" v-if="id === undefined">
+              <q-card-section>
+                <div>
+                  <div class="text-h6">{{ plato.nombre }}</div>
+                  <div class="text-subtitle2">{{ plato.description }}</div>
+                </div>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none">
+                Ingredientes:
+              </q-card-section>
+              <q-separator/>
+            </div>
+            <div :id="plato.id" v-else>
               <q-card-section>
                 <div>
                   <div class="text-h6">{{ plato.nombre }}</div>
@@ -31,7 +44,7 @@
         </div>
       </q-expansion-item>
     </q-list>
-    <q-btn color="indigo" label="Confirma tu menu" style="width: 100%" @click="hacerPedido"></q-btn>
+    <q-btn color="indigo" label="Confirma tu menu" style="width: 100%" @click="hacerPedido" v-if="id === undefined"></q-btn>
   </q-page>
 </template>
 
@@ -42,7 +55,7 @@
     name: "PedidoMenu",
     data() {
       return {
-        id: '',
+        id: undefined,
         lorem: "loremimpsum",
         platos: [],
         categories: ["entrante", "primero", "postre", "bebida"],
