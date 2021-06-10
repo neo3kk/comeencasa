@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rest</groupId>
-	<artifactId>vue</artifactId>
+	<artifactId>comeencasa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>vue</name>
+	<name>ComeEnCasa</name>
 	<description>Come en casa</description>
 	<properties>
 		<java.version>11</java.version>
