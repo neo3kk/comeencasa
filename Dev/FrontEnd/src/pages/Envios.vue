@@ -4,32 +4,18 @@
       <l-map :zoom="zoom" :center="center">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
         <l-circle
-          :lat-lng="extraDelivery.center"
-          :radius="extraDelivery.radius"
-          :color="extraDelivery.color"
-        >
-          <l-popup :content="extraDelivery.name"/>
-        </l-circle>
-        <l-circle
           :lat-lng="delivery.center"
           :radius="delivery.radius"
           :color="delivery.color"
+          :icon="icon"
         >
           <l-popup :content="delivery.name"/>
         </l-circle>
-        <l-circle
-          :lat-lng="freedelivery.center"
-          :radius="freedelivery.radius"
-          :color="freedelivery.color"
-        >
-          <l-popup :content="freedelivery.name"/>
-        </l-circle>
-        <l-marker :lat-lng="center"> >
+        <l-marker :lat-lng="center">
           <l-popup content="Tu posicion"/>
         </l-marker>
 
-        <l-marker :lat-lng="freedelivery.center">
-
+        <l-marker :lat-lng="delivery.center">
           <l-popup content="Comeencasa"/>
         </l-marker>
 
@@ -66,38 +52,26 @@ export default {
       lat: "",
       long: "",
       icon: icon({
-        iconUrl: "statics/images/logo.png",
+        iconUrl: "src/assets/logomin.png",
         iconSize: [32, 37],
         iconAnchor: [16, 37]
       }),
-      deliveryPrice:"deliveryPrice",
+      deliveryPrice: "deliveryPrice",
       zoom: 12,
       center: L.latLng(47.413220, -1.219482),
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      freedelivery: {
-        center: [39.6012567777098, 2.6893242690042873],
-        radius: 1000,
-        color: 'yellow',
-        name: "Envio gratis"
-      },
       delivery: {
         center: [39.6012567777098, 2.6893242690042873],
-        radius: 3000,
+        radius: 10000,
         color: 'green',
-        name: "Envio del 5% del importe del pedido"
-      },
-      extraDelivery: {
-        center: [39.6012567777098, 2.6893242690042873],
-        radius: 20000,
-        color: 'red',
-        name: "Envio del 10% del importe del pedido"
-      },
+        name: "Envio disponible"
+      }
 
     }
   },
   created() {
-      this.locate();
+    this.locate();
 
   },
   computed: {},
