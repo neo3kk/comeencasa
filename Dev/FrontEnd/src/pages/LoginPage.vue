@@ -66,7 +66,6 @@
               method="POST"
               accept=".jpg,.png,image/*"
               :url="url_server_api+'/upload/image'"
-              multiple
             />
             <q-btn class="q-my-lg" color="secondary" label="Register" @click="register"/>
           </q-tab-panel>

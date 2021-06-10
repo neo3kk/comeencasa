@@ -8,9 +8,24 @@
           label="Datos personales"
           :caption="user.name"
         >
+
           <q-card>
+
             <q-card-section>
-              <div class="text-h6">{{ user.img }}</div>
+              <q-card-section class="column items-baseline content-center">
+              <q-img :src="user.img" alt="" width="200px" height="200px"/>
+                <q-uploader
+                  label="Selecciona una imatge de perfil"
+                  fieldName="file"
+                  auto-upload
+                  class="q-mt-md"
+                  @uploaded="uploaded"
+                  method="POST"
+                  accept=".jpg,.png,image/*"
+                  :url="url_server_api+'/upload/image'"
+                />
+              <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage" v-if="user.oauth==='false'"/>
+              </q-card-section>
               <div class="text-h6">{{ user.direccion }}</div>
               <q-input filled
                        label="Nom"
@@ -24,13 +39,6 @@
                        :error-message="mensaError('last_name')"
                        :error="$v.last_name.$invalid"
               />
-              <q-input filled
-                       label="Email"
-                       v-model="email"
-                       :error-message="mensaError('email')"
-                       :error="$v.email.$invalid"
-              />
-
               <q-btn class="q-my-lg" color="secondary" label="Guardar" @click="updateUser"/>
               <q-btn label="Cambia la contraseña" color="primary" @click="prompt = true" v-if="user.oauth==='false'"/>
             </q-card-section>
@@ -146,12 +154,12 @@ export default {
   },
   data() {
     return {
+      file: '',
       last_password: '',
       new_password: '',
       same_new_password: '',
       name: '',
       last_name: '',
-      email: '',
       calle: '',
       codigo_postal: '',
       numero: '',
@@ -167,10 +175,6 @@ export default {
     name: {
       required,
       minLength: minLength(3)
-    },
-    email: {
-      required,
-      email
     },
     last_name: {
       required,
@@ -190,13 +194,34 @@ export default {
     }
   },
   methods: {
+    async updateImage(){
+      let upadteImage = await this.$axios.post(this.url_server_api + '/updateImage', {
+        file: this.file,
+      })
+      if (upadteImage.request.status === 202) {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Imagen cambiada correctamente'
+        })
+        this.$router.go(0)
+      } else {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Error al cambiar la imagen'
+        })
+      }
+    },
+
     async updatePassword() {
       if (this.new_password === this.same_new_password) {
         let sendRegister = await this.$axios.post(this.url_server_api + '/changePassword', {
           last_password: this.last_password,
           new_password: this.new_password,
         })
-        console.log(sendRegister.data)
         if (sendRegister.data === 200) {
           this.showNotification("Se ha cambiado la contraseña correctamente", "check_circle_outline", "positive")
         } else {
@@ -215,7 +240,6 @@ export default {
         let sendRegister = await this.$axios.post(this.url_server_api + '/updateUser', {
           name: this.name,
           last_name: this.last_name,
-          email: this.email,
         }).then(response => {
           this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
         }).catch(error => {
@@ -270,10 +294,6 @@ export default {
       if (data === 'last_name') {
         if (!this.$v.last_name.last_name) return 'Introdueix el teu cognom/s'
         if (!this.$v.last_name.required) return 'Campo requerido'
-      }
-      if (data === 'email') {
-        if (!this.$v.email.email) return 'Introdueix el teu correu electrònic'
-        if (!this.$v.email.required) return 'Camp requerit'
       }
       if (data === 'new_password') {
         if (!this.$v.same_new_password) return 'La contraseña es demasiado corta'
