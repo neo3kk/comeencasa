@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-md">
-    {{ alergenosSelected }}
     <q-list class="">
       <q-item class="flex wrap column justify-center">
         <q-item class="justify-center">
@@ -14,127 +13,10 @@
                   @dragstart="onDragStart"
                   @click="clearAlergeno"
           />
-          <!--          <q-icon
-                      size="6em"
-                      name="img:alergenos/apio.png"
-                      id="apio"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/cacahuetes.png"
-                      id="cacahuetes"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/cereales.png"
-                      id="cereales"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/crustaceo.png"
-                      id="crustaceo"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/frutosdecascara.png"
-                      id="frutosdecascara"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/huevos.png"
-                      id="huevos"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/lacteos.png"
-                      id="lacteos"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/moluscos.png"
-                      id="moluscos"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/mostaza.png"
-                      id="mostaza"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/pescado.png"
-                      id="pescado"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/sesamo.png"
-                      id="sesamo"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/soja.png"
-                      id="soja"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    <q-icon
-                      size="6em"
-                      name="img:alergenos/sulfitos.png"
-                      id="sulfitos"
-                      draggable="true"
-                      dropable="false"
-                      @dragstart="onDragStart"
-                      @click="clearAlergeno"
-                    />
-                    -->
+
         </q-item>
         <q-item
-          id="alergenos"
+          id="alergenosSelected"
           @dragenter="onDragEnter"
           @dragleave="onDragLeave"
           @dragover="onDragOver"
@@ -178,37 +60,64 @@ export default {
   },
   async created() {
     await this.getAlergenos();
-
+    await this.appendAlergenosUsuario();
   },
 
   methods: {
-   async updateAlergenos() {
-     let updt = await this.$axios.post(this.url_server_api + '/profile/updateAlergenos', {
-      alergenos: this.alergenosSelected
-     });
-
+    async updateAlergenos() {
+      let updt = await this.$axios.post(this.url_server_api + '/profile/updateAlergenos', {
+        alergenos: this.alergenosSelected
+      });
+      if (updt.request.status === 202) {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Alergenos actualizados correctamente'
+        })
+      } else {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Error al actualizar los alergenos'
+        })
+      }
     },
 
     async getAlergenos() {
       let alergenosFetch = await this.$axios.get(this.url_server_api + '/profile/getAllAlergenos')
+      let alergenosUser = await this.$axios.get(this.url_server_api + '/profile/gellAllFromUser')
       this.alergenos = alergenosFetch.data
+      this.alergenosSelected = alergenosUser.data
+
+    },
+
+    async appendAlergenosUsuario() {
+      let append = document.querySelector("#alergenosSelected");
+      this.alergenosSelected.forEach(alergeno => {
+        const elemento = document.getElementById(alergeno.id);
+        elemento.dropable = true;
+        append.appendChild(elemento);
+      });
     },
     clearAlergeno(ev) {
       if (ev.target.dropable === true) {
         let alergenosnew = this.alergenosSelected.filter(function (value, index, arr) {
-          return value.id !== ev.target.id
+          return parseInt(value.id) !== parseInt(ev.target.id)
         })
         console.log(alergenosnew)
         ev.target.draggable = true;
 
-        if (document.querySelector("#alergenos").firstChild) {
-          let append = document.querySelector("#alergenos");
+        if (document.querySelector("#alergenosSelected").firstChild) {
+          let append = document.querySelector("#alergenosSelected");
           append.parentNode.firstChild.appendChild(ev.target)
+
         }
         this.alergenosSelected = alergenosnew;
-
+        this.$emit("alergens", this.alergenosSelected);
       }
-      this.$emit("alergens", this.alergenos);
+
 
 
     },
@@ -237,7 +146,6 @@ export default {
 
     onDrop(e) {
       e.preventDefault();
-
       if (e.target.draggable === true) {
         return;
       }
@@ -249,13 +157,12 @@ export default {
       // make the exchange
 
       e.target.appendChild(draggedEl);
-      let alergeno={
-        name:"",
-        id:""
+      let alergeno = {
+        id: "",
+        name: ""
       };
-
-      alergeno.id=draggedEl.id
-      alergeno.name=draggedEl.title
+      alergeno.id = draggedEl.id
+      alergeno.name = draggedEl.title
       this.alergenosSelected.push(alergeno);
       this.$emit("alergens", this.alergenosSelected);
     }
