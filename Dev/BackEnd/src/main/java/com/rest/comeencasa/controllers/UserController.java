@@ -48,13 +48,32 @@ public class UserController {
 
     }
 
+    @GetMapping("/userHaveDirection")
+    public ResponseEntity<String> userHaveDirection(@RequestHeader("Authorization") String auth) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
+            if (user.getCalle()==null||user.getCodigo_postal()==null||user.getNumero()==null||user.getLetra()==null){
+                return new ResponseEntity<>("false", HttpStatus.ACCEPTED);
+            }else{
+                return new ResponseEntity<>("true", HttpStatus.ACCEPTED);
+            }
+        } else {
+            return new ResponseEntity<>("InvalidToken", HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
     @GetMapping("/getUserDetails")
     public ResponseEntity<String> getUserDetails(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
         String email = userService.validateUser(token);
         if (email != null) {
             Usuario user = userService.getUserByEmail(email);
-            Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
+            Map<String, String> myMap = new HashMap<>();
             myMap.put("name", user.getName());
             myMap.put("last_name", user.getLast_name());
             myMap.put("email", user.getEmail());
@@ -62,7 +81,7 @@ public class UserController {
             myMap.put("codigo_postal", user.getCodigo_postal());
             myMap.put("numero", user.getNumero());
             myMap.put("letra", user.getLetra());
-            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(gson.toJson(myMap), HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("InvalidToken", HttpStatus.BAD_REQUEST);
         }

@@ -62,6 +62,12 @@ public class PedidoController {
         }
         if (user != null) {
             List<Pedido> pedidos = pedidoService.findByUsuario(user);
+            for (int i = 0; i <pedidos.size() ; i++) {
+                if (pedidos.get(i).getEstado().equals("Pendiente")){
+                    pedidos.remove(i);
+                    i--;
+                }
+            }
             List<PedidoDTO> pedidoDTOList = pedidoService.createListpedidoDTO(pedidos);
             return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
         }
@@ -169,7 +175,12 @@ public class PedidoController {
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
                 if (pedido != null) {
                     Plato plato = platoService.findPlatoById(Long.valueOf(object));
-                    pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + Double.valueOf(plato.getPrecio())));
+                    if (pedido.getPrecio_final() == null){
+                        pedido.setPrecio_final(String.valueOf(plato.getPrecio()));
+                    }else{
+                        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + Double.valueOf(plato.getPrecio())));
+                    }
+
                     pedidoService.savePedido(pedido);
                     PedidoPlato pedidoPlato = new PedidoPlato();
                     pedidoPlato.setPlato(plato);
@@ -199,9 +210,6 @@ public class PedidoController {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
-
         user = userService.getUserByEmail(validate);
         Map<String, List> map = gson.fromJson(payload, HashMap.class);
         List platos = map.get("platos");
@@ -228,8 +236,11 @@ public class PedidoController {
         PedidoMenu pm = new PedidoMenu();
         pm.setMenu(m);
         if (pedido != null) {
-            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
-
+            if (pedido.getPrecio_final()!=null){
+                pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
+            }else{
+                pedido.setPrecio_final("12.00");
+            }
         } else {
             pedido = new Pedido();
             pedido.setFecha_pedido(utils.getToday());
@@ -263,8 +274,6 @@ public class PedidoController {
 
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
 
         user = userService.getUserByEmail(validate);
         Map<String, List> map1 = gson.fromJson(payload, HashMap.class);
@@ -305,8 +314,6 @@ public class PedidoController {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
 
         user = userService.getUserByEmail(validate);
         Map<String, Double> map = gson.fromJson(payload, HashMap.class);
@@ -328,10 +335,16 @@ public class PedidoController {
     }
 
     @PostMapping("/setPedidoPagado")
-    public ResponseEntity<String> setPedidoPagado(@RequestBody String payload) throws Exception {
+    public ResponseEntity<String> setPedidoPagado(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
+        String token = auth.replace("Bearer ", "");
+        String validate = tokenService.verifyToken(token);
+
+        user = userService.getUserByEmail(validate);
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
         pedido.setEstado("Pagado");
+        pedido.setUbicacion(user.getCodigo_postal() +" , Calle:"+ user.getCalle()+" numero "+user.getNumero()+" , letra "+user.getLetra());
         pedidoService.savePedido(pedido);
         return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
     }
