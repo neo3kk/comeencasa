@@ -73,7 +73,7 @@
             <q-btn-toggle v-model="plato.visible" push glossy toggle-color="primary" :options="[
               {label: 'Visible', value: true},{label: 'Invisible', value: false}]" @click="setVisibility(plato)"/>
             <q-btn color="red" icon="delete" @click="deletePlato(plato.id)" label="Delete"/>
-            <q-btn color="blue" icon="edit" @click="$router.replace( 'admin/editplato/'+plato.id)" label="Editar"/>
+            <q-btn color="blue" icon="edit" @click="$router.push( 'admin/editplato/'+plato.id)" label="Editar"/>
           </td>
         </tr>
         </tbody>

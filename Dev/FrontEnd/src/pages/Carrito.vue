@@ -128,7 +128,7 @@ export default {
         })
       })
       if (!boolean){
-        this.$router.replace( 'pago/'+pedidoId)
+        this.$router.push( 'pago/'+pedidoId)
       }else{
         this.showNotification("El plato: "+name+" ya no se encuentra disponible en este momento, " +
           "borrelo de su pedido elija otro producto, disculpe las molestias", "error", "negative")

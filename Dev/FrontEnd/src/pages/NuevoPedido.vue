@@ -15,7 +15,7 @@
           </div>
           <div class="q-pa-md row items-start q-gutter-md">
             <q-btn color="white" text-color="black" label="Prepara tu menu!"
-                   @click="$router.replace('/profile/pedidomenu')"/>
+                   @click="$router.push('/profile/pedidomenu')"/>
           </div>
 
         </div>
@@ -36,7 +36,7 @@
 
           <q-card-actions align="right">
             <q-btn flat color="secondary" @click="añadirPlato(plato.id)">Añadir Plato</q-btn>
-            <q-btn flat color="primary" @click="$router.replace( '/plato/'+plato.id)">Mas información</q-btn>
+            <q-btn flat color="primary" @click="$router.push( '/plato/'+plato.id)">Mas información</q-btn>
           </q-card-actions>
         </q-card>
       </div>
