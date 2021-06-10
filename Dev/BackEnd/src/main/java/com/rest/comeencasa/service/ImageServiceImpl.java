@@ -14,7 +14,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image getImageByFileName(String fileName) {
         Image im = imageRepo.findImageByFileName(fileName);
-        System.out.println(im);
         return im;
+    }
+
+    @Override
+    public void delete(Image i) {
+        imageRepo.delete(i);
     }
 }

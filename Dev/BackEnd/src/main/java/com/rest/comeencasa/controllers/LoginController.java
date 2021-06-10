@@ -70,8 +70,6 @@ public class LoginController {
         restMap.put("picture", logged.getAvatarUrl());
         restMap.put("oauth", logged.isOauth());
 
-
-
         return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.ACCEPTED);
     }
 
@@ -90,7 +88,6 @@ public class LoginController {
         user.setLast_name(last_name);
         user.setPassword(password);
         user.setOauth(false);
-
         user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
         if (userService.getUser(user) == null) {
             userService.addUser(user);
@@ -108,32 +105,12 @@ public class LoginController {
 
     }
 
-    @PostMapping("/getImage")
-    public HttpEntity<? extends Serializable> getImage(@RequestBody String payload) {
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        String email = map.get("user");
-        Usuario usuario = userService.getUserByEmail(email);
-
-        return new ResponseEntity<String>(usuario.getAvatarUrl(), HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping("/getImage2")
-    public HttpEntity<? extends Serializable> getImage2(@RequestBody String payload) {
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        String email = map.get("user");
-        Usuario usuario = userService.getUserByEmail(email);
-
-        return new ResponseEntity<String>(usuario.getAvatarUrl(), HttpStatus.ACCEPTED);
-    }
-
 
     @PostMapping("/upload/image")
     public HttpEntity<? extends Serializable> uploadFileRegister(@RequestPart(value = "file") MultipartFile uploadfile) {
-
         try {
             byte[] bytes = Base64.encodeBase64(uploadfile.getBytes());
             return new ResponseEntity<>(bytes, HttpStatus.OK);
-
         } catch (Exception e) {
             return new ResponseEntity<String>("ERROR", HttpStatus.UNAUTHORIZED);
         }

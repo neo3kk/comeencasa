@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     AlergenosUsuarioRepository alergenosUsuarioRepository;
 
+    @Autowired
+    ImageService imageService;
+
 
     @Override
     public List<Usuario> getAll() {
@@ -125,7 +128,11 @@ public class UserServiceImpl implements UserService {
             byte[] bytes = Base64.decodeBase64(avatar);
             Image image = new Image();
             image.setBytes(bytes);
-            image.setFileName(userId + "-" + new Timestamp(System.currentTimeMillis()).getTime() + ".png");
+            image.setFileName(userId + "profile.png");
+            Image i = imageService.getImageByFileName(userId+"profile.png");
+            if(i != null){
+                imageService.delete(i);
+            }
             imageRepository.save(image);
             return image.getFileName();
         }

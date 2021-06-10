@@ -24,7 +24,7 @@ public class ImageController {
         if (i != null) {
             return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

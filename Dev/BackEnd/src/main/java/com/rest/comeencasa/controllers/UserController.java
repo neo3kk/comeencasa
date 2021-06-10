@@ -3,12 +3,10 @@ package com.rest.comeencasa.controllers;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rest.comeencasa.entities.*;
-import com.rest.comeencasa.service.AlergenoService;
-import com.rest.comeencasa.service.LoginServiceOauth;
-import com.rest.comeencasa.service.TokenService;
-import com.rest.comeencasa.service.UserService;
+import com.rest.comeencasa.service.*;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +31,12 @@ public class UserController {
     @Autowired
     AlergenoService alergenoService;
 
+    @Autowired
+    ImageService imageService;
+
+    @Value("${server.domain}")
+    String serverDomain;
+
     @GetMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
@@ -55,9 +59,9 @@ public class UserController {
         if (email != null) {
             Usuario user = userService.getUserByEmail(email);
             Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
-            if (user.getCalle()==null||user.getCodigo_postal()==null||user.getNumero()==null||user.getLetra()==null){
+            if (user.getCalle() == null || user.getCodigo_postal() == null || user.getNumero() == null || user.getLetra() == null) {
                 return new ResponseEntity<>("false", HttpStatus.ACCEPTED);
-            }else{
+            } else {
                 return new ResponseEntity<>("true", HttpStatus.ACCEPTED);
             }
         } else {
@@ -97,7 +101,6 @@ public class UserController {
 
         user = userService.getUserByEmail(validate);
         Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
-        user.setEmail(map1.get("email"));
         user.setName(map1.get("name"));
         user.setLast_name(map1.get("last_name"));
         userService.save(user);
@@ -125,6 +128,25 @@ public class UserController {
 
     }
 
+    @PostMapping("/updateImage")
+    public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            Map<String, String> map = gson.fromJson(payload, HashMap.class);
+            String avatar = map.get("file");
+            String url = serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName());
+            user.setAvatarUrl(url);
+            userService.save(user);
+            return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("Algo ha fallado", HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
     @PostMapping("/profile/updateAlergenos")
     public ResponseEntity<String> updateAlergenos(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         String token = auth.replace("Bearer ", "");
@@ -137,7 +159,8 @@ public class UserController {
 
             List<AlergenosUsuario> alergenoList = new ArrayList<>();
 
-            Type Alergeno = new TypeToken<Alergeno>(){}.getType();
+            Type Alergeno = new TypeToken<Alergeno>() {
+            }.getType();
             Usuario user = userService.getUserByEmail(email);
             userService.deleteAlergenos(user);
             arrayList.forEach(al -> {
