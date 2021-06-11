@@ -20,7 +20,7 @@ public class Config implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080", "http://localhost:8081")
+                .allowedOrigins("http://localhost:8080", "http://comeencasa.duckdns.org")
                 .allowedMethods("PUT", "POST", "GET", "DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .allowedHeaders("*");
