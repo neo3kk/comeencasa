@@ -18,4 +18,6 @@ public interface PlatoService {
     Plato findPlatoByName(String nombre);
     void deletePlato(Plato plato);
     boolean exists(String nombre);
+
+    String processAvatar(String file, String nombre);
 }

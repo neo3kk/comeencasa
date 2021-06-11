@@ -31,7 +31,7 @@ public class Config implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns( "/", "/login", "/register", "/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios", "/upload/image", "/test", "/images/users/**");
+                .excludePathPatterns( "/", "/login", "/register", "/loginOauth", "/auth/oauth2callback/**", "/platos", "/tarifas", "/envios", "/upload/image", "/test", "/images/users/**", "/images/platos/**");
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/admin/**");
     }

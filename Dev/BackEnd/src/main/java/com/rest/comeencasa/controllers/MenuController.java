@@ -44,26 +44,30 @@ public class MenuController {
     @DeleteMapping("/deleteMenuPedido")
     public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        validate = userDetails.get("email");
-        user = userService.getUserByEmail(validate);
-
-        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
-        double idmenu = map.get("idmenu");
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        List<PedidoMenu> pedidoMenus = pedido.getPedidoMenus();
-        for (int i = 0; i < pedidoMenus.size(); i++) {
-            if ((double) pedidoMenus.get(i).getMenu().getId() == idmenu) {
-                pedidoMenus.remove(pedidoMenus.get(i));
-            }
+        if (userDetails.get("email") != null) {
+            validate = userDetails.get("email");
         }
-        pedido.setPedidoMenus(pedidoMenus);
-        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())- 12.00));
-        pedidoService.savePedido(pedido);
-        return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+            double idmenu = map.get("idmenu");
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            List<PedidoMenu> pedidoMenus = pedido.getPedidoMenus();
+            for (int i = 0; i < pedidoMenus.size(); i++) {
+                if ((double) pedidoMenus.get(i).getMenu().getId() == idmenu) {
+                    pedidoMenus.remove(pedidoMenus.get(i));
+                }
+            }
+            pedido.setPedidoMenus(pedidoMenus);
+            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final())- 12.00));
+            pedidoService.savePedido(pedido);
+            return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/getPlatosByMenuId")

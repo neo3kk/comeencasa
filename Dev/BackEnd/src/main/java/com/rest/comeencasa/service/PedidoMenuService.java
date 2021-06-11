@@ -6,7 +6,7 @@ import com.rest.comeencasa.entities.PedidoMenu;
 
 
 public interface PedidoMenuService {
-    void savePedidoMenu(PedidoMenu pedidoMenu);
+    PedidoMenu savePedidoMenu(PedidoMenu pedidoMenu);
     PedidoMenu getPedidoMenuByPedido(Pedido pedido);
     PedidoMenu findPedidoMenuByMenu(Menu menu);
 

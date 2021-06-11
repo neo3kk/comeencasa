@@ -195,7 +195,7 @@ export default {
   },
   methods: {
     async updateImage(){
-      let upadteImage = await this.$axios.post(this.url_server_api + '/updateImage', {
+      let upadteImage = await this.$axios.post(this.url_server_api + '/updateImageUser', {
         file: this.file,
       })
       if (upadteImage.request.status === 202) {

@@ -4,7 +4,23 @@
       <q-form @submit="onSubmit" class="q-gutter-md column">
         <div class="row justify-around col" >
           <div class="col-6">
-            Imagen
+            <q-img
+              :src="imgUrl"
+              spinner-color="white"
+              style="height: 140px; max-width: 150px"
+            />
+            <q-uploader
+              label="Selecciona una imatge de perfil"
+              fieldName="file"
+              auto-upload
+              class="q-mt-md"
+              @uploaded="uploaded"
+              method="POST"
+              accept=".jpg,.png,image/*"
+              :url="url_server_api+'/upload/image'"
+              multiple
+            />
+            <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage" v-if="id !=undefined"/>
           </div>
           <div class="q-gutter-y-md col-6 justify-around column">
             <div class="row col items-center justify-around">
@@ -27,7 +43,6 @@
               <q-btn-toggle v-model="visible" class="col" push glossy toggle-color="primary" :options="[
               {label: 'Visible', value: true},{label: 'Invisible', value: false}]"/>
             </div>
-
           </div>
         </div>
         <div class="col">
@@ -116,10 +131,12 @@
         publishableKey: SETTINGS.STRIPE_PUBLISHABLE_KEY,
         plato: '',
         id: '',
+        file: '',
         energia: 0,
         azucar: 0,
         grasas: 0,
-        proteinas: 0
+        proteinas: 0,
+        imgUrl: ''
 
       }
     },
@@ -132,6 +149,9 @@
       }
     },
     methods: {
+      uploaded(info) {
+        this.file = info.xhr.response;
+      },
       async onSubmit() {
         if (this.id === '' || this.id == undefined) {
           let crearPlato = await this.$axios.post(this.url_server_api + '/crearPlato', {
@@ -145,7 +165,8 @@
             azucar: this.azucar,
             grasas: this.grasas,
             proteinas: this.proteinas,
-            visible: this.visible.toString()
+            visible: this.visible.toString(),
+            file: this.file
           }).then(response => {
             if (response.data === 400) {
               this.showNotification("Ya existe un plato con el mismo nombre en la base de datos", "error", "negative")
@@ -173,6 +194,7 @@
             azucar: this.azucar,
             grasas: this.grasas,
             proteinas: this.proteinas,
+
           })
         }
 
@@ -189,6 +211,28 @@
           }
         }
       },
+      async updateImage(){
+        let upadteImage = await this.$axios.post(this.url_server_api + '/updateImagePlato', {
+          file: this.file,
+          idplato: this.id.toString()
+        })
+        if (upadteImage.request.status === 202) {
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'Imagen cambiada correctamente'
+          })
+          this.$router.go(0)
+        } else {
+          this.$q.notify({
+            color: 'red-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'Error al cambiar la imagen'
+          })
+        }
+      },
       async getPlatoById(id) {
         let menuFetch = await this.$axios.post(this.url_server_api + '/getPlatoById', {
           idplato: id
@@ -201,6 +245,7 @@
         })
 
         var plato = menuFetch.data;
+        console.log(plato)
         this.description = plato.description
         this.traduccion = plato.traduccion
         this.id = plato.id
@@ -212,6 +257,7 @@
         this.grasas = parseFloat(plato.grasas)
         this.azucar = parseFloat(plato.azucar)
         this.proteinas = parseFloat(plato.proteinas)
+        this.imgUrl = plato.imageUrl
       },
       añadirIngrediente(id) {
         var esta = false;

@@ -6,6 +6,7 @@ import com.rest.comeencasa.entities.*;
 
 import com.rest.comeencasa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,9 @@ public class PlatoController {
     @Autowired
     PlatoIngredienteService platoIngredienteService;
 
+    @Value("${server.domain}")
+    String serverDomain;
+
     @GetMapping("/platos")
     public ResponseEntity<String> getAll() {
         List<Plato> platos = platoService.findAll();
@@ -56,6 +60,7 @@ public class PlatoController {
         List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
     }
+
     @PostMapping("/setVisibility")
     public ResponseEntity<String> setVisibility(@RequestBody String payload) {
         Map<String, Double> map = gson.fromJson(payload, HashMap.class);
@@ -96,6 +101,20 @@ public class PlatoController {
 
     }
 
+    @PostMapping("/updateImagePlato")
+    public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String avatar = map.get("file");
+        String idplato = map.get("idplato");
+        Plato plato = platoService.findPlatoById(Long.valueOf(idplato));
+        String url = serverDomain + "/images/platos/" + platoService.processAvatar(avatar, plato.getNombre());
+        plato.setImageUrl(url);
+        platoService.save(plato);
+        return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
+
+
+    }
+
     @PostMapping("/crearPlato")
     public ResponseEntity<String> creatPlato(@RequestBody String payload) throws Exception {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
@@ -115,6 +134,7 @@ public class PlatoController {
             plato.setEnergia(map3.get("azucar"));
             plato.setGrasas(map3.get("grasas"));
             plato.setProteinas(map3.get("proteinas"));
+            plato.setImageUrl(serverDomain + "/images/platos/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
 
 
             platoService.save(plato);
@@ -155,7 +175,7 @@ public class PlatoController {
         Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
         List ingredientes = map2.get("ingredientes");
 
-        for (int i = 0; i <platoIngredientes.size() ; i++) {
+        for (int i = 0; i < platoIngredientes.size(); i++) {
             AtomicReference<Boolean> borrar = new AtomicReference<>(true);
             for (int j = 0; j < ingredientes.size(); j++) {
                 LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingredientes.get(j);

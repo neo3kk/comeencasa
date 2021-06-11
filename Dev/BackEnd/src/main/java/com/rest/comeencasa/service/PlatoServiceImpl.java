@@ -1,10 +1,13 @@
 package com.rest.comeencasa.service;
 
+import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Plato;
 
 import com.rest.comeencasa.entities.PlatoDTO;
 
+import com.rest.comeencasa.repos.ImageRepository;
 import com.rest.comeencasa.repos.PlatoRepository;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,12 @@ import java.util.Optional;
 public class PlatoServiceImpl implements PlatoService{
     @Autowired
     PlatoRepository platoRepository;
+
+    @Autowired
+    ImageService imageService;
+
+    @Autowired
+    ImageRepository imageRepository;
 
     @Override
     public List<PlatoDTO> createListplatoDTO(List<Plato> platos) {
@@ -41,6 +50,7 @@ public class PlatoServiceImpl implements PlatoService{
         platoDTO.setEnergia(plato.getEnergia());
         platoDTO.setGrasas(plato.getGrasas());
         platoDTO.setProteinas(plato.getProteinas());
+        platoDTO.setImageUrl(plato.getImageUrl());
         return platoDTO;
     }
 
@@ -65,6 +75,23 @@ public class PlatoServiceImpl implements PlatoService{
         } else {
             return false;
         }
+    }
+
+    @Override
+    public String processAvatar(String file, String nombre) {
+        if (file != null) {
+            byte[] bytes = Base64.decodeBase64(file);
+            Image image = new Image();
+            image.setBytes(bytes);
+            image.setFileName(nombre + "profile.png");
+            Image i = imageService.getImageByFileName(nombre+"profile.png");
+            if(i != null){
+                imageService.delete(i);
+            }
+            imageRepository.save(image);
+            return image.getFileName();
+        }
+        return null;
     }
 
     @Override

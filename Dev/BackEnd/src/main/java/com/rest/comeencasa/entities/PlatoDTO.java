@@ -14,6 +14,7 @@ public class PlatoDTO {
     private double azucar;
     private double grasas;
     private double proteinas;
+    private String imageUrl;
 
 
     public Long getId() {
@@ -102,6 +103,14 @@ public class PlatoDTO {
 
     public void setProteinas(double proteinas) {
         this.proteinas = proteinas;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
