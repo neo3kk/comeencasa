@@ -4,7 +4,17 @@
       <q-form @submit="onSubmit" class="q-gutter-md column">
         <div class="row justify-around col" >
           <div class="col-6">
-            Imagen
+            <q-uploader
+              label="Selecciona una imatge de perfil"
+              fieldName="file"
+              auto-upload
+              class="q-mt-md"
+              @uploaded="uploaded"
+              method="POST"
+              accept=".jpg,.png,image/*"
+              :url="url_server_api+'/upload/image'"
+              multiple
+            />
           </div>
           <div class="q-gutter-y-md col-6 justify-around column">
             <div class="row col items-center justify-around">
@@ -27,7 +37,6 @@
               <q-btn-toggle v-model="visible" class="col" push glossy toggle-color="primary" :options="[
               {label: 'Visible', value: true},{label: 'Invisible', value: false}]"/>
             </div>
-
           </div>
         </div>
         <div class="col">
@@ -116,6 +125,7 @@
         publishableKey: SETTINGS.STRIPE_PUBLISHABLE_KEY,
         plato: '',
         id: '',
+        file: '',
         energia: 0,
         azucar: 0,
         grasas: 0,
@@ -132,6 +142,9 @@
       }
     },
     methods: {
+      uploaded(info) {
+        this.file = info.xhr.response;
+      },
       async onSubmit() {
         if (this.id === '' || this.id == undefined) {
           let crearPlato = await this.$axios.post(this.url_server_api + '/crearPlato', {
@@ -145,7 +158,8 @@
             azucar: this.azucar,
             grasas: this.grasas,
             proteinas: this.proteinas,
-            visible: this.visible.toString()
+            visible: this.visible.toString(),
+            file: this.file
           }).then(response => {
             if (response.data === 400) {
               this.showNotification("Ya existe un plato con el mismo nombre en la base de datos", "error", "negative")

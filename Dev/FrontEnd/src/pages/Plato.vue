@@ -3,7 +3,11 @@
     <div>
       <div class="row justify-around col">
         <div class="col-6">
-          Imagen
+          <q-img
+            :src="plato.imageUrl"
+            spinner-color="white"
+            style="height: 140px; max-width: 150px"
+          />
         </div>
         <div class="q-gutter-y-md col-6 justify-around column">
           <div class="row col items-center justify-around">
