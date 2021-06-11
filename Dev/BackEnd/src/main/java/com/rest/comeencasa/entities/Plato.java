@@ -47,6 +47,9 @@ public class Plato implements Serializable {
     @Column(name = "visible", columnDefinition = "TEXT")
     boolean visible;
 
+    @Column(name ="imageUrl", columnDefinition = "TEXT")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "plato", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     List<PlatoMenu> platoMenu;
@@ -163,6 +166,14 @@ public class Plato implements Serializable {
 
     public void setProteinas(double proteinas) {
         this.proteinas = proteinas;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<PlatoMenu> getPlatoMenu() {
