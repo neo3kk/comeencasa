@@ -16,7 +16,7 @@
     <div class="q-pa-md row items-start q-gutter-md">
       <q-card class="my-card" v-for="plato in platos" key="plato"
               v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search) ">
-        <img :src="plato.image" class="comida">
+        <img :src="plato.imageUrl" class="comida">
 
         <q-card-section>
           <div class="text-h6">{{plato.nombre}}</div>
