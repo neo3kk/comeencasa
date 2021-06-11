@@ -11,7 +11,7 @@
         </q-icon>
         <div class="absolute-bottom text-subtitle1 text-center">
           <div class="q-pa-md row items-start q-gutter-md">
-            <p>Añade a tu pedido un menu en el que te incluye un entrante, el primer plato, el postre y la bebida!</p>
+            <p>Añade a tu pedido un menu en el que te incluye un entrante, el primer plato, el postre y la bebida! Tan solo a 12€!!!</p>
           </div>
           <div class="q-pa-md row items-start q-gutter-md">
             <q-btn color="white" text-color="black" label="Prepara tu menu!"
@@ -21,17 +21,14 @@
         </div>
       </q-img>
       <div class="q-pa-md row items-start q-gutter-md">
-        <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible">
-          <img :src="plato.image" class="comida">
+        <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible" style="max-height: 400px">
+          <img :src="plato.imageUrl" class="comida">
 
           <q-card-section>
             <div class="text-h6">{{ plato.nombre }}</div>
             <div class="text-subtitle2">{{ plato.description }}</div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            Ingredientes:
-          </q-card-section>
           <q-separator/>
 
           <q-card-actions align="right">
