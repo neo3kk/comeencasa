@@ -25,9 +25,6 @@ public class TokenInterceptor implements HandlerInterceptor {
             return true;
         }
         String auth = request.getHeader("Authorization");
-        System.out.println("hola");
-        System.out.println(auth);
-        System.out.println("hola");
         if (auth != null && !auth.isEmpty()) {
             String token = auth.replace("Bearer ", "");
             String validate = tokenService.verifyToken(token);

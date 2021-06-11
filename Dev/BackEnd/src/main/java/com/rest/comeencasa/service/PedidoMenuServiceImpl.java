@@ -13,13 +13,13 @@ public class PedidoMenuServiceImpl implements PedidoMenuService{
     @Autowired
     PedidoMenuRepository pedidoMenuRepository;
     @Override
-    public void savePedidoMenu(PedidoMenu pedidoMenu) {
-        pedidoMenuRepository.save(pedidoMenu);
+    public PedidoMenu savePedidoMenu(PedidoMenu pedidoMenu) {
+        return pedidoMenuRepository.save(pedidoMenu);
     }
 
     @Override
     public PedidoMenu getPedidoMenuByPedido(Pedido pedido) {
-       return pedidoMenuRepository.findPedidoMenuByPedido(pedido);
+       return pedidoMenuRepository.findPedidoMenuByPedido(pedido) ;
     }
 
     @Override

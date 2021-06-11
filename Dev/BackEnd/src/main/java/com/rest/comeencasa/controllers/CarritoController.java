@@ -37,25 +37,29 @@ public class CarritoController {
 
     @GetMapping("/getCarrito")
     public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth) throws Exception {
+        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
+        String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
         if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
+            validate = userDetails.get("email");
         }
-        Usuario user = userService.getUserByEmail(email);
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        if (pedido != null) {
-            List<PedidoPlato> pp = pedido.getPedidoPlato();
-            List<Plato> platos = new ArrayList<>();
-            pp.forEach(result -> {
-                platos.add(result.getPlato());
-            });
-            List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
-            return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            if (pedido != null) {
+                List<PedidoPlato> pp = pedido.getPedidoPlato();
+                List<Plato> platos = new ArrayList<>();
+                pp.forEach(result -> {
+                    platos.add(result.getPlato());
+                });
+                List<PlatoDTO> platoDTOS = platoService.createListplatoDTO(platos);
+                return new ResponseEntity<>(gson.toJson(platoDTOS), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/getCarritoById")
     public ResponseEntity<String> getCarritoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
@@ -76,93 +80,109 @@ public class CarritoController {
 
     @GetMapping("/getPedido")
     public ResponseEntity<String> getPedido(@RequestHeader("Authorization") String auth) throws Exception {
+        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
+        String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
         if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
+            validate = userDetails.get("email");
         }
-        Usuario user = userService.getUserByEmail(email);
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        if (pedido != null) {
-            return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            if (pedido != null) {
+                return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/getPedidoById")
     public ResponseEntity<String> getPedidoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
+        String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
         if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
+            validate = userDetails.get("email");
         }
-        Usuario user = userService.getUserByEmail(email);
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
-        if (pedido != null) {
-            return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, String> map = gson.fromJson(payload, HashMap.class);
+            Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
+            if (pedido != null) {
+                return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/getMenus")
     public ResponseEntity<String> getMenu(@RequestHeader("Authorization") String auth) throws Exception {
+        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
+        String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
         if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
+            validate = userDetails.get("email");
         }
-        Usuario user = userService.getUserByEmail(email);
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        List<Menu> menus = new ArrayList<>();
-        if (pedido != null) {
-            pedido.getPedidoMenus().forEach(pedidoMenu -> {
-                menus.add(pedidoMenu.getMenu());
-            });
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            List<Menu> menus = new ArrayList<>();
+            if (pedido != null) {
+                pedido.getPedidoMenus().forEach(pedidoMenu -> {
+                    menus.add(pedidoMenu.getMenu());
+                });
 
-            List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
-            return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
-        } else {
-            if (user !=null){
-                pedido = new Pedido();
-                pedido.setUsuario(user);
-                pedido.setEstado("Pendiente");
-                pedidoService.savePedido(pedido);
+                List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
+                return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
+            } else {
+                if (user !=null){
+                    pedido = new Pedido();
+                    pedido.setUsuario(user);
+                    pedido.setEstado("Pendiente");
+                    pedidoService.savePedido(pedido);
+                }
+                return new ResponseEntity<>(HttpStatus.CONTINUE);
             }
-            return new ResponseEntity<>(HttpStatus.CONTINUE);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/getMenusById")
     public ResponseEntity<String> getMenusById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String email = tokenService.verifyToken(token);
+        String validate = tokenService.verifyToken(token);
         Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
         if (userDetails.get("email") != null) {
-            email = userDetails.get("email");
+            validate = userDetails.get("email");
         }
-        Usuario user = userService.getUserByEmail(email);
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
-        List<Menu> menus = new ArrayList<>();
-        if (pedido != null) {
-            pedido.getPedidoMenus().forEach(pedidoMenu -> {
-                menus.add(pedidoMenu.getMenu());
-            });
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, String> map = gson.fromJson(payload, HashMap.class);
+            Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
+            List<Menu> menus = new ArrayList<>();
+            if (pedido != null) {
+                pedido.getPedidoMenus().forEach(pedidoMenu -> {
+                    menus.add(pedidoMenu.getMenu());
+                });
 
-            List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
-            return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
-        } else {
-            if (user !=null){
-                pedido = new Pedido();
-                pedido.setUsuario(user);
-                pedido.setEstado("Pendiente");
-                pedidoService.savePedido(pedido);
+                List<MenuDTO> menuDTOS = menuService.creatListMenu(menus);
+                return new ResponseEntity<>(gson.toJson(menuDTOS), HttpStatus.ACCEPTED);
+            } else {
+                if (user != null) {
+                    pedido = new Pedido();
+                    pedido.setUsuario(user);
+                    pedido.setEstado("Pendiente");
+                    pedidoService.savePedido(pedido);
+                }
+                return new ResponseEntity<>(HttpStatus.CONTINUE);
             }
-            return new ResponseEntity<>(HttpStatus.CONTINUE);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

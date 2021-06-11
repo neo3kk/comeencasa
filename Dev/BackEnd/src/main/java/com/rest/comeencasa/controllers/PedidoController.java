@@ -210,102 +210,113 @@ public class PedidoController {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-        user = userService.getUserByEmail(validate);
-        Map<String, List> map = gson.fromJson(payload, HashMap.class);
-        List platos = map.get("platos");
-        List<Plato> platosSeleccionados = new ArrayList<>();
-        Menu m = new Menu();
-        m.setFecha_menu(utils.getToday());
-        m.setNombre_menu("Mi nombre");
-        menuService.saveMenu(m);
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            validate = userDetails.get("email");
+        }
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, List> map = gson.fromJson(payload, HashMap.class);
+            List platos = map.get("platos");
+            List<Plato> platosSeleccionados = new ArrayList<>();
+            Menu m = new Menu();
+            m.setFecha_menu(utils.getToday());
+            m.setNombre_menu("Mi nombre");
+            menuService.saveMenu(m);
 
-        List<PlatoMenu> platmens = new ArrayList<>();
-        platos.forEach(plato -> {
-            System.out.println(plato);
-            LinkedTreeMap<Object, Object> t = (LinkedTreeMap) plato;
-            float idplato = Float.parseFloat(t.get("id").toString());
-            Plato platoMenu = platoService.findPlatoById((long) idplato);
-            platosSeleccionados.add(platoMenu);
-            PlatoMenu platmen = new PlatoMenu();
-            platmen.setPlato(platoMenu);
-            platmen.setRutina(m);
-            platmens.add(platmen);
-        });
-        m.setPlatoMenu(platmens);
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        PedidoMenu pm = new PedidoMenu();
-        pm.setMenu(m);
-        if (pedido != null) {
-            if (pedido.getPrecio_final()!=null){
-                pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
-            }else{
+            List<PlatoMenu> platmens = new ArrayList<>();
+            platos.forEach(plato -> {
+                System.out.println(plato);
+                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) plato;
+                float idplato = Float.parseFloat(t.get("id").toString());
+                Plato platoMenu = platoService.findPlatoById((long) idplato);
+                platosSeleccionados.add(platoMenu);
+                PlatoMenu platmen = new PlatoMenu();
+                platmen.setPlato(platoMenu);
+                platmen.setRutina(m);
+                platmens.add(platmen);
+            });
+            m.setPlatoMenu(platmens);
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            PedidoMenu pm = new PedidoMenu();
+            pm.setMenu(m);
+            if (pedido != null) {
+                if (pedido.getPrecio_final()!=null){
+                    pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
+                }else{
+                    pedido.setPrecio_final("12.00");
+                }
+            } else {
+                pedido = new Pedido();
+                pedido.setFecha_pedido(utils.getToday());
+                pedido.setUsuario(user);
+                pedido.setEstado("Pendiente");
                 pedido.setPrecio_final("12.00");
+
             }
-        } else {
-            pedido = new Pedido();
-            pedido.setFecha_pedido(utils.getToday());
-            pedido.setUsuario(user);
-            pedido.setEstado("Pendiente");
-            pedido.setPrecio_final("12.00");
+            pedidoService.savePedido(pedido);
+            pm.setPedido(pedido);
 
+            pm = pedidoMenuService.savePedidoMenu(pm);
+
+            List<PedidoMenu> pedidoMenus = m.getPedidoMenus();
+            if (pedidoMenus == null) {
+                pedidoMenus = new ArrayList<>();
+                pedidoMenus.add(pm);
+            } else {
+                pedidoMenus.add(pm);
+            }
+            m.setPedidoMenus(pedidoMenus);
+            menuService.saveMenu(m);
+
+
+            return new ResponseEntity<>("Se ha añadido el menu correctamente", HttpStatus.ACCEPTED);
         }
-        pedidoService.savePedido(pedido);
-        pm.setPedido(pedido);
-        pedidoMenuService.savePedidoMenu(pm);
-        pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
-
-        List<PedidoMenu> pedidoMenus = m.getPedidoMenus();
-        if (pedidoMenus == null) {
-            pedidoMenus = new ArrayList<>();
-            pedidoMenus.add(pm);
-        } else {
-            pedidoMenus.add(pm);
-        }
-        m.setPedidoMenus(pedidoMenus);
-        menuService.saveMenu(m);
-
-
-        return new ResponseEntity<>("Se ha añadido el menu correctamente", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/guardarMenu")
     public ResponseEntity<String> guardarMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
-
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-
-        user = userService.getUserByEmail(validate);
-        Map<String, List> map1 = gson.fromJson(payload, HashMap.class);
-        Map<String, String> map2 = gson.fromJson(payload, HashMap.class);
-        List platos = map1.get("platos");
-        String idmenu = map2.get("idmenu");
-        List<Plato> platosSeleccionados = new ArrayList<>();
-        Menu m = menuService.findById(Long.valueOf(idmenu));
-        PedidoMenu pm = pedidoMenuService.findPedidoMenuByMenu(m);
-
-        List<PlatoMenu> platmens = m.getPlatoMenu();
-        for (int i = 0; i < platos.size(); i++) {
-            System.out.println(platos.get(i));
-            LinkedTreeMap<Object, Object> t = (LinkedTreeMap) platos.get(i);
-            float idplato = Float.parseFloat(t.get("id").toString());
-            Plato platoMenu = platoService.findPlatoById((long) idplato);
-            platosSeleccionados.add(platoMenu);
-            PlatoMenu platmen = platmens.get(i);
-            platmen.setPlato(platoMenu);
-            platoMenuService.savePlatoMenu(platmen);
-            platmens.add(platmen);
-
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            validate = userDetails.get("email");
         }
-        m.setPlatoMenu(platmens);
-        menuService.saveMenu(m);
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        pm.setMenu(m);
-        pm.setPedido(pedido);
-        pedidoMenuService.savePedidoMenu(pm);
-        pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
+        if (validate != null) {
+            Map<String, List> map1 = gson.fromJson(payload, HashMap.class);
+            Map<String, String> map2 = gson.fromJson(payload, HashMap.class);
+            List platos = map1.get("platos");
+            String idmenu = map2.get("idmenu");
+            List<Plato> platosSeleccionados = new ArrayList<>();
+            Menu m = menuService.findById(Long.valueOf(idmenu));
+            PedidoMenu pm = pedidoMenuService.findPedidoMenuByMenu(m);
 
-        return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
+            List<PlatoMenu> platmens = m.getPlatoMenu();
+            for (int i = 0; i < platos.size(); i++) {
+                System.out.println(platos.get(i));
+                LinkedTreeMap<Object, Object> t = (LinkedTreeMap) platos.get(i);
+                float idplato = Float.parseFloat(t.get("id").toString());
+                Plato platoMenu = platoService.findPlatoById((long) idplato);
+                platosSeleccionados.add(platoMenu);
+                PlatoMenu platmen = platmens.get(i);
+                platmen.setPlato(platoMenu);
+                platoMenuService.savePlatoMenu(platmen);
+                platmens.add(platmen);
+
+            }
+            m.setPlatoMenu(platmens);
+            menuService.saveMenu(m);
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            pm.setMenu(m);
+            pm.setPedido(pedido);
+            pedidoMenuService.savePedidoMenu(pm);
+            pm = pedidoMenuService.getPedidoMenuByPedido(pedido);
+
+            return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
 
     }
 
@@ -314,23 +325,30 @@ public class PedidoController {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-
-        user = userService.getUserByEmail(validate);
-        Map<String, Double> map = gson.fromJson(payload, HashMap.class);
-        double idplato = map.get("idplato");
-        String precioquitar = "0.00";
-        Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
-        List<PedidoPlato> pedidoPlatos = pedido.getPedidoPlato();
-        for (int i = 0; i < pedidoPlatos.size(); i++) {
-            if ((double) pedidoPlatos.get(i).getPlato().getId() == idplato) {
-                precioquitar = pedidoPlatos.get(i).getPlato().getPrecio();
-                pedidoPlatos.remove(pedidoPlatos.get(i));
-            }
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            validate = userDetails.get("email");
         }
-        pedido.setPedidoPlato(pedidoPlatos);
-        pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) - Double.valueOf(precioquitar)));
-        pedidoService.savePedido(pedido);
-        return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, Double> map = gson.fromJson(payload, HashMap.class);
+            double idplato = map.get("idplato");
+            String precioquitar = "0.00";
+            Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
+            List<PedidoPlato> pedidoPlatos = pedido.getPedidoPlato();
+            for (int i = 0; i < pedidoPlatos.size(); i++) {
+                if ((double) pedidoPlatos.get(i).getPlato().getId() == idplato) {
+                    precioquitar = pedidoPlatos.get(i).getPlato().getPrecio();
+                    pedidoPlatos.remove(pedidoPlatos.get(i));
+                }
+            }
+            pedido.setPedidoPlato(pedidoPlatos);
+            pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) - Double.valueOf(precioquitar)));
+            pedidoService.savePedido(pedido);
+            return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 
@@ -339,14 +357,20 @@ public class PedidoController {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
-
-        user = userService.getUserByEmail(validate);
-        Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
-        pedido.setEstado("Pagado");
-        pedido.setUbicacion(user.getCodigo_postal() +" , Calle:"+ user.getCalle()+" numero "+user.getNumero()+" , letra "+user.getLetra());
-        pedidoService.savePedido(pedido);
-        return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
+        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
+        if (userDetails.get("email") != null) {
+            validate = userDetails.get("email");
+        }
+        if (validate != null) {
+            user = userService.getUserByEmail(validate);
+            Map<String, String> map = gson.fromJson(payload, HashMap.class);
+            Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
+            pedido.setEstado("Pagado");
+            pedido.setUbicacion(user.getCodigo_postal() +" , Calle:"+ user.getCalle()+" numero "+user.getNumero()+" , letra "+user.getLetra());
+            pedidoService.savePedido(pedido);
+            return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
     }
 
 }
