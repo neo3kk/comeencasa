@@ -128,7 +128,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/updateImage")
+    @PostMapping("/updateImageUser")
     public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         String token = auth.replace("Bearer ", "");
         String email = userService.validateUser(token);
@@ -143,7 +143,6 @@ public class UserController {
         } else {
             return new ResponseEntity<>("Algo ha fallado", HttpStatus.BAD_REQUEST);
         }
-
 
     }
 

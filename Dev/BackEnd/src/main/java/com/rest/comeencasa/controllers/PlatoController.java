@@ -60,6 +60,7 @@ public class PlatoController {
         List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
     }
+
     @PostMapping("/setVisibility")
     public ResponseEntity<String> setVisibility(@RequestBody String payload) {
         Map<String, Double> map = gson.fromJson(payload, HashMap.class);
@@ -97,6 +98,20 @@ public class PlatoController {
 
 
         return new ResponseEntity<>(gson.toJson(platoDTO), HttpStatus.ACCEPTED);
+
+    }
+
+    @PostMapping("/updateImagePlato")
+    public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        Map<String, String> map = gson.fromJson(payload, HashMap.class);
+        String avatar = map.get("file");
+        String idplato = map.get("idplato");
+        Plato plato = platoService.findPlatoById(Long.valueOf(idplato));
+        String url = serverDomain + "/images/platos/" + platoService.processAvatar(avatar, plato.getNombre());
+        plato.setImageUrl(url);
+        platoService.save(plato);
+        return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
+
 
     }
 
@@ -160,7 +175,7 @@ public class PlatoController {
         Map<String, List> map2 = gson.fromJson(payload, HashMap.class);
         List ingredientes = map2.get("ingredientes");
 
-        for (int i = 0; i <platoIngredientes.size() ; i++) {
+        for (int i = 0; i < platoIngredientes.size(); i++) {
             AtomicReference<Boolean> borrar = new AtomicReference<>(true);
             for (int j = 0; j < ingredientes.size(); j++) {
                 LinkedTreeMap<Object, Object> t = (LinkedTreeMap) ingredientes.get(j);
