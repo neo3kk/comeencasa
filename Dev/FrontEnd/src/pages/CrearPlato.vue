@@ -4,6 +4,11 @@
       <q-form @submit="onSubmit" class="q-gutter-md column">
         <div class="row justify-around col" >
           <div class="col-6">
+            <q-img
+              :src="imgUrl"
+              spinner-color="white"
+              style="height: 140px; max-width: 150px"
+            />
             <q-uploader
               label="Selecciona una imatge de perfil"
               fieldName="file"
@@ -15,6 +20,7 @@
               :url="url_server_api+'/upload/image'"
               multiple
             />
+            <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage" v-if="id !=undefined"/>
           </div>
           <div class="q-gutter-y-md col-6 justify-around column">
             <div class="row col items-center justify-around">
@@ -129,7 +135,8 @@
         energia: 0,
         azucar: 0,
         grasas: 0,
-        proteinas: 0
+        proteinas: 0,
+        imgUrl: ''
 
       }
     },
@@ -187,6 +194,7 @@
             azucar: this.azucar,
             grasas: this.grasas,
             proteinas: this.proteinas,
+
           })
         }
 
@@ -203,6 +211,28 @@
           }
         }
       },
+      async updateImage(){
+        let upadteImage = await this.$axios.post(this.url_server_api + '/updateImagePlato', {
+          file: this.file,
+          idplato: this.id.toString()
+        })
+        if (upadteImage.request.status === 202) {
+          this.$q.notify({
+            color: 'green-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'Imagen cambiada correctamente'
+          })
+          this.$router.go(0)
+        } else {
+          this.$q.notify({
+            color: 'red-4',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: 'Error al cambiar la imagen'
+          })
+        }
+      },
       async getPlatoById(id) {
         let menuFetch = await this.$axios.post(this.url_server_api + '/getPlatoById', {
           idplato: id
@@ -215,6 +245,7 @@
         })
 
         var plato = menuFetch.data;
+        console.log(plato)
         this.description = plato.description
         this.traduccion = plato.traduccion
         this.id = plato.id
@@ -226,6 +257,7 @@
         this.grasas = parseFloat(plato.grasas)
         this.azucar = parseFloat(plato.azucar)
         this.proteinas = parseFloat(plato.proteinas)
+        this.imgUrl = plato.imageUrl
       },
       añadirIngrediente(id) {
         var esta = false;
