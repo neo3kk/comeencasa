@@ -1,7 +1,5 @@
 package com.rest.comeencasa.controllers;
 
-import aj.org.objectweb.asm.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rest.comeencasa.entities.Alergeno;
@@ -10,19 +8,18 @@ import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.service.AlergenoService;
 import com.rest.comeencasa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,10 +40,18 @@ public class AlergenoController {
     private void postConstruct() throws IOException {
 
 
-       File resource = new ClassPathResource(
-                "alergenos.json").getFile();
+/*       File resource = new ClassPathResource(
+               "static/alergenos.json").getFile();
         String alergenos = new String(
-                Files.readAllBytes(resource.toPath()));
+                Files.readAllBytes(resource.toPath()));*/
+        String alergenos = "";
+        ClassPathResource cpr = new ClassPathResource("static/alergenos.json");
+        try {
+            byte[] bdata = FileCopyUtils.copyToByteArray(cpr.getInputStream());
+            alergenos = new String(bdata, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Type AlergenoListType = new TypeToken<ArrayList<Alergeno>>(){}.getType();
 
