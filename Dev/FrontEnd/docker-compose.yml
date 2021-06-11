@@ -11,3 +11,14 @@ services:
        - 8080
       ports:
        - 8080:8080
+   nodePWA:
+     image: node
+     container_name: nodePWA
+     working_dir: /app
+     command: npx quasar build -m pwa
+     volumes:
+       - ./:/app
+     expose:
+       - 8080
+     ports:
+       - 8080:8080

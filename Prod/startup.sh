@@ -3,7 +3,8 @@
 #BUILD PWA APPLICATION FROM LASTEST VERSION OF FRONTEND
 
 cd ../Dev/FrontEnd
-quasar build -m pwa
+sudo docker-compose run nodePWA
+#quasar build -m pwa
 cp -r  dist/pwa/** ../../Prod/htdocs
 
 cp ../BackEnd/target/comeencasa-1.jar ../../Prod/comeencasa.jar
