@@ -1,15 +1,9 @@
 #!/bin/bash
 
-#BUILD PWA APPLICATION FROM LASTEST VERSION OF FRONTEND
+sudo cp -r  ../Dev/FrontEnd/dist/pwa/** htdocs/
 
-cd ../Dev/FrontEnd
-sudo docker-compose run nodePWA
-#quasar build -m pwa
-cp -r  dist/pwa/** ../../Prod/htdocs
+cp ../Dev/BackEnd/target/comeencasa-1.jar comeencasa.jar
 
-cp ../BackEnd/target/comeencasa-1.jar ../../Prod/comeencasa.jar
-
-cd ../../Prod/
 
 #ONLY FOR  UPDATE  IMAGE DOCKER
 
@@ -17,7 +11,7 @@ cd ../../Prod/
 
 #sudo docker push neo3kk/comeencasa:latest
 
-sudo docker-compose up	
+sudo docker-compose up
 
 
 
