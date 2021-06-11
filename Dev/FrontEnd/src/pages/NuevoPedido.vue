@@ -20,8 +20,21 @@
 
         </div>
       </q-img>
+      <div class="row justify-around" style="background-color: green">
+        <div class="row items-center">
+          <p>Busca segun el tipo de plato:</p>
+          <q-select borderless v-model="tipo" :options="options" label="Tipo de plato" class="q-ml-lg"/>
+        </div>
+        <div class="row items-center">
+          <q-input v-model="search" filled type="search" hint="Search">
+            <template v-slot:append>
+              <q-icon name="search"/>
+            </template>
+          </q-input>
+        </div>
+      </div>
       <div class="q-pa-md row items-start q-gutter-md">
-        <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible" style="max-height: 400px">
+        <q-card class="my-card" v-for="plato in platos" key="plato.id" v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search) " style="max-height: 400px">
           <img :src="plato.imageUrl" class="comida">
 
           <q-card-section>
@@ -55,7 +68,10 @@
       return {
         lorem: "loremimpsum",
         platos: [],
-        url_server_api: SETTINGS.URL_SERVER_API
+        url_server_api: SETTINGS.URL_SERVER_API,
+        tipo: '',
+        options: ['', 'Entrante', 'Primero', 'Postre', 'Bebida'],
+        search: '',
       };
     },
     created() {
