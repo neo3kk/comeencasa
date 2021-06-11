@@ -18,8 +18,18 @@ public class ImageController {
     @Autowired
     ImageService imageService;
 
+    @GetMapping(value = "/images/platos/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImagePlato(@PathVariable String name) {
+        Image i = imageService.getImageByFileName(name);
+        if (i != null) {
+            return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping(value = "/images/users/{name}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable String name) {
+    public ResponseEntity<byte[]> getImageUser(@PathVariable String name) {
         Image i = imageService.getImageByFileName(name);
         if (i != null) {
             return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);

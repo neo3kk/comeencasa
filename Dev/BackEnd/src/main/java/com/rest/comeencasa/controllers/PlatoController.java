@@ -6,6 +6,7 @@ import com.rest.comeencasa.entities.*;
 
 import com.rest.comeencasa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,9 @@ public class PlatoController {
 
     @Autowired
     PlatoIngredienteService platoIngredienteService;
+
+    @Value("${server.domain}")
+    String serverDomain;
 
     @GetMapping("/platos")
     public ResponseEntity<String> getAll() {
@@ -115,6 +119,7 @@ public class PlatoController {
             plato.setEnergia(map3.get("azucar"));
             plato.setGrasas(map3.get("grasas"));
             plato.setProteinas(map3.get("proteinas"));
+            plato.setImageUrl(serverDomain + "/images/platos/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
 
 
             platoService.save(plato);
