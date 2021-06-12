@@ -29,7 +29,7 @@
       </q-item>
 
     </q-list>
-    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === undefined"></q-btn>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === undefined && (menus.length!=0 || platos.length!=0)"></q-btn>
   </q-page>
 </template>
 
