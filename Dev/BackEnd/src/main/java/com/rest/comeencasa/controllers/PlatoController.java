@@ -118,7 +118,6 @@ public class PlatoController {
     @PostMapping("/crearPlato")
     public ResponseEntity<String> creatPlato(@RequestBody String payload) throws Exception {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        System.out.println(platoService.findPlatoByName(map.get("nombre")));
         if (platoService.exists(map.get("nombre"))) {
             return new ResponseEntity<>("400", HttpStatus.OK);
         } else {
@@ -192,7 +191,6 @@ public class PlatoController {
             }
         }
 
-        System.out.println(platoIngredientes.size());
 
         plato.setNombre(map.get("nombre"));
         plato.setPrecio(map.get("precio"));

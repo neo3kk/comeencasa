@@ -53,7 +53,6 @@ public class IngredienteController {
     public ResponseEntity<String> deleteIngredient(@RequestBody String payload ){
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         String ingrediente = map.get("name");
-        System.out.println(ingrediente);
         boolean del = ingredienteService.delete(ingrediente);
         if(del){
             return new ResponseEntity<>(HttpStatus.ACCEPTED);

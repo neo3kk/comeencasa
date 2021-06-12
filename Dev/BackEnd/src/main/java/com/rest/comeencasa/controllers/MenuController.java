@@ -43,15 +43,10 @@ public class MenuController {
 
     @DeleteMapping("/deleteMenuPedido")
     public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+           Usuario user = userService.getUserByEmail(email);
             Map<String, Double> map = gson.fromJson(payload, HashMap.class);
             double idmenu = map.get("idmenu");
             Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");

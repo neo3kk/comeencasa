@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PedidoController {
@@ -47,23 +49,13 @@ public class PedidoController {
 
     @GetMapping("/pedidos")
     public ResponseEntity<String> getAllByUser(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            ;
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
-            }
-        }
-        if (user != null) {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             List<Pedido> pedidos = pedidoService.findByUsuario(user);
-            for (int i = 0; i <pedidos.size() ; i++) {
-                if (pedidos.get(i).getEstado().equals("Pendiente")){
+            for (int i = 0; i < pedidos.size(); i++) {
+                if (pedidos.get(i).getEstado().equals("Pendiente")) {
                     pedidos.remove(i);
                     i--;
                 }
@@ -83,45 +75,32 @@ public class PedidoController {
 
     @PutMapping("/pedidos")
     public ResponseEntity<String> createPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
-                Map<String, String> map = gson.fromJson(payload, HashMap.class);
-                String ubicacion = map.get("ubicacion");
-                String precio_final = map.get("precio_final");
-                String estado = map.get("estado");
-                Pedido pedido = new Pedido();
-                pedido.setFecha_pedido(utils.getToday());
-                pedido.setUbicacion(ubicacion);
-                pedido.setEstado(estado);
-                pedido.setUsuario(user);
-                pedido.setPrecio_final(precio_final);
-                pedidoService.makePedidoDto(pedido, user);
-                return new ResponseEntity<>("Se ha realizado el pedido correctamente", HttpStatus.ACCEPTED);
-            }
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            Map<String, String> map = gson.fromJson(payload, HashMap.class);
+            String ubicacion = map.get("ubicacion");
+            String precio_final = map.get("precio_final");
+            String estado = map.get("estado");
+            Pedido pedido = new Pedido();
+            pedido.setFecha_pedido(utils.getToday());
+            pedido.setUbicacion(ubicacion);
+            pedido.setEstado(estado);
+            pedido.setUsuario(user);
+            pedido.setPrecio_final(precio_final);
+            pedidoService.makePedidoDto(pedido, user);
+            return new ResponseEntity<>("Se ha realizado el pedido correctamente", HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/updatePedido")
     public ResponseEntity<String> updatePedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+                Usuario user = userService.getUserByEmail(email);
                 Map<String, String> map = gson.fromJson(payload, HashMap.class);
                 String precio_final = map.get("precio_final");
                 String estado = map.get("estado");
@@ -132,52 +111,37 @@ public class PedidoController {
                 pedidoService.updatePedido(pedido);
                 return new ResponseEntity<>("Se ha modificado el pedido correctamente", HttpStatus.ACCEPTED);
             }
-        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/getOpenPedido")
     public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+                Usuario user = userService.getUserByEmail(email);
                 String estado = "Pendiente";
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, estado);
                 PedidoDTO pedidoDTO = pedidoService.makePedidoDto(pedido, user);
                 return new ResponseEntity<>(gson.toJson(pedidoDTO), HttpStatus.ACCEPTED);
             }
-        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/addPlatoPedido")
     public ResponseEntity<String> addPlatoPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-        if (auth != null && !auth.isEmpty()) {
-            String token = auth.replace("Bearer ", "");
-            String validate = tokenService.verifyToken(token);
-            Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if (userDetails.get("email") != null) {
-                validate = userDetails.get("email");
-            }
-            if (validate != null) {
-                user = userService.getUserByEmail(validate);
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+               Usuario user = userService.getUserByEmail(email);
                 Map<String, String> map = gson.fromJson(payload, HashMap.class);
-                System.out.println(map);
                 String object = map.get("plato_id");
                 Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
                 if (pedido != null) {
                     Plato plato = platoService.findPlatoById(Long.valueOf(object));
-                    if (pedido.getPrecio_final() == null){
+                    if (pedido.getPrecio_final() == null) {
                         pedido.setPrecio_final(String.valueOf(plato.getPrecio()));
-                    }else{
+                    } else {
                         pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + Double.valueOf(plato.getPrecio())));
                     }
 
@@ -201,21 +165,15 @@ public class PedidoController {
                 }
                 return new ResponseEntity<>("Se ha añadido el plato correctamente", HttpStatus.ACCEPTED);
             }
-        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/añadirMenu")
     public ResponseEntity<String> añadirMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, List> map = gson.fromJson(payload, HashMap.class);
             List platos = map.get("platos");
             List<Plato> platosSeleccionados = new ArrayList<>();
@@ -241,9 +199,9 @@ public class PedidoController {
             PedidoMenu pm = new PedidoMenu();
             pm.setMenu(m);
             if (pedido != null) {
-                if (pedido.getPrecio_final()!=null){
+                if (pedido.getPrecio_final() != null) {
                     pedido.setPrecio_final(String.valueOf(Double.valueOf(pedido.getPrecio_final()) + 12));
-                }else{
+                } else {
                     pedido.setPrecio_final("12.00");
                 }
             } else {
@@ -277,14 +235,10 @@ public class PedidoController {
 
     @PostMapping("/guardarMenu")
     public ResponseEntity<String> guardarMenu(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, List> map1 = gson.fromJson(payload, HashMap.class);
             Map<String, String> map2 = gson.fromJson(payload, HashMap.class);
             List platos = map1.get("platos");
@@ -316,21 +270,16 @@ public class PedidoController {
 
             return new ResponseEntity<>("Se ha guardado el menu correctamente", HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
 
     @DeleteMapping("/deletePlatoPedido")
     public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, Double> map = gson.fromJson(payload, HashMap.class);
             double idplato = map.get("idplato");
             String precioquitar = "0.00";
@@ -354,23 +303,18 @@ public class PedidoController {
 
     @PostMapping("/setPedidoPagado")
     public ResponseEntity<String> setPedidoPagado(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("pedidoid")));
             pedido.setEstado("Pagado");
-            pedido.setUbicacion(user.getCodigo_postal() +" , Calle:"+ user.getCalle()+" numero "+user.getNumero()+" , letra "+user.getLetra());
+            pedido.setUbicacion(user.getCodigo_postal() + " , Calle:" + user.getCalle() + " numero " + user.getNumero() + " , letra " + user.getLetra());
             pedidoService.savePedido(pedido);
             return new ResponseEntity<>(gson.toJson(pedido.getPrecio_final()), HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }
