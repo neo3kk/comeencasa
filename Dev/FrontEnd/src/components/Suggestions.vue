@@ -3,7 +3,7 @@
     <div class="text-center sugerencias" >Sugerencias</div>
   <div class="q-pa-md row wrap items-center justify-center q-gutter-md">
 
-    <q-card class="my-card" v-for="plato in platos" :key="plato.id"
+    <q-card class="my-card" @click="$router.push( '/plato/'+plato.id)" v-for="plato in platos" :key="plato.id"
             v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search) ">
       <img :src="plato.imageUrl" class="comida">
       <q-card-section>

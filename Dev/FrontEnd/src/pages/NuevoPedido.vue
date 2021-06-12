@@ -43,7 +43,6 @@
         </q-card>
       </div>
     </q-page>
-
   </div>
 </template>
 
