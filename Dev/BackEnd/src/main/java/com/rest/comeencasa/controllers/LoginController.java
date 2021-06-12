@@ -97,7 +97,7 @@ public class LoginController {
         } else {
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("error", "Bad request");
-            restMap.put("message", "This user already exists");
+            restMap.put("message", "existe");
             restMap.put("statusCode", 400);
             return new ResponseEntity<>(gson.toJson(restMap), HttpStatus.BAD_REQUEST);
         }

@@ -17,10 +17,6 @@
                   <div class="text-subtitle2">{{ plato.description }}</div>
                 </div>
               </q-card-section>
-
-              <q-card-section class="q-pt-none">
-                Ingredientes:
-              </q-card-section>
               <q-separator/>
             </div>
             <div :id="plato.id" v-else>
@@ -29,10 +25,6 @@
                   <div class="text-h6">{{ plato.nombre }}</div>
                   <div class="text-subtitle2">{{ plato.description }}</div>
                 </div>
-              </q-card-section>
-
-              <q-card-section class="q-pt-none">
-                Ingredientes:
               </q-card-section>
               <q-separator/>
             </div>

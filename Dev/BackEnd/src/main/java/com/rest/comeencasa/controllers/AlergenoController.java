@@ -16,11 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,12 +36,6 @@ public class AlergenoController {
 
     @PostConstruct
     private void postConstruct() throws IOException {
-
-
-/*       File resource = new ClassPathResource(
-               "static/alergenos.json").getFile();
-        String alergenos = new String(
-                Files.readAllBytes(resource.toPath()));*/
         String alergenos = "";
         ClassPathResource cpr = new ClassPathResource("static/alergenos.json");
         try {

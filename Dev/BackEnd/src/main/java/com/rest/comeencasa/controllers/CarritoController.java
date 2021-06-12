@@ -37,15 +37,10 @@ public class CarritoController {
 
     @GetMapping("/getCarrito")
     public ResponseEntity<String> getOpenPedido(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
             if (pedido != null) {
                 List<PedidoPlato> pp = pedido.getPedidoPlato();
@@ -80,15 +75,10 @@ public class CarritoController {
 
     @GetMapping("/getPedido")
     public ResponseEntity<String> getPedido(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
             if (pedido != null) {
                 return new ResponseEntity<>(gson.toJson(pedido.getId()), HttpStatus.ACCEPTED);
@@ -100,15 +90,10 @@ public class CarritoController {
     }
     @PostMapping("/getPedidoById")
     public ResponseEntity<String> getPedidoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
             if (pedido != null) {
@@ -122,15 +107,10 @@ public class CarritoController {
 
     @GetMapping("/getMenus")
     public ResponseEntity<String> getMenu(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+           Usuario user = userService.getUserByEmail(email);
             Pedido pedido = pedidoService.findPedidoByUsuarioAndEstado(user, "Pendiente");
             List<Menu> menus = new ArrayList<>();
             if (pedido != null) {
@@ -154,15 +134,10 @@ public class CarritoController {
     }
     @PostMapping("/getMenusById")
     public ResponseEntity<String> getMenusById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
             List<Menu> menus = new ArrayList<>();

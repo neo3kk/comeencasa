@@ -12,7 +12,7 @@
 
             <q-card-section>
               <q-card-section class="column items-baseline content-center">
-              <q-img :src="user.img" alt="" width="200px" height="200px"/>
+                <q-img :src="user.img" alt="" width="200px" height="200px"/>
                 <q-uploader
                   label="Selecciona una imatge de perfil"
                   fieldName="file"
@@ -23,7 +23,8 @@
                   accept=".jpg,.png,image/*"
                   :url="url_server_api+'/upload/image'"
                 />
-              <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage" v-if="user.oauth==='false'"/>
+                <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage"
+                       v-if="user.oauth==='false'"/>
               </q-card-section>
               <div class="text-h6">{{ user.direccion }}</div>
               <q-input filled
@@ -193,7 +194,7 @@ export default {
     }
   },
   methods: {
-    async updateImage(){
+    async updateImage(n) {
       let upadteImage = await this.$axios.post(this.url_server_api + '/updateImageUser', {
         file: this.file,
       })
@@ -204,7 +205,7 @@ export default {
           icon: 'cloud_done',
           message: 'Imagen cambiada correctamente'
         })
-        this.$router.go(0)
+        this.$router.go(n)
       } else {
         this.$q.notify({
           color: 'red-4',
@@ -234,32 +235,28 @@ export default {
     async updateUser() {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        this.showNotification("Revisa tots els camps requerits", "error", "negative")
+        this.showNotification("Revisa los campos requeridos", "error", "negative")
       } else {
         let sendRegister = await this.$axios.post(this.url_server_api + '/updateUser', {
           name: this.name,
           last_name: this.last_name,
         }).then(response => {
-          this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
+          this.showNotification("Usuario actualizado correctamente", "check_circle_outline", "positive")
         }).catch(error => {
-          if (error.response.data.message == "google user") {
-            this.showNotification("Aquest correu ja s'ha registrat a través de Google", "error", "negative")
-          } else if (error.response.data.message == "local user") {
-            this.showNotification("Aquest correu ja s'ha registrat", "error", "negative")
-          } else {
-            this.showNotification("Ens falten algunes dades", "error", "negative")
+            this.showNotification("Algo ha fallado", "error", "negative")
           }
-
-        });
+        );
       }
-    },
+    }
+    ,
     async deleteUser() {
       let sendRegister = await this.$axios.get(this.url_server_api + '/deleteUser')
       if (sendRegister.data === "ok") {
         localStorage.clear()
         this.$router.push("/login");
       }
-    },
+    }
+    ,
     async updateUserDirection() {
       let sendRegister = await this.$axios.post(this.url_server_api + '/updateUserDirection', {
         calle: this.calle,
@@ -267,7 +264,8 @@ export default {
         numero: this.numero,
         letra: this.letra
       })
-    },
+    }
+    ,
     showNotification(content, icon, color) {
       this.$q.notify({
         message: content,
@@ -281,22 +279,24 @@ export default {
           }
         ]
       })
-    },
+    }
+    ,
     uploaded(info) {
       this.file = info.xhr.response;
-    },
+    }
+    ,
     mensaError(data) {
       if (data === 'name') {
-        if (!this.$v.name.name) return 'Introdueix el teu nom'
+        if (!this.$v.name.name) return 'Introduce tu nombre'
         if (!this.$v.name.required) return 'Campo requerido'
       }
       if (data === 'last_name') {
-        if (!this.$v.last_name.last_name) return 'Introdueix el teu cognom/s'
+        if (!this.$v.last_name.last_name) return 'Introduce tus apellidos'
         if (!this.$v.last_name.required) return 'Campo requerido'
       }
       if (data === 'new_password') {
         if (!this.$v.same_new_password) return 'La contraseña es demasiado corta'
-        if (!this.$v.same_new_password.required) return 'Camp requerit'
+        if (!this.$v.same_new_password.required) return 'Campo requerido'
       }
     }
   }

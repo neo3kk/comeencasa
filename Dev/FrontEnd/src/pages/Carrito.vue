@@ -1,9 +1,10 @@
 <template>
   <q-page>
     <q-list class="flex">
-      <q-item v-for="plato in platos" :key="plato.id" v-if="platos!=null" clickable class="column">
+      <q-item @click="$router.push( '/plato/'+plato.id)" v-for="plato in platos" :key="plato.id" v-if="platos!=null"
+              clickable class="column">
         <img :src="plato.imageUrl" width="150px">
-        <q-item-section @click="$router.push( '/plato/'+plato.id)">
+        <q-item-section>
           <q-item-label>{{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
         </q-item-section>
@@ -11,25 +12,31 @@
         <q-item-section>
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
-          <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" v-if="id === undefined"/></q-item-label>
+          <q-item-label caption>
+            <q-btn color="red" icon="delete" @click="deletePlato(plato.id)" label="Delete" v-if="id === undefined"/>
+          </q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
 
-      <q-item v-for="menu in menus" :key="menu.idmenu"  clickable @click="$router.push( '/profile/pedidomenu/'+menu.idmenu)" class="column">
+      <q-item v-for="menu in menus" :key="menu.idmenu" clickable
+              @click="$router.push( '/profile/pedidomenu/'+menu.idmenu)" class="column">
         <q-item-section>
-          <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
-          <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
+          <q-item-label>Nombre: {{ menu.nombre_menu }}</q-item-label>
+          <q-item-label caption><p v-for="pl in menu.platos" :key="pl.id"> {{ pl.nombre }}</p></q-item-label>
         </q-item-section>
         <q-item-section side top>
-          <q-item-label caption><q-btn color="red" icon="delete" label="Delete" @click="deleteMenu(menu.idmenu)" v-if="id === undefined"
-                                       ></q-btn></q-item-label>
+          <q-item-label caption>
+            <q-btn color="red" icon="delete" label="Delete" @click="deleteMenu(menu.idmenu)" v-if="id === undefined"
+            ></q-btn>
+          </q-item-label>
         </q-item-section>
         <q-separator spaced inset/>
       </q-item>
 
     </q-list>
-    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)" v-if="id === undefined && (menus.length!=0 || platos.length!=0)"></q-btn>
+    <q-btn color="indigo" label="Confirma tu Pedido" style="width: 100%" @click="replace(pedidoId)"
+           v-if="id === undefined && (menus.length!=0 || platos.length!=0)"></q-btn>
   </q-page>
 </template>
 
@@ -51,16 +58,16 @@ export default {
   async created() {
     this.id = this.$router.currentRoute.params.id
     if (this.id !== undefined) {
-      let pedidoId = await this.$axios.post(this.url_server_api + '/getPedidoById',{
+      let pedidoId = await this.$axios.post(this.url_server_api + '/getPedidoById', {
         id: this.id
       });
       this.pedidoId = pedidoId.data
-      let platosFetch = await this.$axios.post(this.url_server_api + '/getCarritoById',{
+      let platosFetch = await this.$axios.post(this.url_server_api + '/getCarritoById', {
         id: this.id
       });
       this.platos = platosFetch.data
       var mymenus = []
-      let menusFetch = await this.$axios.post(this.url_server_api + '/getMenusById',{
+      let menusFetch = await this.$axios.post(this.url_server_api + '/getMenusById', {
         id: this.id
       });
       for (const menu of menusFetch.data) {
@@ -74,7 +81,7 @@ export default {
         })
       }
       this.menus = mymenus
-    }else{
+    } else {
       await this.getPlatos();
       await this.getMenus();
       await this.getPedido();
@@ -105,45 +112,45 @@ export default {
       }
       this.menus = mymenus
     },
-    replace(pedidoId){
+    replace(pedidoId) {
       var boolean = false;
-      var name=0;
-      this.platos.forEach(plato=>{
-        if (!plato.visible){
+      var name = 0;
+      this.platos.forEach(plato => {
+        if (!plato.visible) {
           boolean = true;
           name = plato.nombre
         }
       })
-      this.menus.forEach(menu=>{
-        menu.platos.forEach(plato=>{
-          if (!plato.visible){
+      this.menus.forEach(menu => {
+        menu.platos.forEach(plato => {
+          if (!plato.visible) {
             boolean = true;
             name = plato.nombre
           }
         })
       })
-      if (!boolean){
-        this.$router.push( 'pago/'+pedidoId)
-      }else{
-        this.showNotification("El plato: "+name+" ya no se encuentra disponible en este momento, " +
+      if (!boolean) {
+        this.$router.push('pago/' + pedidoId)
+      } else {
+        this.showNotification("El plato: " + name + " ya no se encuentra disponible en este momento, " +
           "borrelo de su pedido elija otro producto, disculpe las molestias", "error", "negative")
       }
     },
-    async deletePlato(id){
+    async deletePlato(id) {
       for (let i = 0; i < this.platos.length; i++) {
-        if (this.platos[i].id === id){
+        if (this.platos[i].id === id) {
           this.platos.splice(i, 1)
         }
       }
-      let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlatoPedido' ,{data:{idplato: id}});
+      let platosMenuFetch = await this.$axios.delete(this.url_server_api + '/deletePlatoPedido', {data: {idplato: id}});
     },
-    async deleteMenu(id){
+    async deleteMenu(id) {
       for (let i = 0; i < this.menus.length; i++) {
-        if (this.menus[i].idmenu === id){
+        if (this.menus[i].idmenu === id) {
           this.menus.splice(i, 1)
         }
       }
-      let menusFetch = await this.$axios.delete(this.url_server_api + '/deleteMenuPedido' ,{data:{idmenu: id}});
+      let menusFetch = await this.$axios.delete(this.url_server_api + '/deleteMenuPedido', {data: {idmenu: id}});
     },
     showNotification(content, icon, color) {
       this.$q.notify({

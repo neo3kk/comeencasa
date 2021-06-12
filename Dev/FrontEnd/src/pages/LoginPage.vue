@@ -126,14 +126,13 @@ export default {
           password: this.password,
           file: this.file,
         }).then(response => {
-          this.showNotification("Registre completat, ja pots iniciar sessió", "check_circle_outline", "positive")
+          this.showNotification("Ok, ya puedes hacer login", "check_circle_outline", "positive")
         }).catch(error => {
-          if (error.response.data.message == "google user") {
-            this.showNotification("Aquest correu ja s'ha registrat a través de Google", "error", "negative")
-          } else if (error.response.data.message == "local user") {
-            this.showNotification("Aquest correu ja s'ha registrat", "error", "negative")
+          console.log(error.response.data)
+          if (error.response.data.message === "existe") {
+            this.showNotification("Este correo ya esta registrado", "error", "negative")
           } else {
-            this.showNotification("Ens falten algunes dades", "error", "negative")
+            this.showNotification("Algo ha fallado", "error", "negative")
           }
 
         });
@@ -145,12 +144,7 @@ export default {
         email: this.email,
         password: this.password,
       }).catch(error => {
-        if (error.response.data.message == "google user") {
-          this.showNotification("Usuari de Google. Fes el login amb el botó de Google, per favor", "error", "negative")
-        }
-        if (error.response.data.message == "No user") {
-          this.showNotification("Usuari i/o contrasenya incorrectes", "error", "negative")
-        }
+          this.showNotification("Usuario o contraseña incorrectos", "error", "negative")
       });
 
     },
@@ -173,11 +167,11 @@ export default {
     },
     mensaError(data) {
       if (data === 'name') {
-        if (!this.$v.name.name) return 'Introdueix el teu nom'
+        if (!this.$v.name.name) return 'Introduce tu nombre'
         if (!this.$v.name.required) return 'Campo requerido'
       }
       if (data === 'last_name') {
-        if (!this.$v.last_name.last_name) return 'Introdueix el teu cognom/s'
+        if (!this.$v.last_name.last_name) return 'Introduce tus apellidos'
         if (!this.$v.last_name.required) return 'Campo requerido'
       }
       if (data === 'email') {
@@ -185,8 +179,8 @@ export default {
         if (!this.$v.email.required) return 'Camp requerit'
       }
       if (data === 'password') {
-        if (!this.$v.email.email) return 'La contrasenya ha de ser mínim de 4 dígits'
-        if (!this.$v.email.required) return 'Camp requerit'
+        if (!this.$v.email.email) return 'La contraseña debe ser de almenos 4 caracteres'
+        if (!this.$v.email.required) return 'Campo requerido'
       }
     }
   }

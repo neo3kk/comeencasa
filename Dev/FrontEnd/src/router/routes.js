@@ -10,7 +10,7 @@ const routes = [
       {path: 'auth/oauth2callback/', component: () => import('pages/Status/Callback.vue'), meta: {requiresAuth: false}},
       {path: 'unauthorized', component: () => import('pages/Status/Unauthorized.vue'), meta: {requiresAuth: false}},
       {path: 'expired', component: () => import('pages/Status/Expired.vue'), meta: {requiresAuth: false}},
-      {path: 'plato/:id', component: () => import('pages/Plato.vue'), meta: {requiresAuth: true}},
+      {path: 'plato/:id', component: () => import('pages/Plato.vue'), meta: {requiresAuth: false}},
 
     ]
   },
