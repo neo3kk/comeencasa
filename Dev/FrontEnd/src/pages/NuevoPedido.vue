@@ -31,14 +31,12 @@
       </div>
       <div class="q-pa-md row items-start q-gutter-md">
         <q-card class="my-card" v-for="plato in platos" :key="plato.id"
-                v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search) "
-                style="max-height: 400px">
+                v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search)">
           <img :src="plato.imageUrl" class="comida">
-
           <q-card-section>
             <div class="text-h6">{{ plato.nombre }}</div>
             <div class="text-subtitle2">{{ plato.description }}</div>
-            <q-separator></q-separator>
+            <div class="text-subtitle1">{{ plato.precio }}€</div>
             <q-btn flat color="secondary" @click="añadirPlato(plato.id)">Añadir Plato</q-btn>
             <q-btn flat color="primary" @click="$router.push( '/plato/'+plato.id)">Mas información</q-btn>
           </q-card-section>
