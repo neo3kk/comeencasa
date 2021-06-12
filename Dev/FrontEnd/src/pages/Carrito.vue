@@ -1,6 +1,5 @@
 <template>
   <q-page class="flex flex-center">
-
     <q-list>
       Tu lista de productos
       <q-item v-for="plato in platos" key="plato.id" v-if="platos!=null" clickable>
