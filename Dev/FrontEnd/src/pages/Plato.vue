@@ -47,10 +47,6 @@ export default {
                 value: {
                   show: true
                 }
-                /*total: {
-                  showAlways: true,
-                  show: true
-                }*/
               }
             }
           }
