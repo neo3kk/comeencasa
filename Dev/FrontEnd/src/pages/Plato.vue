@@ -14,7 +14,6 @@
         <apexchart type="donut" :options="chartOptions" :series="series"></apexchart>
       </div>
     </q-card>
-
   </q-page>
 </template>
 

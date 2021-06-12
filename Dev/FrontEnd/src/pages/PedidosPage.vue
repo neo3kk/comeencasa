@@ -1,20 +1,13 @@
 <template>
-  <q-page class="flex flex-center">
-
-    <q-list>
-      Pedidos
-      <q-item v-for="pedido in pedidos" key="pedido.id">
-        <q-item-section @click="$router.push( 'pedido/'+pedido.id)">
-          <q-item-label>Orden de pedido {{ pedido.id }}</q-item-label>
-          <q-item-label caption>Precio total: {{ pedido.precio_final }}€</q-item-label>
-        </q-item-section>
-
-        <q-item-section side top>
-          <q-item-label caption>{{ pedido.fecha_pedido }}</q-item-label>
-        </q-item-section>
+  <q-page class="q-pa-md">
+      <q-card v-for="pedido in pedidos" :key="pedido.id" class="my-card">
+        <q-card-section-section @click="$router.push( 'pedido/'+pedido.id)">
+            <div class="text-h4">Orden de pedido {{ pedido.id }}</div>
+            <div class="text-h6">{{ pedido.fecha_pedido }}</div>
+            <div class="text-h6">Precio total: {{ pedido.precio_final }}€</div>
+        </q-card-section-section>
         <q-separator spaced inset/>
-      </q-item>
-    </q-list>
+      </q-card>
   </q-page>
 </template>
 

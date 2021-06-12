@@ -8,7 +8,6 @@
           label="Datos personales"
           :caption="user.name"
         >
-
           <q-card>
 
             <q-card-section>

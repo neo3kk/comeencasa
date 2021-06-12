@@ -158,6 +158,7 @@
           var pagado = await this.$axios.post(this.url_server_api + '/setPedidoPagado', {
             pedidoid: this.id
           });
+          await this.$router.push("/");
         } else {
           this.showNotification("Ha habido un error con el pago, pruebe mas tarde", "error", "negative")
         }
