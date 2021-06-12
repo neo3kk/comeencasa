@@ -182,7 +182,6 @@ export default {
           this.azucar = Math.abs(this.azucar - parseFloat(this.ingredientesSeleccionados[i].azucar))
           this.grasas = Math.abs(this.grasas - parseFloat(this.ingredientesSeleccionados[i].grasas))
           this.proteinas = Math.abs(this.proteinas - parseFloat(this.ingredientesSeleccionados[i].proteinas))
-          console.log(this.proteinas)
           this.ingredientesSeleccionados.splice(i, 1)
         }
       }
