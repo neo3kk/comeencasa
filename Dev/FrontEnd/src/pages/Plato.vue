@@ -1,8 +1,8 @@
 <template>
   <q-page class="q-pa-md">
-    <q-card class="my-card justify-center flex column items-center">
+    <q-card class="my-card justify-center flex items-center">
       <img :src="plato.imageUrl" class="comida" spinner-color="white"
-      style="height: 140px; max-width: 150px""/>
+      style="max-width: 25%"/>
       <q-card-section>
         <div class="text-h4">Nombre: {{ plato.nombre }}</div>
         <div class="text-subtitle1">Descripcion: {{ plato.description }}</div>
