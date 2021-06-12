@@ -1,9 +1,9 @@
 {
   "name": "comeencasa",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
-  "author": "Jlopez <neo3kk@gmail.com>",
+  "description": "Comeencasa",
+  "productName": "Comeencasa",
+  "author": "Comeencasa",
   "private": true,
   "scripts": {
     "dev": "node_modules/.bin/quasar dev",
