@@ -1,11 +1,11 @@
 <template>
   <q-page class="q-pa-md">
       <q-card v-for="pedido in pedidos" :key="pedido.id" class="my-card">
-        <q-card-section-section @click="$router.push( 'pedido/'+pedido.id)">
+        <q-card-section @click="$router.push( 'pedido/'+pedido.id)">
             <div class="text-h4">Orden de pedido {{ pedido.id }}</div>
             <div class="text-h6">{{ pedido.fecha_pedido }}</div>
             <div class="text-h6">Precio total: {{ pedido.precio_final }}€</div>
-        </q-card-section-section>
+        </q-card-section>
         <q-separator spaced inset/>
       </q-card>
   </q-page>
