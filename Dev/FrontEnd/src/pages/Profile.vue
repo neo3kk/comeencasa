@@ -193,7 +193,7 @@ export default {
     }
   },
   methods: {
-    async updateImage(){
+    async updateImage(n){
       let upadteImage = await this.$axios.post(this.url_server_api + '/updateImageUser', {
         file: this.file,
       })
@@ -204,7 +204,7 @@ export default {
           icon: 'cloud_done',
           message: 'Imagen cambiada correctamente'
         })
-        this.$router.go(0)
+        this.$router.go(n)
       } else {
         this.$q.notify({
           color: 'red-4',
