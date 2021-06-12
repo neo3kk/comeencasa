@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-list class="flex">
+    <q-list class="flex text-center justify-around">
       <q-item @click="$router.push( '/plato/'+plato.id)" v-for="plato in platos" :key="plato.id" v-if="platos!=null"
               clickable class="column">
         <img :src="plato.imageUrl" width="150px">

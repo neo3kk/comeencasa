@@ -1,6 +1,6 @@
 <template>
-  <div id="payment-form" class="q-pa-md">
 
+  <div id="payment-form" class="q-pa-md">
     <div class="q-mt-md q-mb-md text-negative" v-if="submissionError">
       <div id="card-errors" role="alert">{{ submissionError }}</div>
     </div>
@@ -55,7 +55,7 @@
     <q-btn
       unelevated
       color="accent"
-      label="Make Payment"
+      :label="'PAGAR '+precio_final+'€'"
       :loading="loading"
       @click="seguro = true"/>
     <q-dialog v-model="seguro" persistent>
