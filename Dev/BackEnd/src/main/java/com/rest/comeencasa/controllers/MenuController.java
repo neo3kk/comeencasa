@@ -42,7 +42,7 @@ public class MenuController {
     LoginServiceOauth loginServiceOauth;
 
     @DeleteMapping("/deleteMenuPedido")
-    public ResponseEntity<String> deletePlato(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+    public ResponseEntity<String> deleteMenuPedido(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
         Usuario user = null;
         String token = auth.replace("Bearer ", "");
         String validate = tokenService.verifyToken(token);
@@ -71,7 +71,7 @@ public class MenuController {
     }
 
     @PostMapping("/getPlatosByMenuId")
-    public ResponseEntity<String> menuById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+    public ResponseEntity<String> getPlatosByMenuId(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
 
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         long idmenu = Long.parseLong(map.get("idmenu"));
