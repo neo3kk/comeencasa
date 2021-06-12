@@ -1,14 +1,14 @@
 <template>
-  <q-page class="flex flex-center">
-    <q-list>
-      Tu lista de productos
-      <q-item v-for="plato in platos" key="plato.id" v-if="platos!=null" clickable>
+  <q-page>
+    <q-list class="flex">
+      <q-item v-for="plato in platos" :key="plato.id" v-if="platos!=null" clickable class="column">
+        <img :src="plato.imageUrl" width="150px">
         <q-item-section @click="$router.push( '/plato/'+plato.id)">
-          <q-item-label>Nombre: {{ plato.nombre }}</q-item-label>
+          <q-item-label>{{ plato.nombre }}</q-item-label>
           <q-item-label caption>{{ plato.description }}</q-item-label>
         </q-item-section>
-
-        <q-item-section side top>
+        <q-separator spaced inset/>
+        <q-item-section>
           <q-item-label caption>Precio total: {{ plato.precio }}€</q-item-label>
           <q-item-label caption>{{ plato.tipo_de_plato }}</q-item-label>
           <q-item-label caption><q-btn color="red" icon="delete" @click="deletePlato(plato.id)"label="Delete" v-if="id === undefined"/></q-item-label>
@@ -16,7 +16,7 @@
         <q-separator spaced inset/>
       </q-item>
 
-      <q-item v-for="menu in menus" key="menu.idmenu"  clickable @click="$router.push( '/profile/pedidomenu/'+menu.idmenu)">
+      <q-item v-for="menu in menus" :key="menu.idmenu"  clickable @click="$router.push( '/profile/pedidomenu/'+menu.idmenu)" class="column">
         <q-item-section>
           <q-item-label>Nombre: {{ menu.nombre_menu}}</q-item-label>
           <q-item-label caption><p v-for="plato in menu.platos"> {{ plato.nombre }}</p></q-item-label>
@@ -72,7 +72,6 @@ export default {
           'nombre_menu': menu.nombre_menu,
           'platos': platosMenuFetch.data
         })
-        console.log(platosMenuFetch.data)
       }
       this.menus = mymenus
     }else{
@@ -103,7 +102,6 @@ export default {
           'nombre_menu': menu.nombre_menu,
           'platos': platosMenuFetch.data
         })
-        console.log(platosMenuFetch.data)
       }
       this.menus = mymenus
     },
@@ -111,7 +109,6 @@ export default {
       var boolean = false;
       var name=0;
       this.platos.forEach(plato=>{
-        console.log(plato.visible)
         if (!plato.visible){
           boolean = true;
           name = plato.nombre
@@ -119,7 +116,6 @@ export default {
       })
       this.menus.forEach(menu=>{
         menu.platos.forEach(plato=>{
-          console.log(plato.visible)
           if (!plato.visible){
             boolean = true;
             name = plato.nombre
@@ -166,7 +162,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
