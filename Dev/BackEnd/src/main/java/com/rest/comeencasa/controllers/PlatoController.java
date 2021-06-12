@@ -54,13 +54,6 @@ public class PlatoController {
         return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/platosByUsuario")
-    public ResponseEntity<String> getAllByUser() {
-        List<Plato> platos = platoService.findAll();
-        List<PlatoDTO> pedidoDTOList = platoService.createListplatoDTO(platos);
-        return new ResponseEntity<>(gson.toJson(pedidoDTOList), HttpStatus.ACCEPTED);
-    }
-
     @PostMapping("/setVisibility")
     public ResponseEntity<String> setVisibility(@RequestBody String payload) {
         Map<String, Double> map = gson.fromJson(payload, HashMap.class);
