@@ -14,15 +14,12 @@
       </div>
     </div>
     <div class="q-pa-md row wrap items-center justify-center q-gutter-md">
-      <q-card class="my-card" v-for="plato in platos" :key="plato.id"
-              v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search) ">
+      <q-card class="my-card" @click="$router.push( '/plato/'+plato.id)" v-for="plato in platos" :key="plato.id"
+              v-if="plato.visible && plato.tipo_de_plato.toLowerCase().includes(tipo.toLowerCase()) && plato.nombre.includes(search)">
         <img :src="plato.imageUrl" class="comida">
         <q-card-section>
           <div class="text-h6">{{plato.nombre}}</div>
           <div class="text-subtitle2">{{plato.description}}</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          Ingredientes:
         </q-card-section>
       </q-card>
     </div>
