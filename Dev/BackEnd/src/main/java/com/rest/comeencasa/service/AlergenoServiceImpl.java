@@ -87,7 +87,6 @@ public class AlergenoServiceImpl implements AlergenoService {
         alergenoList.forEach(alergenosUsuario -> {
             alergenos.add(alergenosUsuario.getAlergeno());
         });
-
         return alergenos;
     }
 }

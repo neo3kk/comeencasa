@@ -31,7 +31,7 @@ public class TokenInterceptor implements HandlerInterceptor {
             Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
             if(userDetails.get("email") != null){
              validate = userDetails.get("email");
-            };
+            }
             if (validate==null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
