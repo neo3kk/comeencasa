@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated style="background-color: green;">
+    <q-header elevated style="background-color: green">
       <q-toolbar>
         <q-btn
           flat
@@ -53,7 +53,7 @@
                       <q-btn round color="deep-orange" icon="account_circle" @click="$router.push('/profile')">
                         <q-tooltip content-class="bg-accent">Mi casa</q-tooltip>
                       </q-btn>
-                      <q-btn v-show="user.admin" round color="negative" icon="account_circle"
+                      <q-btn v-show="user.admin" round color="negative" icon="shield"
                              @click="$router.push('/admin')">
                         <q-tooltip content-class="bg-accent">Admin</q-tooltip>
                       </q-btn>
@@ -65,8 +65,6 @@
             </q-menu>
           </q-btn>
         </div>
-        <!--        <UserInfo v-show=showUserInfo @user="user = $event"></UserInfo>-->
-
       </q-toolbar>
 
     </q-header>
@@ -121,16 +119,16 @@ const linksData = [
     link: '/alergenos'
   },
   {
-    title: 'Mi cuenta',
-    caption: 'Entra a tu cuenta y disfruta de la comida',
-    icon: 'account_circle',
-    link: "/login"
-  },
-  {
     title: 'Nuevo Pedido',
     caption: 'Pide ya tu comida y te lo llevamos lo antes posible',
     icon: 'add_circle',
     link: "/profile/nuevopedido"
+  },
+  {
+    title: 'Mi cuenta',
+    caption: 'Entra a tu cuenta y disfruta de la comida',
+    icon: 'account_circle',
+    link: "/login"
   }
 ];
 

@@ -1,7 +1,7 @@
 <template>
   <q-page class="text-center justify-center">
-    <h3>Benvingut {{ user.name }}</h3>
-    <div class="q-pa-md q-gutter-md fit flex wrap justify-center items-center content-center">
+    <h3>Bienvenido {{ user.email }}</h3>
+    <div class="q-pa-md q-gutter-md flex wrap justify-center items-baseline">
 
       <q-card class="my-card">
         <q-card-section class="bg-primary text-white">
@@ -28,7 +28,7 @@
           <q-btn flat @click="platosInvisible = !platosInvisible">Edita tus platos</q-btn>
         </q-card-actions>
       </q-card>
-      <q-card class="my-card">
+<!--      <q-card class="my-card">
         <q-card-section class="bg-green text-white">
           <div class="text-h6">Usuarios</div>
           <div class="text-subtitle2">Administra los usuarios</div>
@@ -37,7 +37,7 @@
         <q-card-actions align="around">
           <q-btn flat @click="$router.push('/admin/usersadmin')">Entra</q-btn>
         </q-card-actions>
-      </q-card>
+      </q-card>-->
     </div>
     <div v-if="platosInvisible">
       <div class="text-h3">Clicka sobre el plato a modificar</div>

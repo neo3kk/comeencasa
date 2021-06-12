@@ -198,18 +198,6 @@ export default {
       });
     },
 
-
-    /*    async reloadIdb() {
-          for (const ing of this.ing) {
-            let comp = await this.comprovarElementIDXDB(ing.name, ing.energia)
-            if (comp.result) {
-              console.log("element a la llista")
-            } else {
-              await this.comprovaKcal(ing.name, ing.traduccion);
-            }
-          }
-        },*/
-
     async comprovarElementIDXDB(ingrediente) {
       return new Promise((resolve, reject) => {
         let trans = this.db.transaction(["Llista"], "readwrite");
@@ -276,7 +264,6 @@ export default {
       let caloriesJson = await calories.json();
       return caloriesJson;
     },
-
 
     onReset() {
       this.name = null
