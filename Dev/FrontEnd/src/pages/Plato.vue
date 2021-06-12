@@ -42,15 +42,21 @@ export default {
             donut: {
               labels: {
                 show: true,
-                total: {
-                  showAlways: true,
+                name: {
+                  show: true
+                },
+                value: {
                   show: true
                 }
+                /*total: {
+                  showAlways: true,
+                  show: true
+                }*/
               }
             }
           }
         },
-        labels: ["Azucar", "Energia", "Grasas", "Proteinas"],
+        labels: ["Azucar g", "Energia kcal", "Grasas g", "Proteinas g"],
         responsive: [{
           breakpoint: 480,
           options: {
