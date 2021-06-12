@@ -37,7 +37,7 @@
   import VueApexCharts from 'vue-apexcharts'
 
   export default {
-    props: ['id'],
+    //props: ['id'], Se elimina esta variable, daba errores en el frontEnd
     name: "Plato.vue",
     components: {
       apexchart: VueApexCharts,
