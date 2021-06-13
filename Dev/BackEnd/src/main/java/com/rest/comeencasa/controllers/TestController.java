@@ -38,7 +38,6 @@ public class TestController {
     public ResponseEntity<String> test(@RequestHeader("Authorization") String auth) throws Exception {
         String token = auth.replace("Bearer ", "");
         String email = userService.validateUser(token);
-
         System.out.println(email);
         if (email != null) {
             return new ResponseEntity<>(email, HttpStatus.OK);

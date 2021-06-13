@@ -15,7 +15,7 @@ public class IngredienteServiceImpl implements IngredienteService {
     IngredienteRepository ingredienteRepository;
 
     @Override
-    public boolean addIngrediente(String traduccion, String ingrediente, double energy, double sugar, double fsat, double prot ) {
+    public boolean addIngrediente(String traduccion, String ingrediente, double energy, double sugar, double fsat, double prot) {
         Ingrediente in = buscarIngrediente(ingrediente);
         if (in == null) {
             in = new Ingrediente();

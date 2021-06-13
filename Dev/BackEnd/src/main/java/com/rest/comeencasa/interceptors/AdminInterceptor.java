@@ -21,21 +21,18 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
-        System.out.println("ADMININTERCEPTOR");
         String auth = request.getHeader("Authorization");
-        System.out.println(auth);
         if (auth != null && !auth.isEmpty()) {
             String token = auth.replace("Bearer ", "");
             String validate = tokenService.verifyToken(token);
             Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-            if(userDetails.get("email") != null){
-             validate = userDetails.get("email");
-            };
-            if (validate==null) {
+            if (userDetails.get("email") != null) {
+                validate = userDetails.get("email");
+            }
+            if (validate == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
 
@@ -44,15 +41,13 @@ public class AdminInterceptor implements HandlerInterceptor {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return false;
             } else {
-                System.out.println("VALIDATE="+validate );
-                if(validate.equals("admin@gmail.com")){
+                if (validate.equals("admin@comeencasa.com")) {
                     response.setStatus(HttpServletResponse.SC_OK);
                     return true;
-                }else{
+                } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return false;
                 }
-
             }
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -68,7 +68,7 @@ public class LoginServiceOauthImpl implements com.rest.comeencasa.service.LoginS
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost post = new HttpPost(url.toString());
         List<NameValuePair> nvps = new ArrayList<>();
-        for(String s: parameters.keySet()) {
+        for (String s : parameters.keySet()) {
             nvps.add(new BasicNameValuePair(s, parameters.get(s)));
         }
         post.setEntity(new UrlEncodedFormEntity(nvps));

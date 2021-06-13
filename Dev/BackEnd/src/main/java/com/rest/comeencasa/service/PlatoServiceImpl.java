@@ -2,9 +2,7 @@ package com.rest.comeencasa.service;
 
 import com.rest.comeencasa.entities.Image;
 import com.rest.comeencasa.entities.Plato;
-
 import com.rest.comeencasa.entities.PlatoDTO;
-
 import com.rest.comeencasa.repos.ImageRepository;
 import com.rest.comeencasa.repos.PlatoRepository;
 import org.apache.commons.codec.binary.Base64;
@@ -13,10 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class PlatoServiceImpl implements PlatoService{
+public class PlatoServiceImpl implements PlatoService {
     @Autowired
     PlatoRepository platoRepository;
 
@@ -60,7 +57,7 @@ public class PlatoServiceImpl implements PlatoService{
     }
 
     @Override
-    public void save(Plato plato){
+    public void save(Plato plato) {
         platoRepository.save(plato);
     }
 
@@ -84,8 +81,8 @@ public class PlatoServiceImpl implements PlatoService{
             Image image = new Image();
             image.setBytes(bytes);
             image.setFileName(nombre + "profile.png");
-            Image i = imageService.getImageByFileName(nombre+"profile.png");
-            if(i != null){
+            Image i = imageService.getImageByFileName(nombre + "profile.png");
+            if (i != null) {
                 imageService.delete(i);
             }
             imageRepository.save(image);
@@ -102,7 +99,7 @@ public class PlatoServiceImpl implements PlatoService{
     @Override
     public Plato findPlatoById(Long id) {
         Plato plato = platoRepository.findAllById(id);
-        if (plato!=null){
+        if (plato != null) {
             return plato;
         }
         return null;

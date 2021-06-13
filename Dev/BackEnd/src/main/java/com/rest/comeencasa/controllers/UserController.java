@@ -39,15 +39,10 @@ public class UserController {
 
     @GetMapping("/deleteUser")
     public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             userService.deleteUser(user);
             return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
         } else {
@@ -59,15 +54,10 @@ public class UserController {
 
     @GetMapping("/userHaveDirection")
     public ResponseEntity<String> userHaveDirection(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> myMap = loginServiceOauth.getUserDetails(token);
             if (user.getCalle() == null || user.getCodigo_postal() == null || user.getNumero() == null || user.getLetra() == null) {
                 return new ResponseEntity<>("false", HttpStatus.ACCEPTED);
@@ -83,15 +73,10 @@ public class UserController {
 
     @GetMapping("/getUserDetails")
     public ResponseEntity<String> getUserDetails(@RequestHeader("Authorization") String auth) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> myMap = new HashMap<>();
             myMap.put("name", user.getName());
             myMap.put("last_name", user.getLast_name());
@@ -110,15 +95,10 @@ public class UserController {
 
     @PostMapping("/updateUser")
     public ResponseEntity<String> updateUser(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
             user.setName(map1.get("name"));
             user.setLast_name(map1.get("last_name"));
@@ -132,15 +112,10 @@ public class UserController {
 
     @PostMapping("/updateUserDirection")
     public ResponseEntity<String> updateUserDirection(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
             user.setCalle(map1.get("calle"));
             user.setCodigo_postal(map1.get("codigo_postal"));
@@ -156,15 +131,10 @@ public class UserController {
 
     @PostMapping("/updateImageUser")
     public ResponseEntity<String> updateImage(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             String avatar = map.get("file");
             String url = serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName());
@@ -179,20 +149,13 @@ public class UserController {
 
     @PostMapping("/profile/updateAlergenos")
     public ResponseEntity<String> updateAlergenos(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, ArrayList> alergenos = gson.fromJson(payload, HashMap.class);
             ArrayList arrayList = alergenos.get("alergenos");
-
             List<AlergenosUsuario> alergenoList = new ArrayList<>();
-
             Type Alergeno = new TypeToken<Alergeno>() {
             }.getType();
             userService.deleteAlergenos(user);
@@ -214,15 +177,10 @@ public class UserController {
 
     @PostMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
         String token = auth.replace("Bearer ", "");
-        String validate = tokenService.verifyToken(token);
-        Map<String, String> userDetails = loginServiceOauth.getUserDetails(token);
-        if (userDetails.get("email") != null) {
-            validate = userDetails.get("email");
-        }
-        if (validate != null) {
-            user = userService.getUserByEmail(validate);
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
             Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
             System.out.println(user.getPassword());
             System.out.println(map1.get("new_password"));
@@ -232,23 +190,15 @@ public class UserController {
                 userService.save(user);
                 return new ResponseEntity<>("200", HttpStatus.ACCEPTED);
             }
-
-
             return new ResponseEntity<>("ha habido un problema", HttpStatus.ACCEPTED);
         }
-
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/getNameByEmail")
     public ResponseEntity<String> getNameByEmail(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        Usuario user = null;
-
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
-        user = userService.getUserByEmail(map.get("email"));
-        System.out.println(user.getName());
-
-
+        Usuario user = userService.getUserByEmail(map.get("email"));
         return new ResponseEntity<>(gson.toJson(user.getAvatarUrl()), HttpStatus.ACCEPTED);
 
     }
