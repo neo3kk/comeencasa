@@ -147,32 +147,6 @@ public class UserController {
 
     }
 
-    @PostMapping("/profile/updateAlergenos")
-    public ResponseEntity<String> updateAlergenos(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
-        String token = auth.replace("Bearer ", "");
-        String email = userService.validateUser(token);
-        if (email != null) {
-            Usuario user = userService.getUserByEmail(email);
-            Map<String, ArrayList> alergenos = gson.fromJson(payload, HashMap.class);
-            ArrayList arrayList = alergenos.get("alergenos");
-            Type Alergeno = new TypeToken<Alergeno>() {
-            }.getType();
-            userService.deleteAlergenos(user);
-            Usuario finalUser = user;
-            arrayList.forEach(al -> {
-                Alergeno alergeno = gson.fromJson(al.toString(), Alergeno);
-                AlergenosUsuario alu = new AlergenosUsuario();
-                alu.setAlergeno(alergeno);
-                alu.setUsuario(finalUser);
-                alergenoService.adddAlergenoUsuario(alu);
-            });
-
-            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
 
     @PostMapping("/changePassword")
     public ResponseEntity<String> changePassword(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {

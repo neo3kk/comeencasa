@@ -88,8 +88,8 @@ public class LoginController {
         user.setLast_name(last_name);
         user.setPassword(password);
         user.setOauth(false);
-        user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
         if (userService.getUser(user) == null) {
+            user.setAvatarUrl(serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName()));
             userService.addUser(user);
             Map<String, Object> restMap = new HashMap<>();
             restMap.put("message", "done");
@@ -105,14 +105,4 @@ public class LoginController {
 
     }
 
-
-    @PostMapping("/upload/image")
-    public HttpEntity<? extends Serializable> uploadFileRegister(@RequestPart(value = "file") MultipartFile uploadfile) {
-        try {
-            byte[] bytes = Base64.encodeBase64(uploadfile.getBytes());
-            return new ResponseEntity<>(bytes, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<String>("ERROR", HttpStatus.UNAUTHORIZED);
-        }
-    }
 }

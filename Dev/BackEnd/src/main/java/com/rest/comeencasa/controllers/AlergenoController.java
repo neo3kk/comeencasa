@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rest.comeencasa.entities.Alergeno;
 import com.rest.comeencasa.entities.AlergenoDTO;
+import com.rest.comeencasa.entities.AlergenosUsuario;
 import com.rest.comeencasa.entities.Usuario;
 import com.rest.comeencasa.service.AlergenoService;
 import com.rest.comeencasa.service.UserService;
@@ -101,6 +102,32 @@ public class AlergenoController {
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    @PostMapping("/profile/updateAlergenos")
+    public ResponseEntity<String> updateAlergenos(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+        String token = auth.replace("Bearer ", "");
+        String email = userService.validateUser(token);
+        if (email != null) {
+            Usuario user = userService.getUserByEmail(email);
+            Map<String, ArrayList> alergenos = gson.fromJson(payload, HashMap.class);
+            ArrayList arrayList = alergenos.get("alergenos");
+            Type Alergeno = new TypeToken<Alergeno>() {
+            }.getType();
+            userService.deleteAlergenos(user);
+            Usuario finalUser = user;
+            arrayList.forEach(al -> {
+                Alergeno alergeno = gson.fromJson(al.toString(), Alergeno);
+                AlergenosUsuario alu = new AlergenosUsuario();
+                alu.setAlergeno(alergeno);
+                alu.setUsuario(finalUser);
+                alergenoService.adddAlergenoUsuario(alu);
+            });
+
+            return new ResponseEntity<>("ok", HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 }
