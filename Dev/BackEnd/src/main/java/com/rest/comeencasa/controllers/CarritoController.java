@@ -57,7 +57,7 @@ public class CarritoController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/getCarritoById")
-    public ResponseEntity<String> getCarritoById(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+    public ResponseEntity<String> getCarritoById(@RequestBody String payload) throws Exception {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         Pedido pedido = pedidoService.findPedidoById(Long.parseLong(map.get("id")));
         if (pedido != null) {

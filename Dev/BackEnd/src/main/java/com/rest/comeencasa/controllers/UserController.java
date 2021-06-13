@@ -137,7 +137,7 @@ public class UserController {
             Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             String avatar = map.get("file");
-            String url = serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName());
+            String url = serverDomain + "/images/image/" + userService.processAvatar(avatar, user.getName());
             user.setAvatarUrl(url);
             userService.save(user);
             return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
@@ -155,7 +155,6 @@ public class UserController {
             Usuario user = userService.getUserByEmail(email);
             Map<String, ArrayList> alergenos = gson.fromJson(payload, HashMap.class);
             ArrayList arrayList = alergenos.get("alergenos");
-            List<AlergenosUsuario> alergenoList = new ArrayList<>();
             Type Alergeno = new TypeToken<Alergeno>() {
             }.getType();
             userService.deleteAlergenos(user);
@@ -182,8 +181,7 @@ public class UserController {
         if (email != null) {
             Usuario user = userService.getUserByEmail(email);
             Map<String, String> map1 = gson.fromJson(payload, HashMap.class);
-            System.out.println(user.getPassword());
-            System.out.println(map1.get("new_password"));
+
             if (BCrypt.checkpw(map1.get("last_password"), user.getPassword())) {
                 String passEncripted = BCrypt.hashpw(map1.get("new_password"), BCrypt.gensalt(10));
                 user.setPassword(passEncripted);
@@ -196,7 +194,7 @@ public class UserController {
     }
 
     @PostMapping("/getNameByEmail")
-    public ResponseEntity<String> getNameByEmail(@RequestHeader("Authorization") String auth, @RequestBody String payload) throws Exception {
+    public ResponseEntity<String> getAvatarByEmail(@RequestBody String payload) throws Exception {
         Map<String, String> map = gson.fromJson(payload, HashMap.class);
         Usuario user = userService.getUserByEmail(map.get("email"));
         return new ResponseEntity<>(gson.toJson(user.getAvatarUrl()), HttpStatus.ACCEPTED);

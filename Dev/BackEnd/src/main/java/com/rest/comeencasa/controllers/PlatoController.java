@@ -100,7 +100,7 @@ public class PlatoController {
         String avatar = map.get("file");
         String idplato = map.get("idplato");
         Plato plato = platoService.findPlatoById(Long.valueOf(idplato));
-        String url = serverDomain + "/images/platos/" + platoService.processAvatar(avatar, plato.getNombre());
+        String url = serverDomain + "/images/image/" + platoService.processAvatar(avatar, plato.getNombre());
         plato.setImageUrl(url);
         platoService.save(plato);
         return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
@@ -126,7 +126,7 @@ public class PlatoController {
             plato.setEnergia(map3.get("azucar"));
             plato.setGrasas(map3.get("grasas"));
             plato.setProteinas(map3.get("proteinas"));
-            plato.setImageUrl(serverDomain + "/images/platos/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
+            plato.setImageUrl(serverDomain + "/images/image/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
 
 
             platoService.save(plato);
