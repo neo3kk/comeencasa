@@ -126,7 +126,7 @@ public class PlatoController {
             plato.setEnergia(map3.get("azucar"));
             plato.setGrasas(map3.get("grasas"));
             plato.setProteinas(map3.get("proteinas"));
-            plato.setImageUrl(serverDomain + "/images/image/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
+            plato.setImageUrl(serverDomain + "/images/platos/" + platoService.processAvatar(map.get("file"), plato.getNombre()));
 
 
             platoService.save(plato);

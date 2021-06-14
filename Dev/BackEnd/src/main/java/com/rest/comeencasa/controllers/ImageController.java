@@ -31,8 +31,8 @@ public class ImageController {
         }
     }
 
-    @GetMapping(value = "/images/image/{name}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable String name) {
+    @GetMapping(value = "/images/platos/{name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImagePlato(@PathVariable String name) {
         Image i = imageService.getImageByFileName(name);
         if (i != null) {
             return new ResponseEntity<>(i.getBytes(), HttpStatus.OK);

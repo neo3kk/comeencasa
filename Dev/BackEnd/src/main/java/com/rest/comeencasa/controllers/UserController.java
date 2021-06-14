@@ -137,7 +137,7 @@ public class UserController {
             Usuario user = userService.getUserByEmail(email);
             Map<String, String> map = gson.fromJson(payload, HashMap.class);
             String avatar = map.get("file");
-            String url = serverDomain + "/images/image/" + userService.processAvatar(avatar, user.getName());
+            String url = serverDomain + "/images/users/" + userService.processAvatar(avatar, user.getName());
             user.setAvatarUrl(url);
             userService.save(user);
             return new ResponseEntity<>("UpdateImage ok", HttpStatus.ACCEPTED);
