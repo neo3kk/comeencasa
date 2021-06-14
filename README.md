@@ -11,6 +11,8 @@ After start production environment, stop **development**
 
 # Production
 
-Execute docker-compose up -d and wait.
+Execute **startup.sh** -d and wait.
 Then you can use the app in **localhost:8080**
+The **stop.sh** script stops and remove all docker containers
+
 
