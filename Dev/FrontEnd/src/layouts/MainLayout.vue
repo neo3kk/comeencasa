@@ -157,7 +157,7 @@ export default {
     this.user.email = localStorage.getItem("user")
     this.user.img = localStorage.getItem("picture")
     this.user.oauth = localStorage.getItem("oauth")
-    if (this.user.email === "admin@gmail.com") {
+    if (this.user.email === "admin@comeencasa.com") {
       this.user.admin = true;
     }
 
