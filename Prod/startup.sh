@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#BUILD PWA APPLICATION FROM LASTEST VERSION OF FRONTEND
+
+sudo ./createDist.sh
+
 sudo cp -r  ../Dev/FrontEnd/dist/pwa/** htdocs/
 
 cp ../Dev/BackEnd/target/comeencasa-1.jar comeencasa.jar
