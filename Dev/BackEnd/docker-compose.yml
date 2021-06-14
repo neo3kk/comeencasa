@@ -3,7 +3,7 @@ version: '3.2'
 services:
    db:
       image: mysql:8.0
-      container_name: mysql
+      container_name: mysqlDeveloper
       volumes:
         - ./mysql:/var/lib/mysql
       ports:
@@ -14,7 +14,7 @@ services:
       depends_on:
        - db
       image: phpmyadmin/phpmyadmin
-      container_name: phpMyAdminVueForm
+      container_name: phpMyAdminDeveloper
       ports:
        - '8090:80'
       environment:

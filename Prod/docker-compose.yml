@@ -9,7 +9,7 @@ services:
        - 8080:80
    db:
       image: mysql:latest
-      container_name: mysqlcontainer
+      container_name: mysqlproduction
       volumes:
       - ./mysql:/var/lib/mysql
       environment:
@@ -29,11 +29,11 @@ services:
       restart: on-failure
       depends_on:
        - db
-      image: neo3kk/comeencasa:latest
+      image: comeencasa:latest
       container_name: jre
       stdin_open: true # docker run -i
       tty: true # docker run -t
       ports:
        - 5000:5000
       environment:
-       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlcontainer:3306/hibernate?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlproduction:3306/hibernate?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC

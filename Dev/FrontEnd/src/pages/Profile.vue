@@ -22,7 +22,7 @@
                   method="POST"
                   accept=".jpg,.png,image/*"
                   :url="url_server_api+'/upload/image'"
-                />
+                 v-if="user.oauth==='false'"/>
                 <q-btn class="q-my-lg" color="secondary" label="Cambiar imagen" @click="updateImage"
                        v-if="user.oauth==='false'"/>
               </q-card-section>
